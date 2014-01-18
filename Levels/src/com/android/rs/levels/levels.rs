@@ -17,12 +17,8 @@
 #pragma version(1)
 #pragma rs java_package_name(com.android.rs.levels)
 
-float inBlack;
-float outBlack;
-float inWMinInB;
-float outWMinOutB;
-float overInWMinInB;
-float gamma;
+float cx_;
+float cy_;
 float width;
 float height;
 rs_matrix3x3 colorMat;
@@ -31,8 +27,8 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     float3 pixel = convert_float4(in[0]).rgb;
    
     
-    float cx=(float)(inWMinInB/2);
-    float cy=(float)(outWMinOutB/2);
+    float cx=(float)(cx_/2);
+    float cy=(float)(cy_/2);
     // -1;2
     float fx=(float)(x/width)*3-1.f;
     // 1.1;-1.1

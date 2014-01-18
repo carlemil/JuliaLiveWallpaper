@@ -33,10 +33,10 @@ public class LevelsRSActivity extends Activity
     private Bitmap mBitmapIn;
     private Bitmap mBitmapOut;
 
-    private float mInWhite = 255.0f;
-    private SeekBar mInWhiteSeekBar;
-    private float mOutWhite = 255.0f;
-    private SeekBar mOutWhiteSeekBar;
+    private float mCx = 255.0f;
+    private SeekBar mCxSeekBar;
+    private float mCy = 255.0f;
+    private SeekBar mCySeekBar;
 
     private TextView mBenchmarkResult;
     private ImageView mDisplayView;
@@ -54,17 +54,17 @@ public class LevelsRSActivity extends Activity
     private void setLevels() {
         mOverInWMinInB = 1.f / mInWMinInB;
 
-        mScript.set_inWMinInB(mInWhite);
-        mScript.set_outWMinOutB(mOutWhite);
+        mScript.set_cx_(mCx);
+        mScript.set_cy_(mCy);
     }
 
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            if (seekBar == mInWhiteSeekBar) {
-                mInWhite = (float) progress / 127.0f;
+            if (seekBar == mCxSeekBar) {
+                mCx = (float) progress / 127.0f;
                 setLevels();
-            } else if (seekBar == mOutWhiteSeekBar) {
-                mOutWhite = (float) progress / 127.0f;
+            } else if (seekBar == mCySeekBar) {
+                mCy = (float) progress / 127.0f;
                 setLevels();
             }
 
@@ -91,14 +91,14 @@ public class LevelsRSActivity extends Activity
         mDisplayView.setImageBitmap(mBitmapOut);
 
 
-        mInWhiteSeekBar = (SeekBar)findViewById(R.id.inWhite);
-        mInWhiteSeekBar.setOnSeekBarChangeListener(this);
-        mInWhiteSeekBar.setMax(128);
-        mInWhiteSeekBar.setProgress(128);
-        mOutWhiteSeekBar = (SeekBar)findViewById(R.id.outWhite);
-        mOutWhiteSeekBar.setOnSeekBarChangeListener(this);
-        mOutWhiteSeekBar.setMax(128);
-        mOutWhiteSeekBar.setProgress(128);
+        mCxSeekBar = (SeekBar) findViewById(R.id.cxBar);
+        mCxSeekBar.setOnSeekBarChangeListener(this);
+        mCxSeekBar.setMax(128);
+        mCxSeekBar.setProgress(64);
+        mCySeekBar = (SeekBar) findViewById(R.id.cyBar);
+        mCySeekBar.setOnSeekBarChangeListener(this);
+        mCySeekBar.setMax(128);
+        mCySeekBar.setProgress(64);
 
         mBenchmarkResult = (TextView) findViewById(R.id.benchmarkText);
         mBenchmarkResult.setText("Result: not run");
@@ -112,11 +112,12 @@ public class LevelsRSActivity extends Activity
                                                            Allocation.USAGE_SCRIPT);
         mScript = new ScriptC_levels(mRS, getResources(), R.raw.levels);
 
-        mScript.set_height(200);
-        mScript.set_width(200);
+        mScript.set_height(500);
+        mScript.set_width(500);
 
         setLevels();
         filter();
+        mDisplayView.invalidate();
     }
 
     private Bitmap loadBitmap(int resource) {

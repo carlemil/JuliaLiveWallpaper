@@ -21,12 +21,9 @@
     <!-- General -->
     <skip />
     <!--slider label -->
-    <string name="in_white">In White</string>
-    <string name="out_white">Out White</string>
-    <string name="in_black">In Black</string>
-    <string name="out_black">Out Black</string>
-    <string name="gamma">Gamma</string>
-    <string name="saturation">Saturation</string>
+    <string name="cyText">C Y</string>
+    <string name="cxText">C X</string>
     <string name="benchmark">Benchmark</string>
+    <string name="n_a">N/A</string>
 
 </resources>

@@ -55,105 +55,42 @@
                     android:id="@+id/benchmarkText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/saturation"
+                    android:text="@string/n_a"
                     android:textSize="8pt" />
             </LinearLayout>
 
             <TextView
-                android:id="@+id/inSaturationText"
+                android:id="@+id/cxTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10sp"
                 android:layout_marginTop="15sp"
-                android:text="@string/saturation"
+                android:text="@string/cxText"
                 android:textSize="8pt" />
 
             <SeekBar
-                android:id="@+id/inSaturation"
+                android:id="@+id/cxBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10sp"
                 android:layout_marginRight="10sp" />
 
             <TextView
-                android:id="@+id/outWhiteText"
+                android:id="@+id/cyTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10sp"
                 android:layout_marginTop="15sp"
-                android:text="@string/out_white"
+                android:text="@string/cyText"
                 android:textSize="8pt" />
 
             <SeekBar
-                android:id="@+id/outWhite"
+                android:id="@+id/cyBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10sp"
                 android:layout_marginRight="10sp" />
 
-            <TextView
-                android:id="@+id/inWhiteText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginTop="15sp"
-                android:text="@string/in_white"
-                android:textSize="8pt" />
-
-            <SeekBar
-                android:id="@+id/inWhite"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp" />
-
-            <TextView
-                android:id="@+id/outBlackText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginTop="15sp"
-                android:text="@string/out_black"
-                android:textSize="8pt" />
-
-            <SeekBar
-                android:id="@+id/outBlack"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp" />
-
-            <TextView
-                android:id="@+id/inBlackText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginTop="15sp"
-                android:text="@string/in_black"
-                android:textSize="8pt" />
-
-            <SeekBar
-                android:id="@+id/inBlack"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp" />
-
-            <TextView
-                android:id="@+id/inGammaText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginTop="15sp"
-                android:text="@string/gamma"
-                android:textSize="8pt" />
-
-            <SeekBar
-                android:id="@+id/inGamma"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp" />
         </LinearLayout>
     </ScrollView>
 
