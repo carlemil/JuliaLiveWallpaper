@@ -1,18 +1,16 @@
-/*
- * Copyright (C) 2012 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+/* Copyright (C) 2012 The Android Open Source Project
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License. */
 
 package com.android.rs.levels;
 
@@ -30,7 +28,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class LevelsRSActivity extends Activity
-                              implements SeekBar.OnSeekBarChangeListener {
+        implements SeekBar.OnSeekBarChangeListener {
     private final String TAG = "Img";
     private Bitmap mBitmapIn;
     private Bitmap mBitmapOut;
@@ -92,10 +90,10 @@ public class LevelsRSActivity extends Activity
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
             if (seekBar == mInBlackSeekBar) {
-                mInBlack = (float)progress;
+                mInBlack = (float) progress;
                 setLevels();
             } else if (seekBar == mOutBlackSeekBar) {
-                mOutBlack = (float)progress;
+                mOutBlack = (float) progress;
                 setLevels();
             } else if (seekBar == mInWhiteSeekBar) {
                 mInWhite = (float) progress / 127.0f;
@@ -104,12 +102,12 @@ public class LevelsRSActivity extends Activity
                 mOutWhite = (float) progress / 127.0f;
                 setLevels();
             } else if (seekBar == mGammaSeekBar) {
-                mGamma = (float)progress/100.0f;
+                mGamma = (float) progress / 100.0f;
                 mGamma = Math.max(mGamma, 0.1f);
                 mGamma = 1.0f / mGamma;
                 mScript.set_gamma(mGamma);
             } else if (seekBar == mSaturationSeekBar) {
-                mSaturation = (float)progress / 50.0f;
+                mSaturation = (float) progress / 50.0f;
                 setSaturation();
             }
 
@@ -134,6 +132,7 @@ public class LevelsRSActivity extends Activity
 
         mDisplayView = (ImageView) findViewById(R.id.display);
         mDisplayView.setImageBitmap(mBitmapOut);
+        // mDisplayView.set
 
         mInBlackSeekBar = (SeekBar)findViewById(R.id.inBlack);
         mInBlackSeekBar.setOnSeekBarChangeListener(this);
@@ -175,8 +174,13 @@ public class LevelsRSActivity extends Activity
         mScript = new ScriptC_levels(mRS, getResources(), R.raw.levels);
         mScript.set_gamma(mGamma);
 
-        mScript.set_height(400f);
-        mScript.set_width(400f);
+        // Log.d("TAG", "### mDisplayView.getWidth() " +
+        // mDisplayView.getWidth());
+        // mScript.set_height(mDisplayView.getHeight());
+        // mScript.set_width(mDisplayView.getWidth());
+
+        mScript.set_height(200);
+        mScript.set_width(200);
 
         setSaturation();
         setLevels();

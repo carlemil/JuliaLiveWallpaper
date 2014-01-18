@@ -40,11 +40,12 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     //pixel = clamp(pixel, 0.f, 255.f);
     
     
-    float cx=inWMinInB;//0.8f;
-    float cy=outWMinOutB;//0.0f;
-    
-    float fx=(float)(x/width)-0.8f;
-    float fy=(float)(y/height)-0.f;
+    float cx=(float)(inWMinInB/2);
+    float cy=(float)(outWMinOutB/2);
+    // -1 , 2
+    // 1.1 - -1.1, 
+    float fx=(float)(x/width)*3-1.f;
+    float fy=(float)(y/height)*3-1.5f;
     
     float t=0;
     
