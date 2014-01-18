@@ -16,12 +16,13 @@ package com.android.rs.levels;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.renderscript.Allocation;
 import android.renderscript.Matrix3f;
 import android.renderscript.RenderScript;
+import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -84,12 +85,22 @@ public class LevelsRSActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        mBitmapIn = loadBitmap(R.drawable.city);
-        mBitmapOut = loadBitmap(R.drawable.city);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        Log.d(TAG, "### h: " + height + " w: " + width);
+
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
+        mBitmapIn = Bitmap.createBitmap(width, height, conf);
+        mBitmapOut = Bitmap.createBitmap(width, height, conf);
 
         mDisplayView = (ImageView) findViewById(R.id.display);
         mDisplayView.setImageBitmap(mBitmapOut);
 
+        Log.d(TAG, "### mBitmapIn h: " + mBitmapIn.getHeight() + " w: " + mBitmapIn.getWidth());
 
         mCxSeekBar = (SeekBar) findViewById(R.id.cxBar);
         mCxSeekBar.setOnSeekBarChangeListener(this);
@@ -112,24 +123,34 @@ public class LevelsRSActivity extends Activity
                                                            Allocation.USAGE_SCRIPT);
         mScript = new ScriptC_levels(mRS, getResources(), R.raw.levels);
 
-        mScript.set_height(500);
-        mScript.set_width(500);
+
+        mScript.set_height(height / 2);
+        mScript.set_width(width);
 
         setLevels();
         filter();
+
+        mDisplayView.getLayoutParams().width = width;
+        mDisplayView.getLayoutParams().height = height / 2;
+
+        mDisplayView.requestLayout();
+
         mDisplayView.invalidate();
+
     }
 
-    private Bitmap loadBitmap(int resource) {
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap b = BitmapFactory.decodeResource(getResources(), resource, options);
-        Bitmap b2 = Bitmap.createBitmap(b.getWidth(), b.getHeight(), b.getConfig());
-        Canvas c = new Canvas(b2);
-        c.drawBitmap(b, 0, 0, null);
-        b.recycle();
-        return b2;
-    }
+    // private Bitmap loadBitmap(int resource) {
+    // final BitmapFactory.Options options = new BitmapFactory.Options();
+    // options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+    // Bitmap b = BitmapFactory.decodeResource(getResources(), resource,
+    // options);
+    // Bitmap b2 = Bitmap.createBitmap(b.getWidth(), b.getHeight(),
+    // b.getConfig());
+    // Canvas c = new Canvas(b2);
+    // c.drawBitmap(b, 0, 0, null);
+    // b.recycle();
+    // return b2;
+    // }
 
     private void filter() {
 

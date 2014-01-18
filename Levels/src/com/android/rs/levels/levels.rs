@@ -54,8 +54,6 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     pixel.z = k*16;
     
     
-    
-    
     out->xyz = convert_uchar3(pixel);
 }
 
