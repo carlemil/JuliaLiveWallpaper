@@ -29,22 +29,13 @@ rs_matrix3x3 colorMat;
 
 void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     float3 pixel = convert_float4(in[0]).rgb;
-    //pixel = rsMatrixMultiply(&colorMat, pixel);
-    //pixel.x = 255.f - pixel.y;
-    //pixel.z = pixel.y;
-    //pixel = clamp(pixel, 0.f, 255.f);
-    //pixel = (pixel - inBlack) * overInWMinInB;
-    //if (gamma != 1.0f)
-    //    pixel = pow(pixel, (float3)gamma);
-    //pixel = pixel * outWMinOutB + outBlack;
-    //pixel = clamp(pixel, 0.f, 255.f);
-    
+   
     
     float cx=(float)(inWMinInB/2);
     float cy=(float)(outWMinOutB/2);
-    // -1 , 2
-    // 1.1 - -1.1, 
+    // -1;2
     float fx=(float)(x/width)*3-1.f;
+    // 1.1;-1.1
     float fy=(float)(y/height)*3-1.5f;
     
     float t=0;

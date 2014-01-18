@@ -32,18 +32,12 @@ public class LevelsRSActivity extends Activity
     private final String TAG = "Img";
     private Bitmap mBitmapIn;
     private Bitmap mBitmapOut;
-    private float mInBlack = 0.0f;
-    private SeekBar mInBlackSeekBar;
-    private float mOutBlack = 0.0f;
-    private SeekBar mOutBlackSeekBar;
+
     private float mInWhite = 255.0f;
     private SeekBar mInWhiteSeekBar;
     private float mOutWhite = 255.0f;
     private SeekBar mOutWhiteSeekBar;
-    private float mGamma = 1.0f;
-    private SeekBar mGammaSeekBar;
-    private float mSaturation = 1.0f;
-    private SeekBar mSaturationSeekBar;
+
     private TextView mBenchmarkResult;
     private ImageView mDisplayView;
 
@@ -58,57 +52,20 @@ public class LevelsRSActivity extends Activity
     private ScriptC_levels mScript;
 
     private void setLevels() {
-        mInWMinInB = mInWhite - mInBlack;
-        mOutWMinOutB = mOutWhite - mOutBlack;
         mOverInWMinInB = 1.f / mInWMinInB;
 
-        mScript.set_inBlack(mInBlack);
-        mScript.set_outBlack(mOutBlack);
-        mScript.set_inWMinInB(mInWMinInB);
-        mScript.set_outWMinOutB(mOutWMinOutB);
-        mScript.set_overInWMinInB(mOverInWMinInB);
-    }
-
-    private void setSaturation() {
-        float rWeight = 0.299f;
-        float gWeight = 0.587f;
-        float bWeight = 0.114f;
-        float oneMinusS = 1.0f - mSaturation;
-
-        satMatrix.set(0, 0, oneMinusS * rWeight + mSaturation);
-        satMatrix.set(0, 1, oneMinusS * rWeight);
-        satMatrix.set(0, 2, oneMinusS * rWeight);
-        satMatrix.set(1, 0, oneMinusS * gWeight);
-        satMatrix.set(1, 1, oneMinusS * gWeight + mSaturation);
-        satMatrix.set(1, 2, oneMinusS * gWeight);
-        satMatrix.set(2, 0, oneMinusS * bWeight);
-        satMatrix.set(2, 1, oneMinusS * bWeight);
-        satMatrix.set(2, 2, oneMinusS * bWeight + mSaturation);
-        mScript.set_colorMat(satMatrix);
+        mScript.set_inWMinInB(mInWhite);
+        mScript.set_outWMinOutB(mOutWhite);
     }
 
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            if (seekBar == mInBlackSeekBar) {
-                mInBlack = (float) progress;
-                setLevels();
-            } else if (seekBar == mOutBlackSeekBar) {
-                mOutBlack = (float) progress;
-                setLevels();
-            } else if (seekBar == mInWhiteSeekBar) {
+            if (seekBar == mInWhiteSeekBar) {
                 mInWhite = (float) progress / 127.0f;
                 setLevels();
             } else if (seekBar == mOutWhiteSeekBar) {
                 mOutWhite = (float) progress / 127.0f;
                 setLevels();
-            } else if (seekBar == mGammaSeekBar) {
-                mGamma = (float) progress / 100.0f;
-                mGamma = Math.max(mGamma, 0.1f);
-                mGamma = 1.0f / mGamma;
-                mScript.set_gamma(mGamma);
-            } else if (seekBar == mSaturationSeekBar) {
-                mSaturation = (float) progress / 50.0f;
-                setSaturation();
             }
 
             filter();
@@ -132,16 +89,7 @@ public class LevelsRSActivity extends Activity
 
         mDisplayView = (ImageView) findViewById(R.id.display);
         mDisplayView.setImageBitmap(mBitmapOut);
-        // mDisplayView.set
 
-        mInBlackSeekBar = (SeekBar)findViewById(R.id.inBlack);
-        mInBlackSeekBar.setOnSeekBarChangeListener(this);
-        mInBlackSeekBar.setMax(128);
-        mInBlackSeekBar.setProgress(0);
-        mOutBlackSeekBar = (SeekBar)findViewById(R.id.outBlack);
-        mOutBlackSeekBar.setOnSeekBarChangeListener(this);
-        mOutBlackSeekBar.setMax(128);
-        mOutBlackSeekBar.setProgress(0);
 
         mInWhiteSeekBar = (SeekBar)findViewById(R.id.inWhite);
         mInWhiteSeekBar.setOnSeekBarChangeListener(this);
@@ -151,15 +99,6 @@ public class LevelsRSActivity extends Activity
         mOutWhiteSeekBar.setOnSeekBarChangeListener(this);
         mOutWhiteSeekBar.setMax(128);
         mOutWhiteSeekBar.setProgress(128);
-
-        mGammaSeekBar = (SeekBar)findViewById(R.id.inGamma);
-        mGammaSeekBar.setOnSeekBarChangeListener(this);
-        mGammaSeekBar.setMax(150);
-        mGammaSeekBar.setProgress(100);
-
-        mSaturationSeekBar = (SeekBar)findViewById(R.id.inSaturation);
-        mSaturationSeekBar.setOnSeekBarChangeListener(this);
-        mSaturationSeekBar.setProgress(50);
 
         mBenchmarkResult = (TextView) findViewById(R.id.benchmarkText);
         mBenchmarkResult.setText("Result: not run");
@@ -172,17 +111,10 @@ public class LevelsRSActivity extends Activity
                                                            Allocation.MipmapControl.MIPMAP_NONE,
                                                            Allocation.USAGE_SCRIPT);
         mScript = new ScriptC_levels(mRS, getResources(), R.raw.levels);
-        mScript.set_gamma(mGamma);
-
-        // Log.d("TAG", "### mDisplayView.getWidth() " +
-        // mDisplayView.getWidth());
-        // mScript.set_height(mDisplayView.getHeight());
-        // mScript.set_width(mDisplayView.getWidth());
 
         mScript.set_height(200);
         mScript.set_width(200);
 
-        setSaturation();
         setLevels();
         filter();
     }
