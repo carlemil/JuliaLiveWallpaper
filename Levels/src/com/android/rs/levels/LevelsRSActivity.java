@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 public class LevelsRSActivity extends Activity {
+
     private static final float SCALE = 1;
     private final String TAG = "Img";
     private Bitmap mBitmapIn;
@@ -90,7 +91,10 @@ public class LevelsRSActivity extends Activity {
         mDisplayView.getLayoutParams().width = (int) (SCALE * mWidth);
         mDisplayView.getLayoutParams().height = (int) (SCALE * mHeight);
 
-        mDisplayView.requestLayout();
+
+        /* int i = 34; cx = (float) Math.sin(i / 10); cy = (float) Math.cos(i /
+         * 10); */
+        renderJulia(0.5f, 0.5f);
 
         Matrix matrix = new Matrix();
         matrix.postScale(SCALE, SCALE);
@@ -99,6 +103,7 @@ public class LevelsRSActivity extends Activity {
         /* int i = 34; cx = (float) Math.sin(i / 10); cy = (float) Math.cos(i /
          * 10); */
         renderJulia(0.5f, 0.5f);
+
 
     }
 
@@ -129,6 +134,7 @@ public class LevelsRSActivity extends Activity {
                 return super.onTouchEvent(event);
         }
     }
+
 
     private void renderJulia(float cx, float cy) {
         mScript.set_cx(cx);

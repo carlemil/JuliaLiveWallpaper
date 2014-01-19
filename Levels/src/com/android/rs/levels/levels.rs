@@ -37,6 +37,7 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     int COLOR_MULT = (256 / precision);
     
      while(k<precision)
+
 	 {
 	    t = fx*fx-fy*fy+cx;
 	    fy = 2*fx*fy+cy;
