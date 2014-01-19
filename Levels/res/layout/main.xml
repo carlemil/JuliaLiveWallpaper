@@ -26,72 +26,10 @@
         android:layout_width="1dip"
         android:layout_height="1dip" />
 
-    <ScrollView
+    <ImageView
+        android:id="@+id/display"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <ImageView
-                android:id="@+id/display"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="benchmark"
-                    android:text="@string/benchmark" />
-
-                <TextView
-                    android:id="@+id/benchmarkText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/n_a"
-                    android:textSize="8pt" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/cxTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginTop="15sp"
-                android:text="@string/cxText"
-                android:textSize="8pt" />
-
-            <SeekBar
-                android:id="@+id/cxBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp" />
-
-            <TextView
-                android:id="@+id/cyTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginTop="15sp"
-                android:text="@string/cyText"
-                android:textSize="8pt" />
-
-            <SeekBar
-                android:id="@+id/cyBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp" />
-
-        </LinearLayout>
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:scaleType="matrix" />
 
 </LinearLayout>

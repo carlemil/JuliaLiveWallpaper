@@ -17,41 +17,36 @@
 #pragma version(1)
 #pragma rs java_package_name(com.android.rs.levels)
 
-float cx_;
-float cy_;
+float cx;
+float cy;
 float width;
 float height;
 rs_matrix3x3 colorMat;
 
 void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     float3 pixel = convert_float4(in[0]).rgb;
-   
-    
-    float cx=(float)(cx_/2);
-    float cy=(float)(cy_/2);
-    // -1;2
-    float fx=(float)(x/width)*3-1.f;
-    // 1.1;-1.1
-    float fy=(float)(y/height)*3-1.5f;
+
+    float fx=(float)(x/width)*2.f-1.f;
+    float fy=(float)(y/height)*2.f-1.f;
     
     float t=0;
     
     int k=0;
-    int PREC = 15;
+    int PREC = 2*2*2*2;
+    int COLOR_MULT = (256 / PREC);
     
-         //x = i; y=j;
-	     while(k<PREC)
-		 {
-		    t = fx*fx-fy*fy+cx;
-		    fy = 2*fx*fy+cy;
-		    fx = t;
-		    if (fx*fx+fy*fy >= 4) break;
-		    k++;
-		 }
+     while(k<PREC)
+	 {
+	    t = fx*fx-fy*fy+cx;
+	    fy = 2*fx*fy+cy;
+	    fx = t;
+	    if (fx*fx+fy*fy >= 4) break;
+	    k++;
+	 }
 	       //g.setRGB((int)((i+2)*w/4), (int)((j+2)*h/4),colorscheme[k].getRGB());    
-    pixel.x = k*16;
-    pixel.y = k*16;
-    pixel.z = k*16;
+    pixel.x = k*COLOR_MULT;
+    pixel.y = k*COLOR_MULT;
+    pixel.z = k*COLOR_MULT;
     
     
     out->xyz = convert_uchar3(pixel);
