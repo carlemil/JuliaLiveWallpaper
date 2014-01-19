@@ -16,69 +16,39 @@ package com.android.rs.levels;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.renderscript.Allocation;
 import android.renderscript.Matrix3f;
 import android.renderscript.RenderScript;
+import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
-public class LevelsRSActivity extends Activity
-        implements SeekBar.OnSeekBarChangeListener {
+public class LevelsRSActivity extends Activity {
+    private static final float SCALE = 1;
     private final String TAG = "Img";
     private Bitmap mBitmapIn;
     private Bitmap mBitmapOut;
 
-    private float mCx = 255.0f;
-    private SeekBar mCxSeekBar;
-    private float mCy = 255.0f;
-    private SeekBar mCySeekBar;
-
-    private TextView mBenchmarkResult;
     private ImageView mDisplayView;
 
     Matrix3f satMatrix = new Matrix3f();
     float mInWMinInB;
     float mOutWMinOutB;
-    float mOverInWMinInB;
+    // float mOverInWMinInB;
 
     private RenderScript mRS;
     private Allocation mInPixelsAllocation;
     private Allocation mOutPixelsAllocation;
     private ScriptC_levels mScript;
-
-    private void setLevels() {
-        mOverInWMinInB = 1.f / mInWMinInB;
-
-        mScript.set_cx_(mCx);
-        mScript.set_cy_(mCy);
-    }
-
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (fromUser) {
-            if (seekBar == mCxSeekBar) {
-                mCx = (float) progress / 127.0f;
-                setLevels();
-            } else if (seekBar == mCySeekBar) {
-                mCy = (float) progress / 127.0f;
-                setLevels();
-            }
-
-            filter();
-            mDisplayView.invalidate();
-        }
-    }
-
-    public void onStartTrackingTouch(SeekBar seekBar) {
-    }
-
-    public void onStopTrackingTouch(SeekBar seekBar) {
-    }
+    private int i = 0;
+    private int mWidth;
+    private int mHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,82 +58,101 @@ public class LevelsRSActivity extends Activity
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = size.x;
-        int height = size.y;
+        mWidth = (int) (size.x / SCALE);
+        mHeight = (int) (size.y / SCALE);
 
-        Log.d(TAG, "### h: " + height + " w: " + width);
+        Log.d(TAG, "### h: " + mHeight + " w: " + mWidth);
 
         Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-        mBitmapIn = Bitmap.createBitmap(width, height, conf);
-        mBitmapOut = Bitmap.createBitmap(width, height, conf);
+        mBitmapIn = Bitmap.createBitmap(mWidth, mHeight, conf);
+        mBitmapOut = Bitmap.createBitmap(mWidth, mHeight, conf);
 
         mDisplayView = (ImageView) findViewById(R.id.display);
         mDisplayView.setImageBitmap(mBitmapOut);
 
         Log.d(TAG, "### mBitmapIn h: " + mBitmapIn.getHeight() + " w: " + mBitmapIn.getWidth());
 
-        mCxSeekBar = (SeekBar) findViewById(R.id.cxBar);
-        mCxSeekBar.setOnSeekBarChangeListener(this);
-        mCxSeekBar.setMax(128);
-        mCxSeekBar.setProgress(64);
-        mCySeekBar = (SeekBar) findViewById(R.id.cyBar);
-        mCySeekBar.setOnSeekBarChangeListener(this);
-        mCySeekBar.setMax(128);
-        mCySeekBar.setProgress(64);
-
-        mBenchmarkResult = (TextView) findViewById(R.id.benchmarkText);
-        mBenchmarkResult.setText("Result: not run");
-
         mRS = RenderScript.create(this);
         mInPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmapIn,
-                                                          Allocation.MipmapControl.MIPMAP_NONE,
-                                                          Allocation.USAGE_SCRIPT);
+                Allocation.MipmapControl.MIPMAP_NONE,
+                Allocation.USAGE_SCRIPT);
         mOutPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmapOut,
-                                                           Allocation.MipmapControl.MIPMAP_NONE,
-                                                           Allocation.USAGE_SCRIPT);
+                Allocation.MipmapControl.MIPMAP_NONE,
+                Allocation.USAGE_SCRIPT);
         mScript = new ScriptC_levels(mRS, getResources(), R.raw.levels);
 
+        mScript.set_height(mHeight);
+        mScript.set_width(mWidth);
 
-        mScript.set_height(height / 2);
-        mScript.set_width(width);
+        mScript.set_precision(16);
+        mScript.set_zoom(2f);
 
-        setLevels();
-        filter();
-
-        mDisplayView.getLayoutParams().width = width;
-        mDisplayView.getLayoutParams().height = height / 2;
+        mDisplayView.getLayoutParams().width = (int) (SCALE * mWidth);
+        mDisplayView.getLayoutParams().height = (int) (SCALE * mHeight);
 
         mDisplayView.requestLayout();
 
-        mDisplayView.invalidate();
+        Matrix matrix = new Matrix();
+        matrix.postScale(SCALE, SCALE);
+        mDisplayView.setImageMatrix(matrix);
+
+        /* int i = 34; cx = (float) Math.sin(i / 10); cy = (float) Math.cos(i /
+         * 10); */
+        renderJulia(0.5f, 0.5f);
 
     }
 
-    // private Bitmap loadBitmap(int resource) {
-    // final BitmapFactory.Options options = new BitmapFactory.Options();
-    // options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-    // Bitmap b = BitmapFactory.decodeResource(getResources(), resource,
-    // options);
-    // Bitmap b2 = Bitmap.createBitmap(b.getWidth(), b.getHeight(),
-    // b.getConfig());
-    // Canvas c = new Canvas(b2);
-    // c.drawBitmap(b, 0, 0, null);
-    // b.recycle();
-    // return b2;
-    // }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
 
-    private void filter() {
+        int action = MotionEventCompat.getActionMasked(event);
+
+        switch (action) {
+
+            case (MotionEvent.ACTION_MOVE):
+                Log.d(TAG, "Action was MOVE");
+                float cx = 0f,
+                cy = 0f;
+                float x = event.getAxisValue(MotionEvent.AXIS_X) / SCALE;
+                float y = event.getAxisValue(MotionEvent.AXIS_Y) / SCALE;
+                cx = ((x / mWidth) * 4f) - 2f;
+                cy = y / mHeight;
+                long t = java.lang.System.currentTimeMillis();
+                renderJulia(cx, cy);
+                t = java.lang.System.currentTimeMillis() - t;
+
+                Log.d(TAG, "### cx: " + cx + " cy: " + cy + " time: " + t + "ms.");
+
+                return true;
+
+            default:
+                return super.onTouchEvent(event);
+        }
+    }
+
+    private void renderJulia(float cx, float cy) {
+        mScript.set_cx(cx);
+        mScript.set_cy(cy);
 
         mScript.forEach_root(mInPixelsAllocation, mOutPixelsAllocation);
         mOutPixelsAllocation.copyTo(mBitmapOut);
+
+        mDisplayView.invalidate();
     }
 
     public void benchmark(View v) {
-        filter();
-        long t = java.lang.System.currentTimeMillis();
-        filter();
-        t = java.lang.System.currentTimeMillis() - t;
+        renderJulia(0f, 0f);
+        renderJulia(0f, 0f);
         mDisplayView.invalidate();
-        mBenchmarkResult.setText("Result: " + t + " ms");
+
+        float cx = 0f, cy = 0f;
+        i++;
+        // -1;2
+        // 1.1;-1.1
+        cx = (float) (Math.sin(i / 10d) + 0d);
+        cy = (float) Math.cos(i / 10d);
+
+        renderJulia(cx, cy);
+
     }
 }
