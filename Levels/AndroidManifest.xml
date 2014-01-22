@@ -18,18 +18,37 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.rs.levels">
-    <uses-sdk android:minSdkVersion="14" />
-    <application android:label="Levels RS"
-                 android:hardwareAccelerated="true">
+    package="se.kjellstrand.julia" >
 
-        <activity android:name="LevelsRSActivity"
-                  android:label="Levels RS">
+    <uses-sdk android:minSdkVersion="18" />
+
+    <uses-feature android:name="android.software.live_wallpaper" />
+
+    <application
+        android:hardwareAccelerated="true"
+        android:label="Julia RS" >
+        <!-- <activity
+            android:name="LevelsRSActivity"
+            android:label="Levels RS" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity> -->
+        
+        <service
+            android:name="se.kjellstrand.julia.JuliaWallpaperService"
+            android:label="Julia Wallpaper"
+            android:permission="android.permission.BIND_WALLPAPER" >
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
 
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/demo_wp" />
+        </service>
     </application>
+
 </manifest>

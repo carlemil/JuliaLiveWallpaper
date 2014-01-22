@@ -37,7 +37,6 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     int COLOR_MULT = (256 / precision);
     
      while(k<precision)
-
 	 {
 	    t = fx*fx-fy*fy+cx;
 	    fy = 2*fx*fy+cy;
@@ -49,7 +48,6 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     pixel.x = k*COLOR_MULT;
     pixel.y = k*COLOR_MULT;
     pixel.z = k*COLOR_MULT;
-    
     
     out->xyz = convert_uchar3(pixel);
 }

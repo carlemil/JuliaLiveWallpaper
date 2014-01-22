@@ -17,13 +17,8 @@
 */
 -->
 
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- General -->
-    <skip />
-    <!--slider label -->
-    <string name="cyText">C Y</string>
-    <string name="cxText">C X</string>
-    <string name="benchmark">Benchmark</string>
-    <string name="n_a">N/A</string>
+<resources>
+    
+    <string name="name">Julia wallpaper</string>
 
 </resources>

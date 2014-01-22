@@ -12,7 +12,7 @@
  * License for the specific language governing permissions and limitations under
  * the License. */
 
-package com.android.rs.levels;
+package se.kjellstrand.julia;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -28,6 +28,8 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.android.rs.levels.ScriptC_levels;
 
 public class LevelsRSActivity extends Activity {
 
