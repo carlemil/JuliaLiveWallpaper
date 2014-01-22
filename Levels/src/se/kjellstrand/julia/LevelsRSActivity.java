@@ -88,7 +88,7 @@ public class LevelsRSActivity extends Activity {
         mScript.set_width(mWidth);
 
         mScript.set_precision(16);
-        mScript.set_zoom(2f);
+        mScript.set_scale(2f);
 
         mDisplayView.getLayoutParams().width = (int) (SCALE * mWidth);
         mDisplayView.getLayoutParams().height = (int) (SCALE * mHeight);

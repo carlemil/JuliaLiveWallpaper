@@ -2,6 +2,7 @@ package se.kjellstrand.julia;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.renderscript.Allocation;
 import android.renderscript.Matrix3f;
@@ -12,7 +13,6 @@ import android.view.SurfaceHolder;
 
 import com.android.rs.levels.ScriptC_levels;
 
-
 public class JuliaWallpaperService extends WallpaperService {
 
     // private static final float SCALE = 1;
@@ -20,18 +20,16 @@ public class JuliaWallpaperService extends WallpaperService {
     private Bitmap mBitmapIn;
     private Bitmap mBitmapOut;
 
-    // private ImageView mDisplayView;
-
     Matrix3f satMatrix = new Matrix3f();
     float mInWMinInB;
     float mOutWMinOutB;
-    // float mOverInWMinInB;
+
+    float mScale = 2f;
 
     private RenderScript mRS;
     private Allocation mInPixelsAllocation;
     private Allocation mOutPixelsAllocation;
     private ScriptC_levels mScript;
-    // private int i = 0;
     private int mWidth;
     private int mHeight;
 
@@ -42,6 +40,8 @@ public class JuliaWallpaperService extends WallpaperService {
 
     class DemoEngine extends Engine {
 
+        private Matrix mMatrix;
+
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
             super.onSurfaceCreated(holder);
@@ -51,8 +51,6 @@ public class JuliaWallpaperService extends WallpaperService {
             Rect rect = holder.getSurfaceFrame();
             mHeight = rect.height();
             mWidth = rect.width();
-
-            // Log.d(TAG, "### h: " + mHeight + " w: " + mWidth);
         }
 
         @Override
@@ -64,18 +62,12 @@ public class JuliaWallpaperService extends WallpaperService {
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
 
-            // Log.d(TAG, "### onSurfaceChanged h: " + mHeight + " w: " +
-            // mWidth);
-
-            mWidth = width;
-            mHeight = height;
+            mWidth = (int) (width / mScale);
+            mHeight = (int) (height / mScale);
             Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-
             mBitmapIn = Bitmap.createBitmap(mWidth, mHeight, conf);
             mBitmapOut = Bitmap.createBitmap(mWidth, mHeight, conf);
-
-            // Log.d(TAG, "### mBitmapIn h: " + mBitmapIn.getHeight() + " w: " +
-            // mBitmapIn.getWidth());
+            mBitmapOut.setHasAlpha(false);
 
             mRS = RenderScript.create(JuliaWallpaperService.this.getBaseContext(), RenderScript.ContextType.DEBUG);
             mInPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmapIn,
@@ -91,7 +83,10 @@ public class JuliaWallpaperService extends WallpaperService {
             mScript.set_height(mHeight);
 
             mScript.set_precision(16);
-            mScript.set_zoom(1f);
+            mScript.set_scale(mScale);
+
+            mMatrix = new Matrix();
+            mMatrix.postScale(mScale, mScale);
 
             draw(0.5f);
         }
@@ -105,40 +100,26 @@ public class JuliaWallpaperService extends WallpaperService {
         public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep,
                 float yOffsetStep, int xPixelOffset, int yPixelOffset) {
             super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
-            // Log.d(TAG, "### On offset change! " + xOffset + " : " + yOffset);
-
             draw(xOffset);
         }
 
         private void draw(float xOffset) {
 
-            /* for (int i = 1; i < 1080; i++) { int color = 0xffffff00;
-             * mBitmapOut.setPixel(i, i, color); mBitmapOut.setPixel(i, i + 1,
-             * color); mBitmapOut.setPixel(i, i - 1, color); } */
-
             long startTime = System.currentTimeMillis();
 
-            renderJulia(xOffset, 0.5f);
+            renderJulia(0.5f - xOffset / 5, 0.2f);
 
             Log.d(TAG, "Rendertime: " + (System.currentTimeMillis() - startTime));
-
             Canvas c = null;
             SurfaceHolder holder = getSurfaceHolder();
             try {
                 c = holder.lockCanvas();
-                // Log.d(TAG, "canvas: " + c.getHeight() + "  " + c.getWidth());
-                // Log.d(TAG, "mBitmapOut: " + mBitmapOut.getHeight() + "  " +
-                // mBitmapOut.getWidth());
-                // Log.d(TAG, "mBitmapOu 500500t: " + mBitmapOut.getPixel(500,
-                // 500));
-
                 if (c != null) {
 
-                    c.drawBitmap(mBitmapOut, 0f, 0f, null);
+                    c.drawBitmap(mBitmapOut, mMatrix, null);
                 }
             } finally {
                 if (c != null) {
-                    Log.d(TAG, "unlock");
                     holder.unlockCanvasAndPost(c);
                 }
             }
@@ -149,15 +130,6 @@ public class JuliaWallpaperService extends WallpaperService {
             mScript.set_cy(cy);
             mScript.forEach_root(mInPixelsAllocation, mOutPixelsAllocation);
             mOutPixelsAllocation.copyTo(mBitmapOut);
-
-
-            // Log.d(TAG, "alloc 500500t: " + mBitmapOut.getPixel(500, 500));
-            // Log.d(TAG, "alloc 5001080 t: " + mBitmapOut.getPixel(100, 1081));
-
-            // Log.d(TAG, "in alloc size :" +
-            // mInPixelsAllocation.getBytesSize());
-            // Log.d(TAG, "out alloc size :" +
-            // mOutPixelsAllocation.getSurface());
         }
 
     }

@@ -21,15 +21,15 @@ float cx;
 float cy;
 float width;
 float height;
-float zoom;
+float scale;
 int precision;
 rs_matrix3x3 colorMat;
 
 void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     float3 pixel = convert_float4(in[0]).rgb;
 
-    float fx=(float)((x/width)*2.f-1.f) * zoom;
-    float fy=(float)((y/height)*2.f-1.f) * zoom;
+    float fx=(float)((x/width)*2.f-1.f) * scale;
+    float fy=(float)((y/height)*2.f-1.f) * scale;
     
     float t=0;
     
@@ -46,7 +46,7 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
 	 }
 	       //g.setRGB((int)((i+2)*w/4), (int)((j+2)*h/4),colorscheme[k].getRGB());    
     pixel.x = k*COLOR_MULT;
-    pixel.y = k*COLOR_MULT;
+    pixel.y = 255-k*COLOR_MULT;
     pixel.z = k*COLOR_MULT;
     
     out->xyz = convert_uchar3(pixel);
