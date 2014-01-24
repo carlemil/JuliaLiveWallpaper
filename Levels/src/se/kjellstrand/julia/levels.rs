@@ -23,18 +23,23 @@ float width;
 float height;
 float scale;
 int precision;
-rs_matrix3x3 colorMat;
+
+typedef struct Point {
+    int x;
+    int y;
+} Point_t;
+
+Point_t point;
 
 void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
-    float3 pixel = convert_float4(in[0]).rgb;
+    //float3 pixel = convert_float4(in[0]).rgb;
 
     float fx=(float)((x/width)*2.f-1.f) * scale;
     float fy=(float)((y/height)*2.f-1.f) * scale;
     
     float t=0;
-    
     int k=0;
-    int COLOR_MULT = (256 / precision);
+    int COLOR_MULT = (255 / (precision+1));
     
      while(k<precision)
 	 {
@@ -44,12 +49,17 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
 	    if (fx*fx+fy*fy >= 4) break;
 	    k++;
 	 }
-	       //g.setRGB((int)((i+2)*w/4), (int)((j+2)*h/4),colorscheme[k].getRGB());    
-    pixel.x = k*COLOR_MULT;
-    pixel.y = 255-k*COLOR_MULT;
-    pixel.z = k*COLOR_MULT;
+    //pixel.x = k*COLOR_MULT;
+    //pixel.y = k*COLOR_MULT;
+    //pixel.z = k*COLOR_MULT;
+    //out->xyz = convert_uchar3(pixel);
     
-    out->xyz = convert_uchar3(pixel);
+    uchar3 color;
+    color.x = k*COLOR_MULT;
+    color.y = k*COLOR_MULT;
+    color.z = k*COLOR_MULT;
+    out->xyz = color;
+    
 }
 
 
