@@ -8,7 +8,10 @@ import android.renderscript.RenderScript;
 import android.renderscript.RenderScript.Priority;
 
 import com.android.rs.levels.ScriptC_levels;
+<<<<<<< HEAD
 import com.android.rs.levels.ScriptField_Point;
+=======
+>>>>>>> fb1c661c2d6c4ecab8bc3fe4580d0c6247fb8674
 
 public class JuliaEngine {
 
@@ -16,6 +19,10 @@ public class JuliaEngine {
 
     private Matrix mMatrix;
 
+<<<<<<< HEAD
+=======
+    private RenderScript mRS;
+>>>>>>> fb1c661c2d6c4ecab8bc3fe4580d0c6247fb8674
     private ScriptC_levels mScript;
 
     private Allocation mInPixelsAllocation;
@@ -23,6 +30,7 @@ public class JuliaEngine {
 
     private int mPrecision = 16;
 
+<<<<<<< HEAD
     public void init(Context context, int width, int height, float scale) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         mBitmap = Bitmap.createBitmap(width, height, conf);
@@ -42,14 +50,38 @@ public class JuliaEngine {
 
         mScript.set_width(width);
         mScript.set_height(height);
+=======
+    public void init(Context context, int mWidth, int mHeight, float scale) {
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        mBitmap = Bitmap.createBitmap(mWidth, mHeight, conf);
+        mBitmap.setHasAlpha(false);
+
+        mRS = RenderScript.create(context, RenderScript.ContextType.DEBUG);
+        mRS.setPriority(Priority.LOW);
+
+        mInPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmap,
+                Allocation.MipmapControl.MIPMAP_NONE,
+                Allocation.USAGE_SCRIPT);
+        mOutPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmap,
+                Allocation.MipmapControl.MIPMAP_NONE,
+                Allocation.USAGE_SCRIPT);
+
+        mScript = new ScriptC_levels(mRS, context.getResources(), R.raw.levels);
+
+        mScript.set_width(mWidth);
+        mScript.set_height(mHeight);
+>>>>>>> fb1c661c2d6c4ecab8bc3fe4580d0c6247fb8674
 
         mScript.set_precision(mPrecision);
         mScript.set_scale(scale);
 
+<<<<<<< HEAD
         // mScript.set
 
         ScriptField_Point point = null;
 
+=======
+>>>>>>> fb1c661c2d6c4ecab8bc3fe4580d0c6247fb8674
         mMatrix = new Matrix();
         mMatrix.postScale(scale, scale);
     }
@@ -72,10 +104,13 @@ public class JuliaEngine {
 
     public void setPrecision(int mPrecision) {
         this.mPrecision = mPrecision;
+<<<<<<< HEAD
         mScript.set_precision(mPrecision);
     }
 
     public void destroy() {
         mScript.destroy();
+=======
+>>>>>>> fb1c661c2d6c4ecab8bc3fe4580d0c6247fb8674
     }
 }

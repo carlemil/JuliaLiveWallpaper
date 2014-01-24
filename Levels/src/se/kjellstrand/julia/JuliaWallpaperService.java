@@ -77,6 +77,11 @@ public class JuliaWallpaperService extends WallpaperService {
             long renderTime = System.currentTimeMillis() - startTime;
             Log.d(TAG, "Rendertime: " + (renderTime));
 
+
+            Bitmap bitmapOut = mJuliaRenderer.renderJulia(0.5f - xOffset / 5, 0.2f);
+
+            Log.d(TAG, "Rendertime: " + (System.currentTimeMillis() - startTime));
+
             Canvas c = null;
             SurfaceHolder holder = getSurfaceHolder();
             try {
