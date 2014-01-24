@@ -26,17 +26,8 @@
 
     <application
         android:hardwareAccelerated="true"
-        android:label="Julia RS" >
-        <!-- <activity
-            android:name="LevelsRSActivity"
-            android:label="Levels RS" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> -->
-        
+        android:label="Julia Wallpaper" >
+ 
         <service
             android:name="se.kjellstrand.julia.JuliaWallpaperService"
             android:label="Julia Wallpaper"
