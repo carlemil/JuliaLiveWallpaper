@@ -7,7 +7,6 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.RenderScript.Priority;
-import android.renderscript.Short4;
 
 public class JuliaEngine {
 
@@ -47,23 +46,25 @@ public class JuliaEngine {
         mScript.set_precision(mPrecision);
         mScript.set_scale(scale);
 
-        Short4[] d = new Short4[mPrecision];
+        int[] d = new int[mPrecision];
 
         ScriptField_Palette p = new ScriptField_Palette(rs, mPrecision);
         for (int i = 0; i < mPrecision; i++) {
-            Short4 v = new Short4();
-            v.x = (short) ((((float) i) / mPrecision) * 255);
-            v.w = (short) ((((float) mPrecision - i) / mPrecision) * 255);
-            v.y = (short) ((((float) mPrecision - i) / mPrecision) * 255);
-            v.z = (short) ((((float) i) / mPrecision) * 255);
+            // Short4 v = new Short4();
+            // v.x = (short) ((((float) i) / mPrecision) * 255);
+            // v.w = (short) ((((float) i) / mPrecision) * 255);
+            // v.y = (short) ((((float) i) / mPrecision) * 255);
+            // v.z = (short) ((((float) i) / mPrecision) * 255);
             // p.set_c(i, v, true);
-            d[i] = v;
+            d[i] = (int) ((((float) i) / mPrecision) * 255);
         }
 
-        Element type = Element.U8_4(rs);
+        Element type = Element.I32(rs);
         Allocation colorAllocation = Allocation.createSized(rs, type, mPrecision);
         mScript.bind_color(colorAllocation);
-        // colorAllocation.copy1DRangeFrom(0, mPrecision, d);
+
+        colorAllocation.copy1DRangeFrom(0, mPrecision, d);
+        // 2DRangeFrom(0, mPrecision, d);
 
         //Allocation color = mScript.get_color();
         //color.copyFrom(d);

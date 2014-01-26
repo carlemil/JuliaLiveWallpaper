@@ -56,6 +56,8 @@ public class JuliaWallpaperService extends WallpaperService {
         public void onVisibilityChanged(boolean visible) {
             super.onVisibilityChanged(visible);
             // TODO !!!!!!!!!!!!!!!
+
+            // mScript stop/start?
         }
 
         @Override
