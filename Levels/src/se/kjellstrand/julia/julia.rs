@@ -15,7 +15,7 @@
  */
 
 #pragma version(1)
-#pragma rs java_package_name(com.android.rs.levels)
+#pragma rs java_package_name(se.kjellstrand.julia)
 
 float cx;
 float cy;
@@ -24,42 +24,36 @@ float height;
 float scale;
 int precision;
 
-typedef struct Point {
-    int x;
-    int y;
-} Point_t;
+typedef struct Palette {
+    uchar4 c;
+} Palette_t;
 
-Point_t point;
+Palette_t *palette;
+
 
 void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
-    //float3 pixel = convert_float4(in[0]).rgb;
-
-    float fx=(float)((x/width)*2.f-1.f) * scale;
-    float fy=(float)((y/height)*2.f-1.f) * scale;
+    float fx = (float) ((x / width) * 2.f - 1.f) * scale;
+    float fy = (float) ((y / height) * 2.f - 1.f) * scale;
     
-    float t=0;
-    int k=0;
-    int COLOR_MULT = (255 / (precision+1));
+    float t = 0;
+    int k = 0;
+    int COLOR_MULT = (255 / (precision + 1));
     
-     while(k<precision)
-	 {
-	    t = fx*fx-fy*fy+cx;
-	    fy = 2*fx*fy+cy;
+     while(k < precision) {
+	    t = fx * fx - fy * fy + cx;
+	    fy = 2 * fx * fy + cy;
 	    fx = t;
-	    if (fx*fx+fy*fy >= 4) break;
+	    if (fx * fx + fy * fy >= 4) {
+	       break;
+	    }
 	    k++;
 	 }
-    //pixel.x = k*COLOR_MULT;
-    //pixel.y = k*COLOR_MULT;
-    //pixel.z = k*COLOR_MULT;
-    //out->xyz = convert_uchar3(pixel);
-    
+
     uchar3 color;
     color.x = k*COLOR_MULT;
     color.y = k*COLOR_MULT;
     color.z = k*COLOR_MULT;
     out->xyz = color;
-    
 }
 
 

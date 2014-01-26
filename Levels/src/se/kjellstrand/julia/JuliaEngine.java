@@ -6,31 +6,24 @@ import android.graphics.Matrix;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.RenderScript.Priority;
-
-import com.android.rs.levels.ScriptC_levels;
-<<<<<<< HEAD
-import com.android.rs.levels.ScriptField_Point;
-=======
->>>>>>> fb1c661c2d6c4ecab8bc3fe4580d0c6247fb8674
+import android.renderscript.Short4;
+import android.util.Log;
 
 public class JuliaEngine {
+
+    private final String TAG = JuliaEngine.class.getCanonicalName();
 
     private Bitmap mBitmap;
 
     private Matrix mMatrix;
 
-<<<<<<< HEAD
-=======
-    private RenderScript mRS;
->>>>>>> fb1c661c2d6c4ecab8bc3fe4580d0c6247fb8674
-    private ScriptC_levels mScript;
+    private ScriptC_julia mScript;
 
     private Allocation mInPixelsAllocation;
     private Allocation mOutPixelsAllocation;
 
-    private int mPrecision = 16;
+    private int mPrecision = 32;
 
-<<<<<<< HEAD
     public void init(Context context, int width, int height, float scale) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         mBitmap = Bitmap.createBitmap(width, height, conf);
@@ -46,42 +39,27 @@ public class JuliaEngine {
                 Allocation.MipmapControl.MIPMAP_NONE,
                 Allocation.USAGE_SCRIPT);
 
-        mScript = new ScriptC_levels(rs, context.getResources(), R.raw.levels);
+        mScript = new ScriptC_julia(rs, context.getResources(), R.raw.julia);
 
         mScript.set_width(width);
         mScript.set_height(height);
-=======
-    public void init(Context context, int mWidth, int mHeight, float scale) {
-        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-        mBitmap = Bitmap.createBitmap(mWidth, mHeight, conf);
-        mBitmap.setHasAlpha(false);
-
-        mRS = RenderScript.create(context, RenderScript.ContextType.DEBUG);
-        mRS.setPriority(Priority.LOW);
-
-        mInPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmap,
-                Allocation.MipmapControl.MIPMAP_NONE,
-                Allocation.USAGE_SCRIPT);
-        mOutPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmap,
-                Allocation.MipmapControl.MIPMAP_NONE,
-                Allocation.USAGE_SCRIPT);
-
-        mScript = new ScriptC_levels(mRS, context.getResources(), R.raw.levels);
-
-        mScript.set_width(mWidth);
-        mScript.set_height(mHeight);
->>>>>>> fb1c661c2d6c4ecab8bc3fe4580d0c6247fb8674
 
         mScript.set_precision(mPrecision);
         mScript.set_scale(scale);
 
-<<<<<<< HEAD
-        // mScript.set
 
-        ScriptField_Point point = null;
 
-=======
->>>>>>> fb1c661c2d6c4ecab8bc3fe4580d0c6247fb8674
+        ScriptField_Palette p = new ScriptField_Palette(rs, mPrecision);
+        for (int i = 0; i < mPrecision; i++) {
+            Short4 v = new Short4();
+            v.w = (short) 55;
+            v.x = (short) 55;// ((mPrecision / ((float) i)) * 255);
+            v.y = (short) 55;// (255 - (mPrecision / ((float) i)) * 255);
+            v.z = (short) 55;
+            Log.d(TAG, "i: " + i);
+            p.set_c(i, v, true);
+        }
+
         mMatrix = new Matrix();
         mMatrix.postScale(scale, scale);
     }
@@ -104,13 +82,10 @@ public class JuliaEngine {
 
     public void setPrecision(int mPrecision) {
         this.mPrecision = mPrecision;
-<<<<<<< HEAD
         mScript.set_precision(mPrecision);
     }
 
     public void destroy() {
         mScript.destroy();
-=======
->>>>>>> fb1c661c2d6c4ecab8bc3fe4580d0c6247fb8674
     }
 }

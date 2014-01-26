@@ -66,10 +66,17 @@ public class JuliaWallpaperService extends WallpaperService {
             draw(xOffset);
             /* if (xOffset == 1.0f) { mJuliaRenderer.setPrecision(128);
              * draw(xOffset); } */
-            mJuliaRenderer.setPrecision(32);
+            // mJuliaRenderer.setPrecision(32);
 
         }
 
+        // fada in på vissible med separat timestamp var som alltid checkas vid
+        // render, som sätter hur ljus paletten är, 0-1f typ.
+        // om 1 så skit i den å kör default, annars gånga ner alla färger för
+        // att få en fadein under .3 sekunder eller så
+        // låt julia cx cy state va beroende på timestam från senaste fade in
+        
+        
         private void draw(float xOffset) {
 
             long startTime = System.currentTimeMillis();
@@ -78,9 +85,11 @@ public class JuliaWallpaperService extends WallpaperService {
             Log.d(TAG, "Rendertime: " + (renderTime));
 
 
-            Bitmap bitmapOut = mJuliaRenderer.renderJulia(0.5f - xOffset / 5, 0.2f);
+            // Bitmap bitmapOut = mJuliaRenderer.renderJulia(0.5f - xOffset / 5,
+            // 0.2f);
 
-            Log.d(TAG, "Rendertime: " + (System.currentTimeMillis() - startTime));
+            // Log.d(TAG, "Rendertime: " + (System.currentTimeMillis() -
+            // startTime));
 
             Canvas c = null;
             SurfaceHolder holder = getSurfaceHolder();
