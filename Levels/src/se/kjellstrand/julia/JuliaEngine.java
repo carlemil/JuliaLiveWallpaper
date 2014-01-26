@@ -4,10 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.renderscript.Allocation;
+import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.RenderScript.Priority;
 import android.renderscript.Short4;
-import android.util.Log;
 
 public class JuliaEngine {
 
@@ -22,7 +22,7 @@ public class JuliaEngine {
     private Allocation mInPixelsAllocation;
     private Allocation mOutPixelsAllocation;
 
-    private int mPrecision = 32;
+    private int mPrecision = 16;
 
     public void init(Context context, int width, int height, float scale) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
@@ -47,18 +47,26 @@ public class JuliaEngine {
         mScript.set_precision(mPrecision);
         mScript.set_scale(scale);
 
-
+        Short4[] d = new Short4[mPrecision];
 
         ScriptField_Palette p = new ScriptField_Palette(rs, mPrecision);
         for (int i = 0; i < mPrecision; i++) {
             Short4 v = new Short4();
-            v.w = (short) 55;
-            v.x = (short) 55;// ((mPrecision / ((float) i)) * 255);
-            v.y = (short) 55;// (255 - (mPrecision / ((float) i)) * 255);
-            v.z = (short) 55;
-            Log.d(TAG, "i: " + i);
-            p.set_c(i, v, true);
+            v.x = (short) ((((float) i) / mPrecision) * 255);
+            v.w = (short) ((((float) mPrecision - i) / mPrecision) * 255);
+            v.y = (short) ((((float) mPrecision - i) / mPrecision) * 255);
+            v.z = (short) ((((float) i) / mPrecision) * 255);
+            // p.set_c(i, v, true);
+            d[i] = v;
         }
+
+        Element type = Element.U8_4(rs);
+        Allocation colorAllocation = Allocation.createSized(rs, type, mPrecision);
+        mScript.bind_color(colorAllocation);
+        // colorAllocation.copy1DRangeFrom(0, mPrecision, d);
+
+        //Allocation color = mScript.get_color();
+        //color.copyFrom(d);
 
         mMatrix = new Matrix();
         mMatrix.postScale(scale, scale);
