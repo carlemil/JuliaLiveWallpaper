@@ -21,7 +21,7 @@ public class JuliaEngine {
     private Allocation mInPixelsAllocation;
     private Allocation mOutPixelsAllocation;
 
-    private int mPrecision = 16;
+    private int mPrecision = 32;
 
     public void init(Context context, int width, int height, float scale) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
@@ -57,6 +57,7 @@ public class JuliaEngine {
             // v.z = (short) ((((float) i) / mPrecision) * 255);
             // p.set_c(i, v, true);
             d[i] = (int) ((((float) i) / mPrecision) * 255);
+            d[i] += (int) ((((float) i) / mPrecision) * 255)<<8;
         }
 
         Element type = Element.I32(rs);

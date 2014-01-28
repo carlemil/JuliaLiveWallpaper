@@ -53,7 +53,8 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
 	//out = color[k];
 	uchar4 co;
 	 
-    out->b = color[k]&255;
+    out->r = color[k]&255;
+    out->g = color[k]&255;
 
 
 //	uchar4 co;
