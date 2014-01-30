@@ -38,9 +38,8 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     
     float t = 0;
     int k = 0;
-    int COLOR_MULT = (255 / (precision + 1));
     
-     while(k < precision) {
+    while(k < precision) {
 	    t = fx * fx - fy * fy + cx;
 	    fy = 2 * fx * fy + cy;
 	    fx = t;
@@ -48,36 +47,12 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
 	       break;
 	    }
 	    k++;
-	 }
+	}
 
-	//out = color[k];
 	uchar4 co;
 	 
-    out->r = color[k]&255;
-    out->g = color[k]&255;
+    out->b = color[k]&((1<<8))-1;
+    out->g = color[k]&((1<<16))-1;
+    out->r = color[k]&((1<<24))-1;
 
-
-//	uchar4 co;
-//	co.b= color[k].b; 
-//	co.g= color[k].g; 
-//	co.r= color[k].r; 
-//	co.a= color[k].a; 
-
-    //uchar3 color;
-    //color.x = k*COLOR_MULT;
-    //color.y = 0;//k*COLOR_MULT;
-    //color.z = 0;//k*COLOR_MULT;
-    
-    //uchar cx = palette[k].c.x;
-    //uchar cy = palette[k].c.y;
-    //uchar cz = palette[k].c.z;
-
-	//color.x = cx;
-	//color.y = cy;
-	//color.z = palette[k].c.y;//150;
-
-    
-	//out->argb =  co;//convert_uchar3(co);
-    //out->xyz = convert_uchar3(color[k]);
-    //palette[k].c); 
 }
