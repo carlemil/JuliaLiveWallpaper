@@ -30,7 +30,7 @@ typedef struct Palette {
 
 Palette_t *palette;
 
-uint32_t *color;
+uchar *color;
 
 void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     float fx = (float) ((x / width) * 2.f - 1.f) * scale;
@@ -49,10 +49,10 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
 	    k++;
 	}
 
-	uchar4 co;
+	//uchar4 co;
 	 
-    out->b = color[k]&((1<<8))-1;
-    out->g = color[k]&((1<<16))-1;
-    out->r = color[k]&((1<<24))-1;
+    out->b = color[k*3+0];
+    out->g = color[k*3+1];
+    out->r = color[k*3+2];
 
 }

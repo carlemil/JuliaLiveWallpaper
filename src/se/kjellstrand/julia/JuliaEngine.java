@@ -21,7 +21,7 @@ public class JuliaEngine {
 	private Allocation mInPixelsAllocation;
 	private Allocation mOutPixelsAllocation;
 
-	private int mPrecision = 32;
+	private int mPrecision = 16;
 
 	public void init(Context context, int width, int height, float scale) {
 		Bitmap.Config conf = Bitmap.Config.ARGB_8888;
@@ -45,22 +45,21 @@ public class JuliaEngine {
 		mScript.set_precision(mPrecision);
 		mScript.set_scale(scale);
 
-		int[] d = new int[mPrecision + 1];
+		byte[] d = new byte[mPrecision * 3];
 
 		ScriptField_Palette p = new ScriptField_Palette(rs, mPrecision);
-		for (int i = 0; i <= mPrecision; i++) {
-			d[i] = //
-				((int) ((((float) i) / mPrecision) * 256)) + // 
-				((int) ((((float) i) / mPrecision) * 256) << 8) + //
-				((int) ((((float) i) / mPrecision) * 256) << 16);
+		for (int i = 0; i < mPrecision; i++) {
+			d[i * 3 + 0] = (byte) ((((float) i) / mPrecision) * 255);
+			d[i * 3 + 1] = (byte) ((((float) mPrecision - i) / mPrecision) * 255);
+			d[i * 3 + 2] = (byte) ((((float) mPrecision - i) / mPrecision) * 255);
 		}
 
-		Element type = Element.I32(rs);
+		Element type = Element.U8(rs);
 		Allocation colorAllocation = Allocation.createSized(rs, type,
-				mPrecision);
+				mPrecision * 3);
 		mScript.bind_color(colorAllocation);
 
-		colorAllocation.copy1DRangeFrom(0, mPrecision, d);
+		colorAllocation.copy1DRangeFrom(0, mPrecision * 3, d);
 		// 2DRangeFrom(0, mPrecision, d);
 
 		// Allocation color = mScript.get_color();
