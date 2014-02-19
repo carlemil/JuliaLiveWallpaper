@@ -23,6 +23,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
     class DemoEngine extends Engine {
 
+        private final String LOG_TAG = DemoEngine.class.getCanonicalName();
         JuliaEngine mJuliaRenderer = new JuliaEngine();
         private long seedTime;
 
@@ -59,14 +60,13 @@ public class JuliaWallpaperService extends WallpaperService {
             // TODO !!!!!!!!!!!!!!!
 
             // mScript stop/start?
-            seedTime = System.currentTimeMillis();
+            seedTime = 0;// System.currentTimeMillis() % 10000000;
         }
 
         @Override
         public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep,
                 float yOffsetStep, int xPixelOffset, int yPixelOffset) {
             super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
-            Log.d(TAG, "xOffset: " + xOffset);
             draw(xOffset);
             /* if (xOffset == 1.0f) { mJuliaRenderer.setPrecision(128);
              * draw(xOffset); } */
@@ -83,18 +83,13 @@ public class JuliaWallpaperService extends WallpaperService {
         private void draw(float xOffset) {
 
             long startTime = System.currentTimeMillis();
-            final long OFFSET_MULT = 10000l;
-            Bitmap bitmap = mJuliaRenderer.renderJulia(//
-                    getX((long) (seedTime + xOffset * OFFSET_MULT)),//
-                    getY((long) (seedTime + xOffset * OFFSET_MULT)));
+            final float OFFSET_MULT = 100000f;
+            float x = getX((long) (seedTime + xOffset * OFFSET_MULT));
+            float y = getY((long) (seedTime + xOffset * OFFSET_MULT));
+            Log.d(LOG_TAG, "X: " + x + "  Y: " + y);
+            Bitmap bitmap = mJuliaRenderer.renderJulia(x, y);
             long renderTime = System.currentTimeMillis() - startTime;
-            Log.d(TAG, "Rendertime: " + (renderTime));
-
-            // Bitmap bitmapOut = mJuliaRenderer.renderJulia(0.5f - xOffset / 5,
-            // 0.2f);
-
-            // Log.d(TAG, "Rendertime: " + (System.currentTimeMillis() -
-            // startTime));
+            // Log.d(TAG, "Rendertime: " + (renderTime));
 
             Canvas c = null;
             SurfaceHolder holder = getSurfaceHolder();
@@ -115,24 +110,26 @@ public class JuliaWallpaperService extends WallpaperService {
         private static final double MIN_X = 0;
         private static final double MAX_Y = 0.74;
         private static final double MIN_Y = -0.32;
-        private static final int BIG_C = 10007;
+        private static final double BIG_C = 10007;
         // Used to create smaller circles to avoid repetitions in the julia seed
         // values
         private static final double DIV_X1 = 50;
         private static final double DIV_Y1 = 50;
         private static final double DIV_X2 = 400;
         private static final double DIV_Y2 = 400;
-        private static final int MED_C = 27277;
-        private static final int SMAL_C = 101117;
+        private static final double MED_C = 27277;
+        private static final double SMAL_C = 101117;
 
         private float getY(long i) {
-            return (float) (((((Math.cos(i / BIG_C) + 1) / 2) * (MAX_Y - MIN_Y)) + MIN_Y) +
-                    (Math.cos(i / MED_C) / DIV_Y1) + (Math.cos(i / SMAL_C) / DIV_Y2));
+            return (float) (((((Math.cos(i / BIG_C) + 1d) / 2d) * (MAX_Y - MIN_Y)) + MIN_Y));// +
+            // (Math.cos(i / MED_C) / DIV_Y1) + (Math.cos(i / SMAL_C) /
+            // DIV_Y2));
         }
 
         private float getX(long i) {
-            return (float) (((((Math.sin(i / BIG_C) + 1) / 2) * (MAX_X - MIN_X)) + MIN_X) +
-                    (Math.sin(i / MED_C) / DIV_X1) + (Math.sin(i / SMAL_C) / DIV_X2));
+            return (float) (((((Math.sin(i / BIG_C) + 1d) / 2d) * (MAX_X - MIN_X)) + MIN_X));// +
+            // (Math.sin(i / MED_C) / DIV_X1) + (Math.sin(i / SMAL_C) /
+            // DIV_X2));
         }
     }
 }
