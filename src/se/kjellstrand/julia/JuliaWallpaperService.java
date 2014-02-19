@@ -24,6 +24,7 @@ public class JuliaWallpaperService extends WallpaperService {
     class DemoEngine extends Engine {
 
         JuliaEngine mJuliaRenderer = new JuliaEngine();
+        private long seedTime;
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
@@ -58,6 +59,7 @@ public class JuliaWallpaperService extends WallpaperService {
             // TODO !!!!!!!!!!!!!!!
 
             // mScript stop/start?
+            seedTime = System.currentTimeMillis();
         }
 
         @Override
@@ -77,15 +79,16 @@ public class JuliaWallpaperService extends WallpaperService {
         // om 1 så skit i den å kör default, annars gånga ner alla färger för
         // att få en fadein under .3 sekunder eller så
         // låt julia cx cy state va beroende på timestam från senaste fade in
-        
-        
+
         private void draw(float xOffset) {
 
             long startTime = System.currentTimeMillis();
-            Bitmap bitmap = mJuliaRenderer.renderJulia(0.5f - xOffset / 5, 0.2f);
+            final long OFFSET_MULT = 10000l;
+            Bitmap bitmap = mJuliaRenderer.renderJulia(//
+                    getX((long) (seedTime + xOffset * OFFSET_MULT)),//
+                    getY((long) (seedTime + xOffset * OFFSET_MULT)));
             long renderTime = System.currentTimeMillis() - startTime;
             Log.d(TAG, "Rendertime: " + (renderTime));
-
 
             // Bitmap bitmapOut = mJuliaRenderer.renderJulia(0.5f - xOffset / 5,
             // 0.2f);
@@ -107,5 +110,29 @@ public class JuliaWallpaperService extends WallpaperService {
             }
         }
 
+        // Used for the large circle tracing the edge of the Mandelbrot set.
+        private static final double MAX_X = 0.75;
+        private static final double MIN_X = 0;
+        private static final double MAX_Y = 0.74;
+        private static final double MIN_Y = -0.32;
+        private static final int BIG_C = 10007;
+        // Used to create smaller circles to avoid repetitions in the julia seed
+        // values
+        private static final double DIV_X1 = 50;
+        private static final double DIV_Y1 = 50;
+        private static final double DIV_X2 = 400;
+        private static final double DIV_Y2 = 400;
+        private static final int MED_C = 27277;
+        private static final int SMAL_C = 101117;
+
+        private float getY(long i) {
+            return (float) (((((Math.cos(i / BIG_C) + 1) / 2) * (MAX_Y - MIN_Y)) + MIN_Y) +
+                    (Math.cos(i / MED_C) / DIV_Y1) + (Math.cos(i / SMAL_C) / DIV_Y2));
+        }
+
+        private float getX(long i) {
+            return (float) (((((Math.sin(i / BIG_C) + 1) / 2) * (MAX_X - MIN_X)) + MIN_X) +
+                    (Math.sin(i / MED_C) / DIV_X1) + (Math.sin(i / SMAL_C) / DIV_X2));
+        }
     }
 }
