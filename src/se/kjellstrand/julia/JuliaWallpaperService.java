@@ -12,9 +12,9 @@ public class JuliaWallpaperService extends WallpaperService {
     private final String TAG = JuliaWallpaperService.class.getCanonicalName();
 
     float mScale = 2f;
-
-    private int mWidth;
-    private int mHeight;
+//
+//    private int mWidth;
+//    private int mHeight;
 
     @Override
     public Engine onCreateEngine() {
@@ -32,8 +32,8 @@ public class JuliaWallpaperService extends WallpaperService {
             super.onSurfaceCreated(holder);
 
             Rect rect = holder.getSurfaceFrame();
-            mHeight = rect.height();
-            mWidth = rect.width();
+//            mHeight = rect.height();
+//            mWidth = rect.width();
         }
 
         @Override
@@ -60,7 +60,7 @@ public class JuliaWallpaperService extends WallpaperService {
             // TODO !!!!!!!!!!!!!!!
 
             // mScript stop/start?
-            seedTime = 0;// System.currentTimeMillis() % 10000000;
+            seedTime = System.currentTimeMillis() % 10000000;
         }
 
         @Override
@@ -83,7 +83,7 @@ public class JuliaWallpaperService extends WallpaperService {
         private void draw(float xOffset) {
 
             long startTime = System.currentTimeMillis();
-            final float OFFSET_MULT = 100000f;
+            final float OFFSET_MULT = 50000f;
             float x = getX((long) (seedTime + xOffset * OFFSET_MULT));
             float y = getY((long) (seedTime + xOffset * OFFSET_MULT));
             Log.d(LOG_TAG, "X: " + x + "  Y: " + y);
@@ -107,18 +107,18 @@ public class JuliaWallpaperService extends WallpaperService {
 
         // Used for the large circle tracing the edge of the Mandelbrot set.
         private static final double MAX_X = 0.75;
-        private static final double MIN_X = 0;
-        private static final double MAX_Y = 0.74;
-        private static final double MIN_Y = -0.32;
-        private static final double BIG_C = 10007;
+        private static final double MIN_X = -0.82;
+        private static final double MAX_Y = 0.8;
+        private static final double MIN_Y = -MAX_Y;
+        private static final double BIG_C = 10000; //514229;
         // Used to create smaller circles to avoid repetitions in the julia seed
         // values
         private static final double DIV_X1 = 50;
         private static final double DIV_Y1 = 50;
         private static final double DIV_X2 = 400;
         private static final double DIV_Y2 = 400;
-        private static final double MED_C = 27277;
-        private static final double SMAL_C = 101117;
+        private static final double MED_C = 15000;//  96557
+        private static final double SMAL_C = 10000;//33461
 
         private float getY(long i) {
             return (float) (((((Math.cos(i / BIG_C) + 1d) / 2d) * (MAX_Y - MIN_Y)) + MIN_Y));// +

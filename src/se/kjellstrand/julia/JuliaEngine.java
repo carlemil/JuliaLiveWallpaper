@@ -1,3 +1,4 @@
+
 package se.kjellstrand.julia;
 
 import android.content.Context;
@@ -10,87 +11,86 @@ import android.renderscript.RenderScript.Priority;
 
 public class JuliaEngine {
 
-	private final String TAG = JuliaEngine.class.getCanonicalName();
+    private final String TAG = JuliaEngine.class.getCanonicalName();
 
-	private Bitmap mBitmap;
+    private Bitmap mBitmap;
 
-	private Matrix mMatrix;
+    private Matrix mMatrix;
 
-	private ScriptC_julia mScript;
+    private ScriptC_julia mScript;
 
-	private Allocation mInPixelsAllocation;
-	private Allocation mOutPixelsAllocation;
+    private Allocation mInPixelsAllocation;
 
-	private int mPrecision = 16;
+    private Allocation mOutPixelsAllocation;
 
-	public void init(Context context, int width, int height, float scale) {
-		Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-		mBitmap = Bitmap.createBitmap(width, height, conf);
-		mBitmap.setHasAlpha(false);
+    private int mPrecision = 16;
 
-		RenderScript rs = RenderScript.create(context,
-				RenderScript.ContextType.DEBUG);
-		rs.setPriority(Priority.LOW);
+    public void init(Context context, int width, int height, float scale) {
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        mBitmap = Bitmap.createBitmap(width, height, conf);
+        mBitmap.setHasAlpha(false);
 
-		mInPixelsAllocation = Allocation.createFromBitmap(rs, mBitmap,
-				Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
-		mOutPixelsAllocation = Allocation.createFromBitmap(rs, mBitmap,
-				Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+        RenderScript rs = RenderScript.create(context, RenderScript.ContextType.DEBUG);
+        rs.setPriority(Priority.LOW);
 
-		mScript = new ScriptC_julia(rs, context.getResources(), R.raw.julia);
+        mInPixelsAllocation = Allocation.createFromBitmap(rs, mBitmap,
+                Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+        mOutPixelsAllocation = Allocation.createFromBitmap(rs, mBitmap,
+                Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
 
-		mScript.set_width(width);
-		mScript.set_height(height);
+        mScript = new ScriptC_julia(rs, context.getResources(), R.raw.julia);
 
-		mScript.set_precision(mPrecision);
-		mScript.set_scale(scale);
+        mScript.set_width(width);
+        mScript.set_height(height);
 
-		byte[] d = new byte[mPrecision * 3];
+        mScript.set_precision(mPrecision);
+        mScript.set_scale(scale);
 
-		ScriptField_Palette p = new ScriptField_Palette(rs, mPrecision);
-		for (int i = 0; i < mPrecision; i++) {
-			d[i * 3 + 0] = (byte) ((((float) i) / mPrecision) * 255);
-			d[i * 3 + 1] = (byte) ((((float) mPrecision - i) / mPrecision) * 255);
-			d[i * 3 + 2] = (byte) ((((float) mPrecision - i) / mPrecision) * 255);
-		}
+        byte[] d = new byte[mPrecision * 3];
 
-		Element type = Element.U8(rs);
-		Allocation colorAllocation = Allocation.createSized(rs, type,
-				mPrecision * 3);
-		mScript.bind_color(colorAllocation);
+        //ScriptField_Palette p = new ScriptField_Palette(rs, mPrecision);
+        for (int i = 0; i < mPrecision; i++) {
+            d[i * 3 + 0] = (byte) ((((float) i) / mPrecision) * 255);
+            d[i * 3 + 1] = (byte) ((((float) mPrecision - i) / mPrecision) * 255);
+            d[i * 3 + 2] = (byte) ((((float) mPrecision - i) / mPrecision) * 255);
+        }
 
-		colorAllocation.copy1DRangeFrom(0, mPrecision * 3, d);
-		// 2DRangeFrom(0, mPrecision, d);
+        Element type = Element.U8(rs);
+        Allocation colorAllocation = Allocation.createSized(rs, type, mPrecision * 3);
+        mScript.bind_color(colorAllocation);
 
-		// Allocation color = mScript.get_color();
-		// color.copyFrom(d);
+        colorAllocation.copy1DRangeFrom(0, mPrecision * 3, d);
+        // 2DRangeFrom(0, mPrecision, d);
 
-		mMatrix = new Matrix();
-		mMatrix.postScale(scale, scale);
-	}
+        // Allocation color = mScript.get_color();
+        // color.copyFrom(d);
 
-	public Bitmap renderJulia(float cx, float cy) {
-		mScript.set_cx(cx);
-		mScript.set_cy(cy);
-		mScript.forEach_root(mInPixelsAllocation, mOutPixelsAllocation);
-		mOutPixelsAllocation.copyTo(mBitmap);
-		return mBitmap;
-	}
+        mMatrix = new Matrix();
+        mMatrix.postScale(scale, scale);
+    }
 
-	public Matrix getScaleMatrix() {
-		return mMatrix;
-	}
+    public Bitmap renderJulia(float cx, float cy) {
+        mScript.set_cx(cx);
+        mScript.set_cy(cy);
+        mScript.forEach_root(mInPixelsAllocation, mOutPixelsAllocation);
+        mOutPixelsAllocation.copyTo(mBitmap);
+        return mBitmap;
+    }
 
-	public int getPrecision() {
-		return mPrecision;
-	}
+    public Matrix getScaleMatrix() {
+        return mMatrix;
+    }
 
-	public void setPrecision(int mPrecision) {
-		this.mPrecision = mPrecision;
-		mScript.set_precision(mPrecision);
-	}
+    public int getPrecision() {
+        return mPrecision;
+    }
 
-	public void destroy() {
-		mScript.destroy();
-	}
+    public void setPrecision(int mPrecision) {
+        this.mPrecision = mPrecision;
+        mScript.set_precision(mPrecision);
+    }
+
+    public void destroy() {
+        mScript.destroy();
+    }
 }

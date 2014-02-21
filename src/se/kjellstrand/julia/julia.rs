@@ -24,11 +24,11 @@ float height;
 float scale;
 int precision;
 
-typedef struct Palette {
-    uchar4 c;
-} Palette_t;
+//typedef struct Palette {
+//    uchar4 c;
+//} Palette_t;
 
-Palette_t *palette;
+//Palette_t *palette;
 
 uchar *color;
 
@@ -49,10 +49,13 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
 	    k++;
 	}
 
-	//uchar4 co;
-	 
-    out->b = color[k*3+0];
-    out->g = color[k*3+1];
-    out->r = color[k*3+2];
-
+	if (k < precision) {
+    	out->b = color[k*3+0];
+    	out->g = color[k*3+1];
+    	out->r = color[k*3+2];
+	} else {
+		out->b = 0;
+    	out->g = 0;
+    	out->r = 0;
+	}
 }
