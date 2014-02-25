@@ -23,7 +23,7 @@ public class JuliaEngine {
 
     private Allocation mOutPixelsAllocation;
 
-    private int mPrecision = 16;
+    private int mPrecision = 24;
 
     public void init(Context context, int width, int height, float scale) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
@@ -46,14 +46,7 @@ public class JuliaEngine {
         mScript.set_precision(mPrecision);
         mScript.set_scale(scale);
 
-        byte[] d = new byte[mPrecision * 3];
-
-        //ScriptField_Palette p = new ScriptField_Palette(rs, mPrecision);
-        for (int i = 0; i < mPrecision; i++) {
-            d[i * 3 + 0] = (byte) ((((float) i) / mPrecision) * 255);
-            d[i * 3 + 1] = (byte) ((((float) mPrecision - i) / mPrecision) * 255);
-            d[i * 3 + 2] = (byte) ((((float) mPrecision - i) / mPrecision) * 255);
-        }
+        byte[] d = getPalette();
 
         Element type = Element.U8(rs);
         Allocation colorAllocation = Allocation.createSized(rs, type, mPrecision * 3);
@@ -69,9 +62,28 @@ public class JuliaEngine {
         mMatrix.postScale(scale, scale);
     }
 
-    public Bitmap renderJulia(float cx, float cy) {
-        mScript.set_cx(cx);
-        mScript.set_cy(cy);
+    private byte[] getPalette() {
+        byte[] d = new byte[mPrecision * 3];
+
+        // ScriptField_Palette p = new ScriptField_Palette(rs, mPrecision);
+        // for (int i = 0; i < mPrecision; i++) {
+        // d[i * 3 + 0] = (byte) ((((float) i) / mPrecision) * 255);
+        // d[i * 3 + 1] = (byte) ((((float) mPrecision - i) / mPrecision) *
+        // 255);
+        // d[i * 3 + 2] = (byte) ((((float) mPrecision - i) / mPrecision) *
+        // 255);
+        // }
+        for (int i = 0; i < mPrecision; i++) {
+            d[i * 3 + 0] = (byte) (((Math.cos(i / (double) mPrecision * Math.PI) + 1d) / 2d) * 255);
+            d[i * 3 + 1] = (byte) (((Math.sin(i / (double) mPrecision * Math.PI / 3) + 1d) / 2d) * 255);
+            d[i * 3 + 2] = (byte) (((Math.sin(i / (double) mPrecision * Math.PI) + 1d) / 2d) * 255);
+        }
+        return d;
+    }
+
+    public Bitmap renderJulia(double x, double y) {
+        mScript.set_cx((float) x);
+        mScript.set_cy((float) y);
         mScript.forEach_root(mInPixelsAllocation, mOutPixelsAllocation);
         mOutPixelsAllocation.copyTo(mBitmap);
         return mBitmap;

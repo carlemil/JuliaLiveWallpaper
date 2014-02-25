@@ -54,8 +54,8 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     	out->g = color[k*3+1];
     	out->r = color[k*3+2];
 	} else {
-		out->b = 0;
-    	out->g = 0;
-    	out->r = 0;
+		out->b = 1;
+    	out->g = 1;
+    	out->r = 1;
 	}
 }

@@ -12,9 +12,10 @@ public class JuliaWallpaperService extends WallpaperService {
     private final String TAG = JuliaWallpaperService.class.getCanonicalName();
 
     float mScale = 2f;
-//
-//    private int mWidth;
-//    private int mHeight;
+
+    //
+    // private int mWidth;
+    // private int mHeight;
 
     @Override
     public Engine onCreateEngine() {
@@ -32,8 +33,8 @@ public class JuliaWallpaperService extends WallpaperService {
             super.onSurfaceCreated(holder);
 
             Rect rect = holder.getSurfaceFrame();
-//            mHeight = rect.height();
-//            mWidth = rect.width();
+            // mHeight = rect.height();
+            // mWidth = rect.width();
         }
 
         @Override
@@ -60,7 +61,8 @@ public class JuliaWallpaperService extends WallpaperService {
             // TODO !!!!!!!!!!!!!!!
 
             // mScript stop/start?
-            seedTime = System.currentTimeMillis() % 10000000;
+            seedTime = System.currentTimeMillis() % Integer.MAX_VALUE;
+            Log.d(TAG, "seedTime " + seedTime);
         }
 
         @Override
@@ -82,13 +84,13 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private void draw(float xOffset) {
 
-            long startTime = System.currentTimeMillis();
+            // long startTime = System.currentTimeMillis();
             final float OFFSET_MULT = 50000f;
-            float x = getX((long) (seedTime + xOffset * OFFSET_MULT));
-            float y = getY((long) (seedTime + xOffset * OFFSET_MULT));
+            double x = getX((long) (seedTime + xOffset * OFFSET_MULT));
+            double y = getY((long) (seedTime + xOffset * OFFSET_MULT));
             Log.d(LOG_TAG, "X: " + x + "  Y: " + y);
             Bitmap bitmap = mJuliaRenderer.renderJulia(x, y);
-            long renderTime = System.currentTimeMillis() - startTime;
+            // long renderTime = System.currentTimeMillis() - startTime;
             // Log.d(TAG, "Rendertime: " + (renderTime));
 
             Canvas c = null;
@@ -105,31 +107,29 @@ public class JuliaWallpaperService extends WallpaperService {
             }
         }
 
-        // Used for the large circle tracing the edge of the Mandelbrot set.
-        private static final double MAX_X = 0.75;
-        private static final double MIN_X = -0.82;
-        private static final double MAX_Y = 0.8;
-        private static final double MIN_Y = -MAX_Y;
-        private static final double BIG_C = 10000; //514229;
-        // Used to create smaller circles to avoid repetitions in the julia seed
-        // values
-        private static final double DIV_X1 = 50;
-        private static final double DIV_Y1 = 50;
-        private static final double DIV_X2 = 400;
-        private static final double DIV_Y2 = 400;
-        private static final double MED_C = 15000;//  96557
-        private static final double SMAL_C = 10000;//33461
+        /*array med x y size för seed punkter som ger "bra" julias array med
+         * paletter (hur nu de ska funka med dynamisk size på paletten, kanske 5
+         * färger och sen auto smooth mellan dom? en handler eller liknande för
+         * att vänta 2x senaste tiden det tog att rita en frame, och sen rita
+         * med scale == 1 */
 
-        private float getY(long i) {
-            return (float) (((((Math.cos(i / BIG_C) + 1d) / 2d) * (MAX_Y - MIN_Y)) + MIN_Y));// +
-            // (Math.cos(i / MED_C) / DIV_Y1) + (Math.cos(i / SMAL_C) /
-            // DIV_Y2));
+        // Used for the large circle tracing the edge of the Mandelbrot set.
+        private static final double MAX_X = 0.82;
+        private static final double MIN_X = -0.52;
+        private static final double MAX_Y = 0.77;
+        private static final double MIN_Y = -MAX_Y;
+        private static final double OUTER_C = 514229;
+        // Used to create a smaller circle to avoid repetitions in the julia
+        // seed values
+        private static final double INNER_DIV = 10;
+        private static final double INNER_C = 5003;
+
+        private double getY(double i) {
+            return (double) (((((Math.cos(i / OUTER_C) + 1d) / 2d) * (MAX_Y - MIN_Y)) + MIN_Y) + (Math.cos(i / INNER_C) / INNER_DIV));
         }
 
-        private float getX(long i) {
-            return (float) (((((Math.sin(i / BIG_C) + 1d) / 2d) * (MAX_X - MIN_X)) + MIN_X));// +
-            // (Math.sin(i / MED_C) / DIV_X1) + (Math.sin(i / SMAL_C) /
-            // DIV_X2));
+        private double getX(double i) {
+            return (double) (((((Math.sin(i / OUTER_C) + 1d) / 2d) * (MAX_X - MIN_X)) + MIN_X) + (Math.sin(i / INNER_C) / INNER_DIV));
         }
     }
 }
