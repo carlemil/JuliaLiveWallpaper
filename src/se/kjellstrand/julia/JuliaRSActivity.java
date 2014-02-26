@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -29,85 +30,86 @@ import com.android.rs.levels.ScriptC_julia;
 
 public class JuliaRSActivity extends Activity {
 
-    private Bitmap mBitmap;
+	private Bitmap mBitmap;
 
-    private ImageView mDisplayView;
+	private ImageView mDisplayView;
 
-    private RenderScript mRS;
-    private Allocation mInPixelsAllocation;
-    private Allocation mOutPixelsAllocation;
-    private ScriptC_julia mScript;
+	private RenderScript mRS;
+	private Allocation mInPixelsAllocation;
+	private Allocation mOutPixelsAllocation;
+	private ScriptC_julia mScript;
 
-    private int mWidth;
-    private int mHeight;
+	private int mWidth;
+	private int mHeight;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
 
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        mWidth = (int) (size.x);
-        mHeight = (int) (size.y);
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		mWidth = (int) (size.x);
+		mHeight = (int) (size.y);
 
-        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-        mBitmap = Bitmap.createBitmap(mWidth, mHeight, conf);
-        mBitmap = Bitmap.createBitmap(mWidth, mHeight, conf);
+		Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+		mBitmap = Bitmap.createBitmap(mWidth, mHeight, conf);
+		mBitmap = Bitmap.createBitmap(mWidth, mHeight, conf);
 
-        mDisplayView = (ImageView) findViewById(R.id.display);
-        mDisplayView.setImageBitmap(mBitmap);
+		mDisplayView = (ImageView) findViewById(R.id.display);
+		mDisplayView.setImageBitmap(mBitmap);
 
-        mRS = RenderScript.create(this);
-        mInPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmap,
-                Allocation.MipmapControl.MIPMAP_NONE,
-                Allocation.USAGE_SCRIPT);
-        mOutPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmap,
-                Allocation.MipmapControl.MIPMAP_NONE,
-                Allocation.USAGE_SCRIPT);
-        mScript = new ScriptC_julia(mRS, getResources(), R.raw.julia);
+		mRS = RenderScript.create(this);
+		mInPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmap,
+				Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+		mOutPixelsAllocation = Allocation.createFromBitmap(mRS, mBitmap,
+				Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+		mScript = new ScriptC_julia(mRS, getResources(), R.raw.julia);
 
-        mScript.set_height(mHeight - 160);
-        mScript.set_width(mWidth);
+		mScript.set_height(mHeight - 160);
+		mScript.set_width(mWidth);
 
-        mScript.set_precision(24);
+		mScript.set_precision(24);
 
-        mDisplayView.getLayoutParams().width = mWidth;
-        mDisplayView.getLayoutParams().height = mHeight;
+		mDisplayView.getLayoutParams().width = mWidth;
+		mDisplayView.getLayoutParams().height = mHeight;
 
-        renderJulia(-0.9259259f, 0.30855855f);
-    }
+		renderJulia(-0.9259259f, 0.30855855f);
+	}
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
 
-        int action = MotionEventCompat.getActionMasked(event);
+		int action = MotionEventCompat.getActionMasked(event);
 
-        switch (action) {
+		switch (action) {
 
-            case (MotionEvent.ACTION_MOVE):
-                float cx = 0f,
-                cy = 0f;
-                float x = event.getAxisValue(MotionEvent.AXIS_X);
-                float y = event.getAxisValue(MotionEvent.AXIS_Y);
-                cx = ((x / mWidth) * 2f) - 1f;
-                cy = y / mHeight;
-                renderJulia(cx, cy);
-                return true;
+		case (MotionEvent.ACTION_MOVE):
+			float cx = 0f,
+			cy = 0f;
+			float x = event.getAxisValue(MotionEvent.AXIS_X);
+			float y = event.getAxisValue(MotionEvent.AXIS_Y);
+			cx = ((x / mWidth) * 4f) - 2f;
+			cy = ((y / mHeight) * 4f) - 2f;
+			renderJulia(cx, cy);
+			return true;
 
-            default:
-                return super.onTouchEvent(event);
-        }
-    }
+		default:
+			return super.onTouchEvent(event);
+		}
+	}
 
-    private void renderJulia(float cx, float cy) {
-        mScript.set_cx(cx);
-        mScript.set_cy(cy);
-        mScript.forEach_root(mInPixelsAllocation, mOutPixelsAllocation);
-        mOutPixelsAllocation.copyTo(mBitmap);
+	int[][] a = new int[][]{{1,2,3,4,2},{1,2}};
+	
+	private void renderJulia(float cx, float cy) {
+		Log.d("tag","{"+cx+","+cy+"},");
+		mScript.set_cx(cx);
+		mScript.set_cy(cy);
+		mScript.forEach_root(mInPixelsAllocation, mOutPixelsAllocation);
+		mOutPixelsAllocation.copyTo(mBitmap);
 
-        mDisplayView.invalidate();
-    }
+		mDisplayView.invalidate();
+	}
 
 }
