@@ -115,9 +115,10 @@ public class JuliaWallpaperService extends WallpaperService {
 		private void draw(float xOffset) {
 
 			// long startTime = System.currentTimeMillis();
-			final float OFFSET_MULT = 50000f;
-			double x = getX((long) (xOffset * OFFSET_MULT));
-			double y = getY((long) (xOffset * OFFSET_MULT));
+
+			double x = getX(xOffset);
+			double y = getY(xOffset);
+
 			Log.d(LOG_TAG, "X: " + x + "  Y: " + y);
 			Bitmap bitmap = mJuliaRenderer.renderJulia(x, y);
 			// long renderTime = System.currentTimeMillis() - startTime;
@@ -155,22 +156,22 @@ public class JuliaWallpaperService extends WallpaperService {
 
 		private static final double FIRST_SIZE = 0.1;
 
-		private static final double FIRST_SEED_DIV = 7229;
+		private static final double FIRST_SEED_MUL = 9.97;
 
 		// Used to create a smaller circle to avoid repetitions in the julia
 		// seed values
 		private static final double SECOND_SIZE = 0.1;
 
-		private static final double SECOND_SEED_DIV = 5003;
+		private static final double SECOND_SEED_MUL = 15.97;
 
 		private double getX(double i) {
-			return (double) ((Math.sin(i / FIRST_SEED_DIV) * FIRST_SIZE) + (Math
-					.sin(i / SECOND_SEED_DIV) * SECOND_SIZE))+juliaSeeds[pickJuliaSeedByTime][0];
+			return (double) ((Math.sin(i * FIRST_SEED_MUL) * FIRST_SIZE) + (Math
+					.sin(i / SECOND_SEED_MUL) * SECOND_SIZE))+juliaSeeds[pickJuliaSeedByTime][0];
 		}
 		
 		private double getY(double i) {
-			return (double) ((Math.cos(i / FIRST_SEED_DIV) * FIRST_SIZE) + (Math
-					.cos(i / SECOND_SEED_DIV) * SECOND_SIZE))+juliaSeeds[pickJuliaSeedByTime][1];
+			return (double) ((Math.cos(i * FIRST_SEED_MUL) * FIRST_SIZE) + (Math
+					.cos(i / SECOND_SEED_MUL) * SECOND_SIZE))+juliaSeeds[pickJuliaSeedByTime][1];
 		}
 	}
 }
