@@ -1,4 +1,3 @@
-
 package se.kjellstrand.julia;
 
 import android.graphics.Bitmap;
@@ -11,144 +10,167 @@ import android.view.SurfaceHolder;
 
 public class JuliaWallpaperService extends WallpaperService {
 
-    private final String TAG = JuliaWallpaperService.class.getCanonicalName();
+	private final String TAG = JuliaWallpaperService.class.getCanonicalName();
 
-    private int mWidth;
+	private int mWidth;
 
-    private int mHeight;
+	private int mHeight;
 
-    @Override
-    public Engine onCreateEngine() {
-        return new DemoEngine();
-    }
+	private double[][] juliaSeeds = new double[][] {
+			{ -0.9259259, 0.30855855 },//
+			{ 0.41851854, 0.42567563 },//
+			{ -0.08888888, 0.93468475 },//
+			{ -0.57777774, 0.6554055 },//
+			{ -1.1592593, 0.33333325 },//
+			{ -1.3962963, 0.10810804 },//
+			{ -0.7740741, -0.34909904 },//
+			{ -0.67777777, -0.5112612 },//
+			{ -0.2481482, -0.8626126 },//
+			{ 0.437037, 0.18693686 },//
+			{ 0.47777772, -0.22072077 },//
+			{ -0.26666665, -0.7995496 },//
+			{ -0.17037034, -0.8941442 },//
+			{ -1.0333333, -0.40090096 },//
+			{ 0.34074068, -0.6486486 },//
+			{ 0.36666656, 0.06531525 },//
+			{ 0.45555544, 0.13513517 },//
+			{ 0.36296296, -0.042792797 },//
+			{ 0.44074082, 0.25900912 },//
+			{ -0.79629624, 0.21846843 },//
+			{ -0.80370367, -0.1981982 },//
+			{ -0.88518524, 0.27702713 } };
 
-    class DemoEngine extends Engine {
+	@Override
+	public Engine onCreateEngine() {
+		return new DemoEngine();
+	}
 
-        private final String LOG_TAG = DemoEngine.class.getCanonicalName();
+	class DemoEngine extends Engine {
 
-        JuliaEngine mJuliaRenderer = new JuliaEngine();
+		private final String LOG_TAG = DemoEngine.class.getCanonicalName();
 
-        private long seedTime;
+		JuliaEngine mJuliaRenderer = new JuliaEngine();
 
-        private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer();
+		private long seedTime;
 
-        @Override
-        public void onSurfaceCreated(SurfaceHolder holder) {
-            super.onSurfaceCreated(holder);
+		private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer();
 
-            Rect rect = holder.getSurfaceFrame();
-            mHeight = rect.height();
-            mWidth = rect.width();
-        }
+		@Override
+		public void onSurfaceCreated(SurfaceHolder holder) {
+			super.onSurfaceCreated(holder);
 
-        @Override
-        public void onSurfaceDestroyed(SurfaceHolder holder) {
-            super.onSurfaceDestroyed(holder);
-            mJuliaRenderer.destroy();
-        }
+			Rect rect = holder.getSurfaceFrame();
+			mHeight = rect.height();
+			mWidth = rect.width();
+		}
 
-        @Override
-        public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            super.onSurfaceChanged(holder, format, width, height);
-            mJuliaRenderer.init(JuliaWallpaperService.this.getBaseContext(), width, height / 2);
-            draw(0.5f);
-        }
+		@Override
+		public void onSurfaceDestroyed(SurfaceHolder holder) {
+			super.onSurfaceDestroyed(holder);
+			mJuliaRenderer.destroy();
+		}
 
-        @Override
-        public void onVisibilityChanged(boolean visible) {
-            super.onVisibilityChanged(visible);
-            // TODO !!!!!!!!!!!!!!!
+		@Override
+		public void onSurfaceChanged(SurfaceHolder holder, int format,
+				int width, int height) {
+			super.onSurfaceChanged(holder, format, width, height);
 
-            // mScript stop/start?
-            seedTime = System.currentTimeMillis() % Integer.MAX_VALUE;
-            Log.d(TAG, "seedTime " + seedTime);
-        }
+			mJuliaRenderer.init(JuliaWallpaperService.this.getBaseContext(),
+					width, height / 2);
 
-        @Override
-        public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep,
-                float yOffsetStep, int xPixelOffset, int yPixelOffset) {
-            super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset,
-                    yPixelOffset);
-            draw(xOffset);
-            /*
-             * if (xOffset == 1.0f) { mJuliaRenderer.setPrecision(128);
-             * draw(xOffset); }
-             */
-            mJuliaRenderer.setPrecision(12);
-            hqTimer.setLastFrameTimestamp(System.currentTimeMillis());
-        }
+			draw(0.5f);
+		}
 
-        // fada in på vissible med separat timestamp var som alltid checkas vid
-        // render, som sätter hur ljus paletten är, 0-1f typ.
-        // om 1 så skit i den å kör default, annars gånga ner alla färger för
-        // att få en fadein under .3 sekunder eller så
-        // låt julia cx cy state va beroende på timestam från senaste fade in
+		@Override
+		public void onVisibilityChanged(boolean visible) {
+			super.onVisibilityChanged(visible);
+			// TODO !!!!!!!!!!!!!!!
 
-        private void draw(float xOffset) {
+			// mScript stop/start?
+			seedTime = System.currentTimeMillis() % Integer.MAX_VALUE;
+			Log.d(TAG, "seedTime " + seedTime);
+		}
 
-            // long startTime = System.currentTimeMillis();
-            final float OFFSET_MULT = 50000f;
-            double x = getX((long) (seedTime + xOffset * OFFSET_MULT));
-            double y = getY((long) (seedTime + xOffset * OFFSET_MULT));
-            Log.d(LOG_TAG, "X: " + x + "  Y: " + y);
-            Bitmap bitmap = mJuliaRenderer.renderJulia(x, y);
-            // long renderTime = System.currentTimeMillis() - startTime;
-            // Log.d(TAG, "Rendertime: " + (renderTime));
+		@Override
+		public void onOffsetsChanged(float xOffset, float yOffset,
+				float xOffsetStep, float yOffsetStep, int xPixelOffset,
+				int yPixelOffset) {
+			super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep,
+					xPixelOffset, yPixelOffset);
+			draw(xOffset);
+			/*
+			 * if (xOffset == 1.0f) { mJuliaRenderer.setPrecision(128);
+			 * draw(xOffset); }
+			 */
+			mJuliaRenderer.setPrecision(12);
+			hqTimer.setLastFrameTimestamp(System.currentTimeMillis());
+		}
 
-            Canvas c = null;
-            SurfaceHolder holder = getSurfaceHolder();
-            try {
-                c = holder.lockCanvas();
-                if (c != null) {
-                    Matrix rotateMatrix = new Matrix();
-                    c.drawBitmap(bitmap, rotateMatrix, null);
-                    rotateMatrix.setRotate(180, 0,0);
-                    rotateMatrix.postTranslate(mWidth, mHeight);
-                    c.drawBitmap(bitmap, rotateMatrix, null);
+		// fada in på vissible med separat timestamp var som alltid checkas vid
+		// render, som sätter hur ljus paletten är, 0-1f typ.
+		// om 1 så skit i den å kör default, annars gånga ner alla färger för
+		// att få en fadein under .3 sekunder eller så
+		// låt julia cx cy state va beroende på timestam från senaste fade in
 
-                }
-            } finally {
-                if (c != null) {
-                    holder.unlockCanvasAndPost(c);
-                }
-                long lastFrameTime = System.currentTimeMillis() - hqTimer.getLastFrameTimestamp();
-                hqTimer.setLastFrameTime(lastFrameTime);
-            }
-        }
+		private void draw(float xOffset) {
 
-        /*
-         * array med x y size för seed punkter som ger "bra" julias array med
-         * paletter (hur nu de ska funka med dynamisk size på paletten, kanske 5
-         * färger och sen auto smooth mellan dom? en handler eller liknande för
-         * att vänta 2x senaste tiden det tog att rita en frame, och sen rita
-         * med scale == 1
-         */
+			// long startTime = System.currentTimeMillis();
+			final float OFFSET_MULT = 50000f;
+			double x = getX((long) (seedTime + xOffset * OFFSET_MULT));
+			double y = getY((long) (seedTime + xOffset * OFFSET_MULT));
+			Log.d(LOG_TAG, "X: " + x + "  Y: " + y);
+			Bitmap bitmap = mJuliaRenderer.renderJulia(x, y);
+			// long renderTime = System.currentTimeMillis() - startTime;
+			// Log.d(TAG, "Rendertime: " + (renderTime));
 
-        // Used for the large circle tracing the edge of the Mandelbrot set.
-        private static final double MAX_X = 0.82;
+			Canvas c = null;
+			SurfaceHolder holder = getSurfaceHolder();
+			try {
+				c = holder.lockCanvas();
+				if (c != null) {
+					Matrix rotateMatrix = new Matrix();
+					c.drawBitmap(bitmap, rotateMatrix, null);
+					rotateMatrix.setRotate(180, 0, 0);
+					rotateMatrix.postTranslate(mWidth, mHeight);
+					c.drawBitmap(bitmap, rotateMatrix, null);
 
-        private static final double MIN_X = -0.52;
+				}
+			} finally {
+				if (c != null) {
+					holder.unlockCanvasAndPost(c);
+				}
+				long lastFrameTime = System.currentTimeMillis()
+						- hqTimer.getLastFrameTimestamp();
+				hqTimer.setLastFrameTime(lastFrameTime);
+			}
+		}
 
-        private static final double MAX_Y = 0.77;
+		/*
+		 * array med x y size för seed punkter som ger "bra" julias array med
+		 * paletter (hur nu de ska funka med dynamisk size på paletten, kanske 5
+		 * färger och sen auto smooth mellan dom? en handler eller liknande för
+		 * att vänta 2x senaste tiden det tog att rita en frame, och sen rita
+		 * med scale == 1
+		 */
 
-        private static final double MIN_Y = -MAX_Y;
+		private static final double FIRST_SIZE = 0.001;
 
-        private static final double OUTER_C = 514229;
+		private static final double FIRST_SEED_DIV = 514229;
 
-        // Used to create a smaller circle to avoid repetitions in the julia
-        // seed values
-        private static final double INNER_DIV = 10;
+		// Used to create a smaller circle to avoid repetitions in the julia
+		// seed values
+		private static final double SECOND_SIZE = 0.001;
 
-        private static final double INNER_C = 5003;
+		private static final double SECOND_SEED_DIV = 50003;
 
-        private double getY(double i) {
-            return (double) (((((Math.cos(i / OUTER_C) + 1d) / 2d) * (MAX_Y - MIN_Y)) + MIN_Y) + (Math
-                    .cos(i / INNER_C) / INNER_DIV));
-        }
+		private double getY(double i) {
+			return (double) ((Math.cos(i / FIRST_SEED_DIV) * FIRST_SIZE) + (Math
+					.cos(i / SECOND_SEED_DIV) * SECOND_SIZE))+juliaSeeds[0][0];
+		}
 
-        private double getX(double i) {
-            return (double) (((((Math.sin(i / OUTER_C) + 1d) / 2d) * (MAX_X - MIN_X)) + MIN_X) + (Math
-                    .sin(i / INNER_C) / INNER_DIV));
-        }
-    }
+		private double getX(double i) {
+			return (double) ((Math.sin(i / FIRST_SEED_DIV) * FIRST_SIZE) + (Math
+					.sin(i / SECOND_SEED_DIV) * SECOND_SIZE));
+		}
+	}
 }
