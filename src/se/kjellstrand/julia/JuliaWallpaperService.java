@@ -1,7 +1,9 @@
+
 package se.kjellstrand.julia;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
@@ -11,11 +13,11 @@ public class JuliaWallpaperService extends WallpaperService {
 
     private final String TAG = JuliaWallpaperService.class.getCanonicalName();
 
-    float mScale = 2f;
+    float mScale = 1f;
 
-    //
-    // private int mWidth;
-    // private int mHeight;
+    private int mWidth;
+
+    private int mHeight;
 
     @Override
     public Engine onCreateEngine() {
@@ -25,16 +27,20 @@ public class JuliaWallpaperService extends WallpaperService {
     class DemoEngine extends Engine {
 
         private final String LOG_TAG = DemoEngine.class.getCanonicalName();
+
         JuliaEngine mJuliaRenderer = new JuliaEngine();
+
         private long seedTime;
+
+        private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer();
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
             super.onSurfaceCreated(holder);
 
             Rect rect = holder.getSurfaceFrame();
-            // mHeight = rect.height();
-            // mWidth = rect.width();
+            mHeight = rect.height();
+            mWidth = rect.width();
         }
 
         @Override
@@ -50,7 +56,8 @@ public class JuliaWallpaperService extends WallpaperService {
             width = (int) (width / mScale);
             height = (int) (height / mScale);
 
-            mJuliaRenderer.init(JuliaWallpaperService.this.getBaseContext(), width, height, mScale);
+            mJuliaRenderer.init(JuliaWallpaperService.this.getBaseContext(), width, height / 2,
+                    mScale);
 
             draw(0.5f);
         }
@@ -68,12 +75,15 @@ public class JuliaWallpaperService extends WallpaperService {
         @Override
         public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep,
                 float yOffsetStep, int xPixelOffset, int yPixelOffset) {
-            super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
+            super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset,
+                    yPixelOffset);
             draw(xOffset);
-            /* if (xOffset == 1.0f) { mJuliaRenderer.setPrecision(128);
-             * draw(xOffset); } */
-            // mJuliaRenderer.setPrecision(32);
-
+            /*
+             * if (xOffset == 1.0f) { mJuliaRenderer.setPrecision(128);
+             * draw(xOffset); }
+             */
+            mJuliaRenderer.setPrecision(12);
+            hqTimer.setLastFrameTimestamp(System.currentTimeMillis());
         }
 
         // fada in på vissible med separat timestamp var som alltid checkas vid
@@ -98,38 +108,55 @@ public class JuliaWallpaperService extends WallpaperService {
             try {
                 c = holder.lockCanvas();
                 if (c != null) {
-                    c.drawBitmap(bitmap, mJuliaRenderer.getScaleMatrix(), null);
+                    Matrix rotateMatrix = new Matrix();
+                    c.drawBitmap(bitmap, rotateMatrix, null);
+                    rotateMatrix.setRotate(180, 0,0);
+                    rotateMatrix.postTranslate(mWidth, mHeight);
+                    c.drawBitmap(bitmap, rotateMatrix, null);
+
                 }
             } finally {
                 if (c != null) {
                     holder.unlockCanvasAndPost(c);
                 }
+                long lastFrameTime = System.currentTimeMillis() - hqTimer.getLastFrameTimestamp();
+                hqTimer.setLastFrameTime(lastFrameTime);
             }
         }
 
-        /*array med x y size för seed punkter som ger "bra" julias array med
+        /*
+         * array med x y size för seed punkter som ger "bra" julias array med
          * paletter (hur nu de ska funka med dynamisk size på paletten, kanske 5
          * färger och sen auto smooth mellan dom? en handler eller liknande för
          * att vänta 2x senaste tiden det tog att rita en frame, och sen rita
-         * med scale == 1 */
+         * med scale == 1
+         */
 
         // Used for the large circle tracing the edge of the Mandelbrot set.
         private static final double MAX_X = 0.82;
+
         private static final double MIN_X = -0.52;
+
         private static final double MAX_Y = 0.77;
+
         private static final double MIN_Y = -MAX_Y;
+
         private static final double OUTER_C = 514229;
+
         // Used to create a smaller circle to avoid repetitions in the julia
         // seed values
         private static final double INNER_DIV = 10;
+
         private static final double INNER_C = 5003;
 
         private double getY(double i) {
-            return (double) (((((Math.cos(i / OUTER_C) + 1d) / 2d) * (MAX_Y - MIN_Y)) + MIN_Y) + (Math.cos(i / INNER_C) / INNER_DIV));
+            return (double) (((((Math.cos(i / OUTER_C) + 1d) / 2d) * (MAX_Y - MIN_Y)) + MIN_Y) + (Math
+                    .cos(i / INNER_C) / INNER_DIV));
         }
 
         private double getX(double i) {
-            return (double) (((((Math.sin(i / OUTER_C) + 1d) / 2d) * (MAX_X - MIN_X)) + MIN_X) + (Math.sin(i / INNER_C) / INNER_DIV));
+            return (double) (((((Math.sin(i / OUTER_C) + 1d) / 2d) * (MAX_X - MIN_X)) + MIN_X) + (Math
+                    .sin(i / INNER_C) / INNER_DIV));
         }
     }
 }

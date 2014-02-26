@@ -65,14 +65,6 @@ public class JuliaEngine {
     private byte[] getPalette() {
         byte[] d = new byte[mPrecision * 3];
 
-        // ScriptField_Palette p = new ScriptField_Palette(rs, mPrecision);
-        // for (int i = 0; i < mPrecision; i++) {
-        // d[i * 3 + 0] = (byte) ((((float) i) / mPrecision) * 255);
-        // d[i * 3 + 1] = (byte) ((((float) mPrecision - i) / mPrecision) *
-        // 255);
-        // d[i * 3 + 2] = (byte) ((((float) mPrecision - i) / mPrecision) *
-        // 255);
-        // }
         for (int i = 0; i < mPrecision; i++) {
             d[i * 3 + 0] = (byte) (((Math.cos(i / (double) mPrecision * Math.PI) + 1d) / 2d) * 255);
             d[i * 3 + 1] = (byte) (((Math.sin(i / (double) mPrecision * Math.PI / 3) + 1d) / 2d) * 255);
