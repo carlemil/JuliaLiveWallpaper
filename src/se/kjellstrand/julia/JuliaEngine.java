@@ -3,7 +3,6 @@ package se.kjellstrand.julia;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -15,8 +14,6 @@ public class JuliaEngine {
 
     private Bitmap mBitmap;
 
-    private Matrix mMatrix;
-
     private ScriptC_julia mScript;
 
     private Allocation mInPixelsAllocation;
@@ -25,7 +22,7 @@ public class JuliaEngine {
 
     private int mPrecision = 24;
 
-    public void init(Context context, int width, int height, float scale) {
+    public void init(Context context, int width, int height) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         mBitmap = Bitmap.createBitmap(width, height, conf);
         mBitmap.setHasAlpha(false);
@@ -44,7 +41,6 @@ public class JuliaEngine {
         mScript.set_height(height);
 
         mScript.set_precision(mPrecision);
-        mScript.set_scale(scale);
 
         byte[] d = getPalette();
 
@@ -53,26 +49,11 @@ public class JuliaEngine {
         mScript.bind_color(colorAllocation);
 
         colorAllocation.copy1DRangeFrom(0, mPrecision * 3, d);
-        // 2DRangeFrom(0, mPrecision, d);
-
-        // Allocation color = mScript.get_color();
-        // color.copyFrom(d);
-
-        mMatrix = new Matrix();
-        mMatrix.postScale(scale, scale);
     }
 
     private byte[] getPalette() {
         byte[] d = new byte[mPrecision * 3];
 
-        // ScriptField_Palette p = new ScriptField_Palette(rs, mPrecision);
-        // for (int i = 0; i < mPrecision; i++) {
-        // d[i * 3 + 0] = (byte) ((((float) i) / mPrecision) * 255);
-        // d[i * 3 + 1] = (byte) ((((float) mPrecision - i) / mPrecision) *
-        // 255);
-        // d[i * 3 + 2] = (byte) ((((float) mPrecision - i) / mPrecision) *
-        // 255);
-        // }
         for (int i = 0; i < mPrecision; i++) {
             d[i * 3 + 0] = (byte) (((Math.cos(i / (double) mPrecision * Math.PI) + 1d) / 2d) * 255);
             d[i * 3 + 1] = (byte) (((Math.sin(i / (double) mPrecision * Math.PI / 3) + 1d) / 2d) * 255);
@@ -87,10 +68,6 @@ public class JuliaEngine {
         mScript.forEach_root(mInPixelsAllocation, mOutPixelsAllocation);
         mOutPixelsAllocation.copyTo(mBitmap);
         return mBitmap;
-    }
-
-    public Matrix getScaleMatrix() {
-        return mMatrix;
     }
 
     public int getPrecision() {

@@ -21,20 +21,13 @@ float cx;
 float cy;
 float width;
 float height;
-float scale;
 int precision;
-
-//typedef struct Palette {
-//    uchar4 c;
-//} Palette_t;
-
-//Palette_t *palette;
 
 uchar *color;
 
 void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
-    float fx = (float) ((x / width) * 2.f - 1.f) * scale;
-    float fy = (float) ((y / height) * 2.f - 1.f) * scale;
+    float fx = x / width * 4.f - 2.f;
+    float fy = y / height * 2.f - 2.f;
     
     float t = 0;
     int k = 0;
