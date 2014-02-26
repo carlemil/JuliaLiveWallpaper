@@ -50,7 +50,9 @@ public class JuliaWallpaperService extends WallpaperService {
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
+
             mJuliaRenderer.init(JuliaWallpaperService.this.getBaseContext(), width, height / 2);
+
             draw(0.5f);
         }
 

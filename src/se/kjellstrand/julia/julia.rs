@@ -28,7 +28,7 @@ uchar *color;
 void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     float fx = x / width * 4.f - 2.f;
     float fy = y / height * 2.f - 2.f;
-    
+
     float t = 0;
     int k = 0;
     
