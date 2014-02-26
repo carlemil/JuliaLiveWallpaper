@@ -51,7 +51,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
 		JuliaEngine mJuliaRenderer = new JuliaEngine();
 
-		private long seedTime;
+		private int pickJuliaSeedByTime;
 
 		private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer();
 
@@ -87,8 +87,8 @@ public class JuliaWallpaperService extends WallpaperService {
 			// TODO !!!!!!!!!!!!!!!
 
 			// mScript stop/start?
-			seedTime = System.currentTimeMillis() % Integer.MAX_VALUE;
-			Log.d(TAG, "seedTime " + seedTime);
+			pickJuliaSeedByTime = (int) ((System.currentTimeMillis()/(1000*60*60)) % juliaSeeds.length);
+			Log.d(TAG, "seedTime " + pickJuliaSeedByTime);
 		}
 
 		@Override
@@ -116,8 +116,8 @@ public class JuliaWallpaperService extends WallpaperService {
 
 			// long startTime = System.currentTimeMillis();
 			final float OFFSET_MULT = 50000f;
-			double x = getX((long) (seedTime + xOffset * OFFSET_MULT));
-			double y = getY((long) (seedTime + xOffset * OFFSET_MULT));
+			double x = getX((long) (xOffset * OFFSET_MULT));
+			double y = getY((long) (xOffset * OFFSET_MULT));
 			Log.d(LOG_TAG, "X: " + x + "  Y: " + y);
 			Bitmap bitmap = mJuliaRenderer.renderJulia(x, y);
 			// long renderTime = System.currentTimeMillis() - startTime;
@@ -153,24 +153,24 @@ public class JuliaWallpaperService extends WallpaperService {
 		 * med scale == 1
 		 */
 
-		private static final double FIRST_SIZE = 0.001;
+		private static final double FIRST_SIZE = 0.1;
 
-		private static final double FIRST_SEED_DIV = 514229;
+		private static final double FIRST_SEED_DIV = 7229;
 
 		// Used to create a smaller circle to avoid repetitions in the julia
 		// seed values
-		private static final double SECOND_SIZE = 0.001;
+		private static final double SECOND_SIZE = 0.1;
 
-		private static final double SECOND_SEED_DIV = 50003;
-
-		private double getY(double i) {
-			return (double) ((Math.cos(i / FIRST_SEED_DIV) * FIRST_SIZE) + (Math
-					.cos(i / SECOND_SEED_DIV) * SECOND_SIZE))+juliaSeeds[0][0];
-		}
+		private static final double SECOND_SEED_DIV = 5003;
 
 		private double getX(double i) {
 			return (double) ((Math.sin(i / FIRST_SEED_DIV) * FIRST_SIZE) + (Math
-					.sin(i / SECOND_SEED_DIV) * SECOND_SIZE));
+					.sin(i / SECOND_SEED_DIV) * SECOND_SIZE))+juliaSeeds[pickJuliaSeedByTime][0];
+		}
+		
+		private double getY(double i) {
+			return (double) ((Math.cos(i / FIRST_SEED_DIV) * FIRST_SIZE) + (Math
+					.cos(i / SECOND_SEED_DIV) * SECOND_SIZE))+juliaSeeds[pickJuliaSeedByTime][1];
 		}
 	}
 }
