@@ -13,10 +13,6 @@ public class JuliaWallpaperService extends WallpaperService {
 
     private final String TAG = JuliaWallpaperService.class.getCanonicalName();
 
-    private int mWidth;
-
-    private int mHeight;
-
     @Override
     public Engine onCreateEngine() {
         return new DemoEngine();
@@ -26,34 +22,45 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private final String LOG_TAG = DemoEngine.class.getCanonicalName();
 
-        JuliaEngine mJuliaRenderer = new JuliaEngine();
+        private JuliaEngine juliaRenderer = new JuliaEngine();
+
+        private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer();
 
         private int timeBasedSeed;
 
-        private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer();
+        private int width;
+
+        private int height;
+
+        private float xOffset = 0.5f;
+
+        private Matrix rotateMatrix;
+
+        private float scale = 1.5f;
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
             super.onSurfaceCreated(holder);
 
             Rect rect = holder.getSurfaceFrame();
-            mHeight = rect.height();
-            mWidth = rect.width();
+            height = (int) (rect.height() / scale);
+            width = (int) (rect.width() / scale) ;
         }
 
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder) {
             super.onSurfaceDestroyed(holder);
-            mJuliaRenderer.destroy();
+            juliaRenderer.destroy();
         }
 
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
 
-            mJuliaRenderer.init(JuliaWallpaperService.this.getBaseContext(), width, height / 2);
+            juliaRenderer.init(JuliaWallpaperService.this.getBaseContext(), this.width,
+                    this.height / 2);
 
-            draw(0.5f);
+            draw();
         }
 
         @Override
@@ -62,6 +69,8 @@ public class JuliaWallpaperService extends WallpaperService {
             // TODO !!!!!!!!!!!!!!!
 
             // mScript stop/start?
+            // mJuliaRenderer.getScript
+
             timeBasedSeed = (int) ((System.currentTimeMillis() / (1000 * 60 * 60)) % JuliaSeeds
                     .getNumberOfSeeds());
             Log.d(TAG, "seedTime " + timeBasedSeed);
@@ -72,30 +81,26 @@ public class JuliaWallpaperService extends WallpaperService {
                 float yOffsetStep, int xPixelOffset, int yPixelOffset) {
             super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset,
                     yPixelOffset);
-            draw(xOffset);
-            /*
-             * if (xOffset == 1.0f) { mJuliaRenderer.setPrecision(128);
-             * draw(xOffset); }
-             */
-            mJuliaRenderer.setPrecision(12);
-            hqTimer.setLastFrameTimestamp(System.currentTimeMillis());
+
+            this.xOffset = xOffset;
+
+            if ((int) (xOffset / xOffsetStep) == xOffset / xOffsetStep) {
+                RenderHighQualityTimer.startTimer();
+            }
+            juliaRenderer.setPrecision(12);
+
+            draw();
+
         }
 
-        // fada in på vissible med separat timestamp var som alltid checkas vid
-        // render, som sätter hur ljus paletten är, 0-1f typ.
-        // om 1 så skit i den å kör default, annars gånga ner alla färger för
-        // att få en fadein under .3 sekunder eller så
-        // låt julia cx cy state va beroende på timestam från senaste fade in
-
-        private void draw(float xOffset) {
-
-            // long startTime = System.currentTimeMillis();
+        private void draw() {
+            long startTime = System.currentTimeMillis();
 
             double x = JuliaSeeds.getX(xOffset, timeBasedSeed);
             double y = JuliaSeeds.getY(xOffset, timeBasedSeed);
 
             Log.d(LOG_TAG, "X: " + x + "  Y: " + y);
-            Bitmap bitmap = mJuliaRenderer.renderJulia(x, y);
+            Bitmap bitmap = juliaRenderer.renderJulia(x, y);
             // long renderTime = System.currentTimeMillis() - startTime;
             // Log.d(TAG, "Rendertime: " + (renderTime));
 
@@ -104,18 +109,17 @@ public class JuliaWallpaperService extends WallpaperService {
             try {
                 c = holder.lockCanvas();
                 if (c != null) {
-                    Matrix rotateMatrix = new Matrix();
+                    rotateMatrix = new Matrix();
                     c.drawBitmap(bitmap, rotateMatrix, null);
                     rotateMatrix.setRotate(180, 0, 0);
-                    rotateMatrix.postTranslate(mWidth, mHeight);
+                    rotateMatrix.postTranslate(width, height);
                     c.drawBitmap(bitmap, rotateMatrix, null);
-
                 }
             } finally {
                 if (c != null) {
                     holder.unlockCanvasAndPost(c);
                 }
-                long lastFrameTime = System.currentTimeMillis() - hqTimer.getLastFrameTimestamp();
+                long lastFrameTime = System.currentTimeMillis() - startTime;
                 hqTimer.setLastFrameTime(lastFrameTime);
             }
         }

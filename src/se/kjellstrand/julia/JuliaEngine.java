@@ -16,9 +16,7 @@ public class JuliaEngine {
 
     private ScriptC_julia mScript;
 
-    private Allocation mInPixelsAllocation;
-
-    private Allocation mOutPixelsAllocation;
+    private Allocation mPixelsAllocation;
 
     private int mPrecision = 24;
 
@@ -30,9 +28,7 @@ public class JuliaEngine {
         RenderScript rs = RenderScript.create(context, RenderScript.ContextType.DEBUG);
         rs.setPriority(Priority.LOW);
 
-        mInPixelsAllocation = Allocation.createFromBitmap(rs, mBitmap,
-                Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
-        mOutPixelsAllocation = Allocation.createFromBitmap(rs, mBitmap,
+        mPixelsAllocation = Allocation.createFromBitmap(rs, mBitmap,
                 Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
 
         mScript = new ScriptC_julia(rs, context.getResources(), R.raw.julia);
@@ -65,8 +61,8 @@ public class JuliaEngine {
     public Bitmap renderJulia(double x, double y) {
         mScript.set_cx((float) x);
         mScript.set_cy((float) y);
-        mScript.forEach_root(mInPixelsAllocation, mOutPixelsAllocation);
-        mOutPixelsAllocation.copyTo(mBitmap);
+        mScript.forEach_root(mPixelsAllocation, mPixelsAllocation);
+        mPixelsAllocation.copyTo(mBitmap);
         return mBitmap;
     }
 

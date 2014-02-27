@@ -29,24 +29,27 @@ public class JuliaSeeds {
             { -0.80370367, -0.1981982 },//
             { -0.88518524, 0.27702713 } };
 
-
     private static final double FIRST_SIZE = 0.1;
+
     private static final double FIRST_SEED_MUL = 9.97;
 
     private static final double SECOND_SIZE = 0.1;
+
     private static final double SECOND_SEED_MUL = 15.97;
 
     static double getX(double i, int seed) {
-        return (double) ((Math.sin(i * FIRST_SEED_MUL) * FIRST_SIZE) + (Math
-                .sin(i / SECOND_SEED_MUL) * SECOND_SIZE))+juliaSeeds[seed][0];
+        return (double) ((Math.sin(i * FIRST_SEED_MUL) * FIRST_SIZE) + (Math.sin(i
+                / SECOND_SEED_MUL) * SECOND_SIZE))
+                + juliaSeeds[seed][0];
     }
 
     static double getY(double i, int seed) {
-        return (double) ((Math.cos(i * FIRST_SEED_MUL) * FIRST_SIZE) + (Math
-                .cos(i / SECOND_SEED_MUL) * SECOND_SIZE))+juliaSeeds[seed][1];
+        return (double) ((Math.cos(i * FIRST_SEED_MUL) * FIRST_SIZE) + (Math.cos(i
+                / SECOND_SEED_MUL) * SECOND_SIZE))
+                + juliaSeeds[seed][1];
     }
 
-    static int getNumberOfSeeds(){
+    static int getNumberOfSeeds() {
         return juliaSeeds.length;
     }
 
