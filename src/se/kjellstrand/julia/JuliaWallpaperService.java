@@ -32,19 +32,31 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private int height;
 
+        private int scaledWidth;
+
+        private int scaledHeight;
+
         private float xOffset = 0.5f;
 
-        private Matrix rotateMatrix;
+        private Matrix matrix;
 
-        private float scale = 1.5f;
+        private float scale;
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
             super.onSurfaceCreated(holder);
 
             Rect rect = holder.getSurfaceFrame();
-            height = (int) (rect.height() / scale);
-            width = (int) (rect.width() / scale) ;
+            width = rect.width();
+            height = rect.height();
+            setScale(2f);
+
+        }
+
+        private void setScale(float scale) {
+            this.scale = scale;
+            scaledWidth = (int) (width / scale);
+            scaledHeight = (int) (height / scale);
         }
 
         @Override
@@ -57,8 +69,8 @@ public class JuliaWallpaperService extends WallpaperService {
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
 
-            juliaRenderer.init(JuliaWallpaperService.this.getBaseContext(), this.width,
-                    this.height / 2);
+            juliaRenderer.init(JuliaWallpaperService.this.getBaseContext(), this.scaledWidth,
+                    this.scaledHeight / 2);
 
             draw();
         }
@@ -83,13 +95,30 @@ public class JuliaWallpaperService extends WallpaperService {
                     yPixelOffset);
 
             this.xOffset = xOffset;
+            juliaRenderer.setPrecision(20);
 
-            if ((int) (xOffset / xOffsetStep) == xOffset / xOffsetStep) {
-                RenderHighQualityTimer.startTimer();
-            }
-            juliaRenderer.setPrecision(12);
-
+//            float oldScale = scale;
+//            Log.d(LOG_TAG, "(int) (xOffset / xOffsetStep) == xOffset / xOffsetStep "
+//                    + ((int) (xOffset / xOffsetStep) - xOffset / xOffsetStep));
+//            Log.d(LOG_TAG, "xOffset - xOffsetStep "
+//                    +  xOffset +" - " +xOffsetStep);
+//            if ((int) (xOffset / xOffsetStep) == xOffset / xOffsetStep) {
+//                RenderHighQualityTimer.startTimer();
+//                setScale(1f);
+//            } else {
+//                setScale(2f);
+//            }
+//            if (oldScale != scale) {
+//                juliaRenderer.init(getApplicationContext(), scaledWidth, scaledHeight / 2);
+//            }
             draw();
+            RenderHighQualityTimer.startTimer();
+
+            /**
+             *
+             * set timer and use pre inited juliaRenderer objects with fixed scale.
+             *
+             */
 
         }
 
@@ -109,11 +138,12 @@ public class JuliaWallpaperService extends WallpaperService {
             try {
                 c = holder.lockCanvas();
                 if (c != null) {
-                    rotateMatrix = new Matrix();
-                    c.drawBitmap(bitmap, rotateMatrix, null);
-                    rotateMatrix.setRotate(180, 0, 0);
-                    rotateMatrix.postTranslate(width, height);
-                    c.drawBitmap(bitmap, rotateMatrix, null);
+                    matrix = new Matrix();
+                    matrix.setScale(scale, scale);
+                    c.drawBitmap(bitmap, matrix, null);
+                    matrix.postRotate(180, 0, 0);
+                    matrix.postTranslate(width, height);
+                    c.drawBitmap(bitmap, matrix, null);
                 }
             } finally {
                 if (c != null) {
