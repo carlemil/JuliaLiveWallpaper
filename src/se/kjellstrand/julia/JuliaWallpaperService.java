@@ -1,6 +1,6 @@
-
 package se.kjellstrand.julia;
 
+import se.kjellstrand.julia.RenderHighQualityTimer.TimeoutListener;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -8,23 +8,26 @@ import android.graphics.Rect;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
-
 public class JuliaWallpaperService extends WallpaperService {
 
     private final String TAG = JuliaWallpaperService.class.getCanonicalName();
 
     @Override
     public Engine onCreateEngine() {
-        return new DemoEngine();
+        return new JuliaEngine();
     }
 
-    class DemoEngine extends Engine {
+    class JuliaEngine extends Engine implements TimeoutListener {
 
-        private final String LOG_TAG = DemoEngine.class.getCanonicalName();
+        private final String LOG_TAG = JuliaEngine.class.getCanonicalName();
 
-        private JuliaEngine juliaRenderer = new JuliaEngine();
+        private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer(this);
 
-        private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer();
+        private Matrix matrix = new Matrix();
+
+        private JuliaRSWrapper[] juliaRSWrappers = new JuliaRSWrapper[2];
+
+        private JuliaRSWrapper juliaRSWrapper;
 
         private int timeBasedSeed;
 
@@ -32,15 +35,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private int height;
 
-        private int scaledWidth;
-
-        private int scaledHeight;
-
-        private float xOffset = 0.5f;
-
-        private Matrix matrix;
-
-        private float scale;
+        private float xOffset = 0.0f;
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
@@ -49,28 +44,24 @@ public class JuliaWallpaperService extends WallpaperService {
             Rect rect = holder.getSurfaceFrame();
             width = rect.width();
             height = rect.height();
-            setScale(2f);
 
-        }
-
-        private void setScale(float scale) {
-            this.scale = scale;
-            scaledWidth = (int) (width / scale);
-            scaledHeight = (int) (height / scale);
         }
 
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder) {
             super.onSurfaceDestroyed(holder);
-            juliaRenderer.destroy();
+            juliaRSWrapper.destroy();
         }
 
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
+            juliaRSWrappers[0] = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width,
+                    height / 2, 1f);
+            juliaRSWrappers[1] = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width,
+                    height / 2, 2f);
 
-            juliaRenderer.init(JuliaWallpaperService.this.getBaseContext(), this.scaledWidth,
-                    this.scaledHeight / 2);
+            juliaRSWrapper = juliaRSWrappers[1];
 
             draw();
         }
@@ -95,51 +86,36 @@ public class JuliaWallpaperService extends WallpaperService {
                     yPixelOffset);
 
             this.xOffset = xOffset;
-            juliaRenderer.setPrecision(20);
 
-//            float oldScale = scale;
-//            Log.d(LOG_TAG, "(int) (xOffset / xOffsetStep) == xOffset / xOffsetStep "
-//                    + ((int) (xOffset / xOffsetStep) - xOffset / xOffsetStep));
-//            Log.d(LOG_TAG, "xOffset - xOffsetStep "
-//                    +  xOffset +" - " +xOffsetStep);
-//            if ((int) (xOffset / xOffsetStep) == xOffset / xOffsetStep) {
-//                RenderHighQualityTimer.startTimer();
-//                setScale(1f);
-//            } else {
-//                setScale(2f);
-//            }
-//            if (oldScale != scale) {
-//                juliaRenderer.init(getApplicationContext(), scaledWidth, scaledHeight / 2);
-//            }
+            long drawStart = System.currentTimeMillis();
             draw();
-            RenderHighQualityTimer.startTimer();
+            long drawFinished = System.currentTimeMillis();
+            hqTimer.setLastFrameTime(drawFinished - drawStart);
 
-            /**
-             *
-             * set timer and use pre inited juliaRenderer objects with fixed scale.
-             *
-             */
+            // Log.d(LOG_TAG, "drawtime: " + hqTimer.getLastFrameTime());
 
+            hqTimer.startTimer();
+        }
+
+
+        @Override
+        public void timeout() {
+            juliaRSWrapper = juliaRSWrappers[0];
+            draw();
+            juliaRSWrapper = juliaRSWrappers[1];
         }
 
         private void draw() {
-            long startTime = System.currentTimeMillis();
-
             double x = JuliaSeeds.getX(xOffset, timeBasedSeed);
             double y = JuliaSeeds.getY(xOffset, timeBasedSeed);
-
-            Log.d(LOG_TAG, "X: " + x + "  Y: " + y);
-            Bitmap bitmap = juliaRenderer.renderJulia(x, y);
-            // long renderTime = System.currentTimeMillis() - startTime;
-            // Log.d(TAG, "Rendertime: " + (renderTime));
-
+            Bitmap bitmap = juliaRSWrapper.renderJulia(x, y);
             Canvas c = null;
             SurfaceHolder holder = getSurfaceHolder();
             try {
                 c = holder.lockCanvas();
                 if (c != null) {
-                    matrix = new Matrix();
-                    matrix.setScale(scale, scale);
+                    matrix.reset();
+                    matrix.setScale(juliaRSWrapper.getScale(), juliaRSWrapper.getScale());
                     c.drawBitmap(bitmap, matrix, null);
                     matrix.postRotate(180, 0, 0);
                     matrix.postTranslate(width, height);
@@ -149,17 +125,8 @@ public class JuliaWallpaperService extends WallpaperService {
                 if (c != null) {
                     holder.unlockCanvasAndPost(c);
                 }
-                long lastFrameTime = System.currentTimeMillis() - startTime;
-                hqTimer.setLastFrameTime(lastFrameTime);
             }
         }
 
-        /*
-         * array med x y size för seed punkter som ger "bra" julias array med
-         * paletter (hur nu de ska funka med dynamisk size på paletten, kanske 5
-         * färger och sen auto smooth mellan dom? en handler eller liknande för
-         * att vänta 2x senaste tiden det tog att rita en frame, och sen rita
-         * med scale == 1
-         */
     }
 }
