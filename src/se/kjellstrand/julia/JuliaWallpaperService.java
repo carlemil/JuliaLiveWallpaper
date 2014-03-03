@@ -25,17 +25,16 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private Matrix matrix = new Matrix();
 
-        private JuliaRSWrapper[] juliaRSWrappers = new JuliaRSWrapper[2];
+        private JuliaRSWrapper juliaHighQualityRSWrapper;
+        private JuliaRSWrapper juliaLowQualityRSWrapper;
 
-        private JuliaRSWrapper juliaRSWrapper;
+        private float xOffset = 0.0f;
 
         private int timeBasedSeed;
 
         private int width;
 
         private int height;
-
-        private float xOffset = 0.0f;
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
@@ -44,26 +43,23 @@ public class JuliaWallpaperService extends WallpaperService {
             Rect rect = holder.getSurfaceFrame();
             width = rect.width();
             height = rect.height();
-
         }
 
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder) {
             super.onSurfaceDestroyed(holder);
-            juliaRSWrapper.destroy();
+            juliaHighQualityRSWrapper.destroy();
+            juliaLowQualityRSWrapper.destroy();
         }
 
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
-            juliaRSWrappers[0] = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width,
+            juliaHighQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width,
                     height / 2, 1f);
-            juliaRSWrappers[1] = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width,
+            juliaLowQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width,
                     height / 2, 2f);
-
-            juliaRSWrapper = juliaRSWrappers[1];
-
-            draw();
+            draw(juliaHighQualityRSWrapper);
         }
 
         @Override
@@ -88,7 +84,7 @@ public class JuliaWallpaperService extends WallpaperService {
             this.xOffset = xOffset;
 
             long drawStart = System.currentTimeMillis();
-            draw();
+            draw(juliaLowQualityRSWrapper);
             long drawFinished = System.currentTimeMillis();
             hqTimer.setLastFrameTime(drawFinished - drawStart);
 
@@ -100,12 +96,10 @@ public class JuliaWallpaperService extends WallpaperService {
 
         @Override
         public void timeout() {
-            juliaRSWrapper = juliaRSWrappers[0];
-            draw();
-            juliaRSWrapper = juliaRSWrappers[1];
+            draw(juliaHighQualityRSWrapper);
         }
 
-        private void draw() {
+        private void draw(JuliaRSWrapper juliaRSWrapper) {
             double x = JuliaSeeds.getX(xOffset, timeBasedSeed);
             double y = JuliaSeeds.getY(xOffset, timeBasedSeed);
             Bitmap bitmap = juliaRSWrapper.renderJulia(x, y);

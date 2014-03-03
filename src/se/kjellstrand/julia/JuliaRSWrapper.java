@@ -1,5 +1,6 @@
 package se.kjellstrand.julia;
 
+import se.kjellstrand.julia.Palette.Type;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.renderscript.Allocation;
@@ -21,7 +22,7 @@ public class JuliaRSWrapper {
 
     private int scaledHeight;
 
-    private int precision = 24;
+    private int precision = 34;
 
     private final float scale;
 
@@ -49,24 +50,13 @@ public class JuliaRSWrapper {
 
         script.set_precision(precision);
 
-        byte[] d = getPalette();
+        byte[] d = Palette.getPalette(Type.INVERTED_GRAY_SCALE, precision);
 
         Element type = Element.U8(rs);
         Allocation colorAllocation = Allocation.createSized(rs, type, precision * 3);
         script.bind_color(colorAllocation);
 
         colorAllocation.copy1DRangeFrom(0, precision * 3, d);
-    }
-
-    private byte[] getPalette() {
-        byte[] d = new byte[precision * 3];
-
-        for (int i = 0; i < precision; i++) {
-            d[i * 3 + 0] = (byte) (((Math.cos(i / (double) precision * Math.PI) + 1d) / 2d) * 255);
-            d[i * 3 + 1] = (byte) (((Math.sin(i / (double) precision * Math.PI / 3) + 1d) / 2d) * 255);
-            d[i * 3 + 2] = (byte) (((Math.sin(i / (double) precision * Math.PI) + 1d) / 2d) * 255);
-        }
-        return d;
     }
 
     public Bitmap renderJulia(double x, double y) {
