@@ -84,7 +84,9 @@ public class JuliaWallpaperService extends WallpaperService {
             this.xOffset = xOffset;
 
             long drawStart = System.currentTimeMillis();
+            Log.d(LOG_TAG, "Begin lq draw.");
             draw(juliaLowQualityRSWrapper);
+            Log.d(LOG_TAG, "Finish lq draw.");
             long drawFinished = System.currentTimeMillis();
             hqTimer.setLastFrameTime(drawFinished - drawStart);
 
@@ -96,7 +98,9 @@ public class JuliaWallpaperService extends WallpaperService {
 
         @Override
         public void timeout() {
+            Log.d(LOG_TAG, "---Begin hq draw.");
             draw(juliaHighQualityRSWrapper);
+            Log.d(LOG_TAG, "---Finish hq draw.");
         }
 
         private void draw(JuliaRSWrapper juliaRSWrapper) {
