@@ -92,6 +92,11 @@ public class JuliaWallpaperService extends WallpaperService {
 
             // Log.d(LOG_TAG, "drawtime: " + hqTimer.getLastFrameTime());
 
+            TODO
+            kolla hur denna anropas, kanske får vi anrop som blockas här? borde kanske sätta
+            xOffset != null, och sen ha en render tråd som koller efter xOffset!=null och kör en draw
+            sålänge som den e xOffset!=null, och som kör en draw(juliaHighQualityRSWrapper); sist.
+
             hqTimer.startTimer();
         }
 
