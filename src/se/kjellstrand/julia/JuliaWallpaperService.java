@@ -83,19 +83,9 @@ public class JuliaWallpaperService extends WallpaperService {
 
             this.xOffset = xOffset;
 
-            long drawStart = System.currentTimeMillis();
             Log.d(LOG_TAG, "Begin lq draw.");
             draw(juliaLowQualityRSWrapper);
             Log.d(LOG_TAG, "Finish lq draw.");
-            long drawFinished = System.currentTimeMillis();
-            hqTimer.setLastFrameTime(drawFinished - drawStart);
-
-            // Log.d(LOG_TAG, "drawtime: " + hqTimer.getLastFrameTime());
-
-            TODO
-            kolla hur denna anropas, kanske får vi anrop som blockas här? borde kanske sätta
-            xOffset != null, och sen ha en render tråd som koller efter xOffset!=null och kör en draw
-            sålänge som den e xOffset!=null, och som kör en draw(juliaHighQualityRSWrapper); sist.
 
             hqTimer.startTimer();
         }
