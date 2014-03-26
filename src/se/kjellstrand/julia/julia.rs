@@ -32,7 +32,7 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     float t = 0;
     int k = 0;
     
-    while(k < precision) {
+    while(k < precision - 1) {
 	    t = fx * fx - fy * fy + cx;
 	    fy = 2 * fx * fy + cy;
 	    fx = t;
@@ -41,14 +41,7 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
 	    }
 	    k++;
 	}
-
-	if (k < precision) {
-    	out->b = color[k*3+0];
-    	out->g = color[k*3+1];
-    	out->r = color[k*3+2];
-	} else {
-		out->b = 1;
-    	out->g = 1;
-    	out->r = 1;
-	}
+    out->b = color[k*3+0];
+    out->g = color[k*3+1];
+    out->r = color[k*3+2];
 }

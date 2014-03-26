@@ -16,11 +16,7 @@ public class Palette {
 
         switch (type) {
             case KAZAKH_FLAG:
-                for (int i = 0; i < precision; i++) {
-                    palette[i * 3 + 0] = (byte) (((Math.cos(i / (double) precision * Math.PI) + 1d) / 2d) * 255);
-                    palette[i * 3 + 1] = (byte) (((Math.sin(i / (double) precision * Math.PI / 3) + 1d) / 2d) * 255);
-                    palette[i * 3 + 2] = (byte) (((Math.sin(i / (double) precision * Math.PI) + 1d) / 2d) * 255);
-                }
+                palette = getHSVGradient(palette, 0x00ddff, 0xfeed00);
                 break;
             case WHITE_TO_BLACK_SCALE:
                 palette = getHSVGradient(palette, 0xffffff, 0x000000);
@@ -49,9 +45,9 @@ public class Palette {
                 tmpHSV[j] = startHSV[j] * (1f - p) + endHSV[j] * p;
             }
             int c = Color.HSVToColor(tmpHSV);
-            palette[i * 3 + 0] = (byte) Color.red(c);
+            palette[i * 3 + 0] = (byte) Color.blue(c);
             palette[i * 3 + 1] = (byte) Color.green(c);
-            palette[i * 3 + 2] = (byte) Color.blue(c);
+            palette[i * 3 + 2] = (byte) Color.red(c);
         }
         return palette;
     }

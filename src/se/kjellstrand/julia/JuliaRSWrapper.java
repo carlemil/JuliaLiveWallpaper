@@ -50,7 +50,7 @@ public class JuliaRSWrapper {
 
         script.set_precision(precision);
 
-        byte[] d = Palette.getPalette(Type.WHITE_TO_BLACK_SCALE, precision);
+        byte[] d = Palette.getPalette(Type.KAZAKH_FLAG, precision);
 
         Element type = Element.U8(rs);
         Allocation colorAllocation = Allocation.createSized(rs, type, precision * 3);
