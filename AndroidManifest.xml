@@ -34,7 +34,7 @@
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="Julia Wallpaper" >
-        <activity android:name=".PrefsActivity" >
+        <activity android:name=".SettingsActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
