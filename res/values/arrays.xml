@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="list_of_palettes">
+        <item>@string/palette_white_to_black</item>
+        <item>@string/palette_black_to_white</item>
+        <item>@string/palette_kazakh_flagg</item>
+    </string-array>
+    
+</resources>

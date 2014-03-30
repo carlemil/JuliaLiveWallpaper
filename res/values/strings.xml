@@ -20,5 +20,15 @@
 <resources>
     
     <string name="name">Julia wallpaper</string>
+    
+    <string name="palette_white_to_black">White to black</string>
+    <string name="palette_black_to_white">Black to white</string>
+    <string name="palette_kazakh_flagg">Kazakh flagg</string>
 
+    <string name="pref_palette_default">@string/palette_white_to_black</string>
+    <string name="pref_palette_dialog_title">TODO</string>
+    <string name="pref_palette_key">palette_key</string>
+    <string name="pref_palette_summary">TODO</string>
+    <string name="pref_palette_title">TODO</string>
+    
 </resources>
