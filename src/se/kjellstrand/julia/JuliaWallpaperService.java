@@ -1,13 +1,16 @@
 package se.kjellstrand.julia;
 
 import se.kjellstrand.julia.RenderHighQualityTimer.TimeoutListener;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
 public class JuliaWallpaperService extends WallpaperService {
 
     private final String TAG = JuliaWallpaperService.class.getCanonicalName();
@@ -70,6 +73,13 @@ public class JuliaWallpaperService extends WallpaperService {
             // mScript stop/start?
             // mJuliaRenderer.getScript
 
+            String key = getResources().getString(R.string.pref_palette_key);
+            SharedPreferences sharedPreferences = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext());
+            String palette = sharedPreferences.getString(key, null);
+            juliaHighQualityRSWrapper.setPalette(getApplicationContext(), palette);
+            juliaLowQualityRSWrapper.setPalette(getApplicationContext(), palette);
+
             timeBasedSeed = (int) ((System.currentTimeMillis() / (1000 * 60 * 60)) % JuliaSeeds
                     .getNumberOfSeeds());
             Log.d(TAG, "seedTime " + timeBasedSeed);
@@ -89,7 +99,6 @@ public class JuliaWallpaperService extends WallpaperService {
 
             hqTimer.startTimer();
         }
-
 
         @Override
         public void timeout() {

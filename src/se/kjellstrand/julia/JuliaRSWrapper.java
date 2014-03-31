@@ -1,6 +1,5 @@
 package se.kjellstrand.julia;
 
-import se.kjellstrand.julia.Palette.Type;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.renderscript.Allocation;
@@ -26,6 +25,8 @@ public class JuliaRSWrapper {
 
     private final float scale;
 
+    private RenderScript rs;
+
     public JuliaRSWrapper(Context context, int width, int height, float scale) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
 
@@ -37,7 +38,7 @@ public class JuliaRSWrapper {
         bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, conf);
         bitmap.setHasAlpha(false);
 
-        RenderScript rs = RenderScript.create(context, RenderScript.ContextType.DEBUG);
+        rs = RenderScript.create(context, RenderScript.ContextType.DEBUG);
         rs.setPriority(Priority.LOW);
 
         pxelsAllocation = Allocation.createFromBitmap(rs, bitmap,
@@ -50,7 +51,12 @@ public class JuliaRSWrapper {
 
         script.set_precision(precision);
 
-        byte[] d = Palette.getPalette(Type.KAZAKH_FLAG, precision);
+        String palette = context.getString(R.string.palette_black_to_white);
+        setPalette(context, palette);
+    }
+
+    public void setPalette(Context context, String palette) {
+        byte[] d = Palette.getPalette(context, palette, precision);
 
         Element type = Element.U8(rs);
         Allocation colorAllocation = Allocation.createSized(rs, type, precision * 3);
