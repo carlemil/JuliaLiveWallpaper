@@ -73,12 +73,21 @@ public class JuliaWallpaperService extends WallpaperService {
             // mScript stop/start?
             // mJuliaRenderer.getScript
 
+<<<<<<< HEAD
             String key = getResources().getString(R.string.pref_palette_key);
             SharedPreferences sharedPreferences = PreferenceManager
                     .getDefaultSharedPreferences(getApplicationContext());
             String palette = sharedPreferences.getString(key, null);
             juliaHighQualityRSWrapper.setPalette(getApplicationContext(), palette);
             juliaLowQualityRSWrapper.setPalette(getApplicationContext(), palette);
+=======
+            String colorsKey = getResources().getString(R.string.pref_palette_key);
+            SharedPreferences sharedPreferences = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext());
+            String colors = sharedPreferences.getString(colorsKey, null);
+            juliaHighQualityRSWrapper.setPalette(getApplicationContext(), colors);
+            juliaLowQualityRSWrapper.setPalette(getApplicationContext(), colors);
+>>>>>>> palette in settings and working as expected.
 
             timeBasedSeed = (int) ((System.currentTimeMillis() / (1000 * 60 * 60)) % JuliaSeeds
                     .getNumberOfSeeds());

@@ -51,8 +51,8 @@ public class JuliaRSWrapper {
 
         script.set_precision(precision);
 
-        String palette = context.getString(R.string.palette_black_to_white);
-        setPalette(context, palette);
+        String colors = context.getString(R.string.palette_black_to_white);
+        setPalette(context, colors);
     }
 
     public void setPalette(Context context, String palette) {
