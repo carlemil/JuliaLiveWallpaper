@@ -23,8 +23,9 @@
     
     <string name="palette_white_to_black">White to black</string>
     <string name="palette_black_to_white">Black to white</string>
-    <string name="palette_kazakh_flagg">Kazakh flagg</string>
-    <string name="palette_norway_flagg">Norweigan flagg</string>
+    <string name="palette_kazakhstan">Flag of Kazakhstan</string>
+    <string name="palette_sweden">Flag of Sweden</string>
+    <string name="palette_norway">Flag of Norway</string>
     
     <string name="pref_palette_default">@string/palette_black_to_white</string>
     <string name="pref_palette_dialog_title">Palette</string>
