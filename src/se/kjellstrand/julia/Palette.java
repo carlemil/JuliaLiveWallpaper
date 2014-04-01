@@ -1,3 +1,4 @@
+
 package se.kjellstrand.julia;
 
 import android.content.Context;
@@ -8,28 +9,46 @@ public class Palette {
 
     private static final String LOG_TAG = Palette.class.getCanonicalName();
 
-    public static byte[] getPalette(Context context, String colors, int precision) {
+    public static byte[] getPalette(Context context, String paletteName, int precision) {
         byte[] palette = new byte[precision * 3];
 
-        if (context.getString(R.string.palette_kazakh_flagg).equals(colors)) {
-            setHSVGradient(palette, 0x00ddff, 0xfeed00);
-        } else if (context.getString(R.string.palette_white_to_black).equals(colors)) {
-            setHSVGradient(palette, 0xffffff, 0x000000);
-        } else if (context.getString(R.string.palette_black_to_white).equals(colors)) {
-            setHSVGradient(palette, 0x000000, 0xffffff);
-        } else if (context.getString(R.string.palette_norway_flagg).equals(colors)) {
-            setTrippleHSVGradient(palette, 0x0000ff, 0xff0000, 0xffffff);
+        int[] colors = null;
+
+        if (context.getString(R.string.palette_kazakh_flagg).equals(paletteName)) {
+            colors = new int[] {
+                    0x00ddff, 0xfeed00
+            };
+        } else if (context.getString(R.string.palette_white_to_black).equals(paletteName)) {
+            colors = new int[] {
+                    0xffffff, 0x000000
+            };
+        } else if (context.getString(R.string.palette_black_to_white).equals(paletteName)) {
+            colors = new int[] {
+                    0x000000, 0xffffff
+            };
+        } else if (context.getString(R.string.palette_norway_flagg).equals(paletteName)) {
+            colors = new int[] {
+                    0x0000ff, 0xff0000, 0xffffff
+            };
+        }
+
+        if (colors.length == 2) {
+            setHSVGradient(palette, colors[0], colors[1]);
+        } else if (colors.length == 3) {
+            setTrippleHSVGradient(palette, colors[0], colors[1], colors[2]);
         }
         return palette;
     }
 
-    private static byte[] setTrippleHSVGradient(byte[] palette, int startColor, int middleColor, int endColor) {
+    private static byte[] setTrippleHSVGradient(byte[] palette, int startColor, int middleColor,
+            int endColor) {
         byte[] paletteStart = new byte[((palette.length / 3) / 2) * 3];
         setHSVGradient(paletteStart, startColor, middleColor);
         byte[] paletteEnd = new byte[palette.length - paletteStart.length];
         setHSVGradient(paletteEnd, middleColor, endColor);
 
-        Log.d("pal", "sl: " + paletteStart.length + " el: " + paletteEnd.length + " pl: " + palette.length);
+        Log.d("pal", "sl: " + paletteStart.length + " el: " + paletteEnd.length + " pl: "
+                + palette.length);
 
         System.arraycopy(paletteStart, 0, palette, 0, paletteStart.length);
 
