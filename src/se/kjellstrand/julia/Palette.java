@@ -2,6 +2,7 @@ package se.kjellstrand.julia;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 
 public class Palette {
 
@@ -11,16 +12,33 @@ public class Palette {
         byte[] palette = new byte[precision * 3];
 
         if (context.getString(R.string.palette_kazakh_flagg).equals(colors)) {
-            palette = getHSVGradient(palette, 0x00ddff, 0xfeed00);
+            setHSVGradient(palette, 0x00ddff, 0xfeed00);
         } else if (context.getString(R.string.palette_white_to_black).equals(colors)) {
-            palette = getHSVGradient(palette, 0xffffff, 0x000000);
+            setHSVGradient(palette, 0xffffff, 0x000000);
         } else if (context.getString(R.string.palette_black_to_white).equals(colors)) {
-            palette = getHSVGradient(palette, 0x000000, 0xffffff);
+            setHSVGradient(palette, 0x000000, 0xffffff);
+        } else if (context.getString(R.string.palette_norway_flagg).equals(colors)) {
+            setTrippleHSVGradient(palette, 0x0000ff, 0xff0000, 0xffffff);
         }
         return palette;
     }
 
-    private static byte[] getHSVGradient(byte[] palette, int startColor, int endColor) {
+    private static byte[] setTrippleHSVGradient(byte[] palette, int startColor, int middleColor, int endColor) {
+        byte[] paletteStart = new byte[((palette.length / 3) / 2) * 3];
+        setHSVGradient(paletteStart, startColor, middleColor);
+        byte[] paletteEnd = new byte[palette.length - paletteStart.length];
+        setHSVGradient(paletteEnd, middleColor, endColor);
+
+        Log.d("pal", "sl: " + paletteStart.length + " el: " + paletteEnd.length + " pl: " + palette.length);
+
+        System.arraycopy(paletteStart, 0, palette, 0, paletteStart.length);
+
+        System.arraycopy(paletteEnd, 0, palette, paletteStart.length, paletteEnd.length);
+
+        return palette;
+    }
+
+    private static void setHSVGradient(byte[] palette, int startColor, int endColor) {
         float[] startHSV = new float[3];
         Color.colorToHSV(startColor, startHSV);
         float[] endHSV = new float[3];
@@ -38,7 +56,6 @@ public class Palette {
             palette[i * 3 + 1] = (byte) Color.green(c);
             palette[i * 3 + 2] = (byte) Color.red(c);
         }
-        return palette;
     }
 
 }

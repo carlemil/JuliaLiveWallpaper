@@ -2,9 +2,10 @@
 <resources>
 
     <string-array name="list_of_palettes">
-        <item>@string/palette_white_to_black</item>
         <item>@string/palette_black_to_white</item>
+        <item>@string/palette_white_to_black</item>
         <item>@string/palette_kazakh_flagg</item>
+        <item>@string/palette_norway_flagg</item>
     </string-array>
-    
+
 </resources>
