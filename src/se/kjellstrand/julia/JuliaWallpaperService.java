@@ -73,12 +73,14 @@ public class JuliaWallpaperService extends WallpaperService {
             // mScript stop/start?
             // mJuliaRenderer.getScript
 
-            String colorsKey = getResources().getString(R.string.pref_palette_key);
             SharedPreferences sharedPreferences = PreferenceManager
                     .getDefaultSharedPreferences(getApplicationContext());
+            String colorsKey = getResources().getString(R.string.pref_palette_key);
             String colors = sharedPreferences.getString(colorsKey, null);
-            juliaHighQualityRSWrapper.setPalette(getApplicationContext(), colors);
-            juliaLowQualityRSWrapper.setPalette(getApplicationContext(), colors);
+            String drawModeKey = getResources().getString(R.string.pref_draw_mode_key);
+            String drawMode = sharedPreferences.getString(drawModeKey, null);
+            juliaHighQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
+            juliaLowQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
 
             timeBasedSeed = (int) ((System.currentTimeMillis() / (1000 * 60 * 60)) % JuliaSeeds
                     .getNumberOfSeeds());

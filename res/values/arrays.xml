@@ -8,4 +8,10 @@
         <item>@string/palette_norway_flagg</item>
     </string-array>
 
+    <string-array name="list_of_draw_modes">
+        <item>@string/draw_mode_smooth_blend</item>
+        <item>@string/draw_mode_zebra_blend</item>
+        <item>@string/draw_mode_flag_bands</item>
+    </string-array>
+    
 </resources>

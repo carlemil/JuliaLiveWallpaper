@@ -18,7 +18,7 @@
 -->
 
 <resources>
-    
+
     <string name="name">Julia wallpaper</string>
     
     <string name="palette_white_to_black">White to black</string>
@@ -26,11 +26,20 @@
     <string name="palette_kazakh_flagg">Kazakh flagg</string>
     <string name="palette_norway_flagg">Norweigan flagg</string>
     
-    
     <string name="pref_palette_default">@string/palette_black_to_white</string>
     <string name="pref_palette_dialog_title">Palette</string>
     <string name="pref_palette_key">palette_key</string>
     <string name="pref_palette_summary">Set the palette of the wallpaper</string>
     <string name="pref_palette_title">Palette</string>
     
+    <string name="draw_mode_smooth_blend">Smooth blend</string>
+    <string name="draw_mode_zebra_blend">Zebra blend</string>
+    <string name="draw_mode_flag_bands">Flag bands</string>
+    
+    <string name="pref_draw_mode_default">@string/draw_mode_smooth_blend</string>
+    <string name="pref_draw_mode_dialog_title">Draw mode</string>
+    <string name="pref_draw_mode_key">draw_mode_key</string>
+    <string name="pref_draw_mode_summary">Set the draw mode of the wallpaper</string>
+    <string name="pref_draw_mode_title">Draw mode</string>
+
 </resources>
