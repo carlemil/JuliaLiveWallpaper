@@ -34,17 +34,28 @@ public class Palette {
             colors = new int[] {
                     0x00ddff, 0xfeed00
             };
+        } else if (context.getString(R.string.palette_india).equals(paletteName)) {
+            colors = new int[] {
+                    0xff9933, 0xffffff, 0x128807
+            };
+        } else if (context.getString(R.string.palette_china).equals(paletteName)) {
+            colors = new int[] {
+                    0xde2910, 0xffde00
+            };
+        } else if (context.getString(R.string.palette_russia).equals(paletteName)) {
+            colors = new int[] {
+                    0x0039a6, 0xffffff, 0xd52b1e
+            };
+        } else if (context.getString(R.string.palette_britain).equals(paletteName)) {
+            colors = new int[] {
+                    0xcf142b, 0xffffff, 0x00247d
+            };
         } else {
             // Default colors: black - white - black
             colors = new int[] {
                     0x000000, 0xffffff, 0x000000
             };
         }
-
-        // indira 0xff9933, 0xffffff, 0x128807
-        // uk, us 0xcf142b, 0xffffff, 0x00247d
-        // china 0xde2910, 0xffde00
-        // russian 0xffffff, 0x0039a6, 0xd52b1e
 
         if (context.getString(R.string.draw_mode_smooth_blend).equals(drawMode)) {
             if (colors.length == 2) {
@@ -54,8 +65,19 @@ public class Palette {
             }
         } else if (context.getString(R.string.draw_mode_flag_bands).equals(drawMode)) {
             setFlagBands(palette, colors);
+        } else if (context.getString(R.string.draw_mode_zebra_blend).equals(drawMode)) {
+            if (colors.length == 2) {
+                setHSVGradient(palette, colors[0], colors[1]);
+            } else if (colors.length == 3) {
+                setTrippleHSVGradient(palette, colors[0], colors[1], colors[2]);
+            }
+            zebraify(palette);
         }
         return byteify(palette);
+    }
+
+    private static void zebraify(int[] palette) {
+
     }
 
     private static byte[] byteify(int[] palette) {

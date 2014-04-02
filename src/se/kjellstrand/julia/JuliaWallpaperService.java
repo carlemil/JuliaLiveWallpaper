@@ -1,3 +1,4 @@
+
 package se.kjellstrand.julia;
 
 import se.kjellstrand.julia.RenderHighQualityTimer.TimeoutListener;
@@ -29,6 +30,7 @@ public class JuliaWallpaperService extends WallpaperService {
         private Matrix matrix = new Matrix();
 
         private JuliaRSWrapper juliaHighQualityRSWrapper;
+
         private JuliaRSWrapper juliaLowQualityRSWrapper;
 
         private float xOffset = 0.0f;
@@ -58,10 +60,10 @@ public class JuliaWallpaperService extends WallpaperService {
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
-            juliaHighQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width,
-                    height / 2, 1f);
-            juliaLowQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width,
-                    height / 2, 2f);
+            juliaHighQualityRSWrapper = new JuliaRSWrapper(
+                    JuliaWallpaperService.this.getBaseContext(), width, height / 2, 1f);
+            juliaLowQualityRSWrapper = new JuliaRSWrapper(
+                    JuliaWallpaperService.this.getBaseContext(), width, height / 2, 2f);
             draw(juliaHighQualityRSWrapper);
         }
 

@@ -21,20 +21,25 @@
 
     <string name="name">Julia wallpaper</string>
     
-    <string name="palette_white_to_black">White to black</string>
-    <string name="palette_black_to_white">Black to white</string>
+    <string name="palette_black_to_white_to_black">Black, white, black</string>
+    <string name="palette_white_to_black">White, black</string>
+    <string name="palette_black_to_white">Black, white</string>
     <string name="palette_kazakhstan">Flag of Kazakhstan</string>
     <string name="palette_sweden">Flag of Sweden</string>
     <string name="palette_norway">Flag of Norway</string>
+    <string name="palette_india">Flag of India</string>
+    <string name="palette_china">Flag of China</string>
+    <string name="palette_russia">Flag of Russia</string>
+    <string name="palette_britain">Flag of Britain</string>
     
-    <string name="pref_palette_default">@string/palette_black_to_white</string>
+    <string name="pref_palette_default">@string/palette_black_to_white_to_black</string>
     <string name="pref_palette_dialog_title">Palette</string>
     <string name="pref_palette_key">palette_key</string>
     <string name="pref_palette_summary">Set the palette of the wallpaper</string>
     <string name="pref_palette_title">Palette</string>
     
-    <string name="draw_mode_smooth_blend">Smooth blend</string>
-    <string name="draw_mode_zebra_blend">Zebra blend</string>
+    <string name="draw_mode_smooth_blend">Smooth gradients</string>
+    <string name="draw_mode_zebra_blend">Zebra gradients</string>
     <string name="draw_mode_flag_bands">Flag bands</string>
     
     <string name="pref_draw_mode_default">@string/draw_mode_smooth_blend</string>

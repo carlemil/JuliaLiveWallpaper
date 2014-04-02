@@ -2,11 +2,16 @@
 <resources>
 
     <string-array name="list_of_palettes">
+        <item>@string/palette_black_to_white_to_black</item>
         <item>@string/palette_black_to_white</item>
         <item>@string/palette_white_to_black</item>
         <item>@string/palette_kazakhstan</item>
         <item>@string/palette_norway</item>
         <item>@string/palette_sweden</item>
+        <item>@string/palette_china</item>
+        <item>@string/palette_india</item>
+        <item>@string/palette_russia</item>
+        <item>@string/palette_britain</item>
     </string-array>
 
     <string-array name="list_of_draw_modes">
