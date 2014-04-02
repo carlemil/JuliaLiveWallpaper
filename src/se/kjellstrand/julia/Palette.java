@@ -77,7 +77,15 @@ public class Palette {
     }
 
     private static void zebraify(int[] palette) {
-
+        for (int i = 0; i < palette.length; i++) {
+            if (i % 2 == 1) {
+                int c = palette[i];
+                int r = ((c & 0xff0000) >> 1) & 0xff0000;
+                int g = ((c & 0x00ff00) >> 1) & 0x00ff00;
+                int b = ((c & 0x0000ff) >> 1) & 0x0000ff;
+                palette[i] = r + g + b;
+            }
+        }
     }
 
     private static byte[] byteify(int[] palette) {
