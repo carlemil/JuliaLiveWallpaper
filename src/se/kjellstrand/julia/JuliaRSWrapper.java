@@ -28,6 +28,8 @@ public class JuliaRSWrapper {
 
     private RenderScript rs;
 
+    private float zoom = 1.0f;
+
     public JuliaRSWrapper(Context context, int width, int height, float scale) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
 
@@ -49,6 +51,8 @@ public class JuliaRSWrapper {
 
         script.set_width(scaledWidth);
         script.set_height(scaledHeight);
+
+        script.set_zoom(zoom);
 
         script.set_precision(precision);
 
