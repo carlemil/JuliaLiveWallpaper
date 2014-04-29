@@ -3,6 +3,7 @@ package se.kjellstrand.julia;
 import se.kjellstrand.julia.RenderHighQualityTimer.TimeoutListener;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.preference.PreferenceManager;
@@ -32,25 +33,20 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private JuliaRSWrapper juliaLowQualityRSWrapper;
 
+        private static final int Y_ACC_DIV = 2000;
+
         private float xOffset = 0.0f;
 
         private int timeBasedSeed;
 
-        private int width;
+        private float oldTouchY;
 
-        private int height;
-
-        private float touchY;
-
-        private float touchX;
+        private float touchYaccumulated;
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
             super.onSurfaceCreated(holder);
-
             Rect rect = holder.getSurfaceFrame();
-            width = rect.width();
-            height = rect.height();
         }
 
         @Override
@@ -95,17 +91,14 @@ public class JuliaWallpaperService extends WallpaperService {
         @Override
         public void onTouchEvent(MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                touchX = event.getX();
-                touchY = event.getY();
+                if (event.getPointerCount() == 1 && oldTouchY != -1) {
+                    Log.d(LOG_TAG, "-- " + (event.getY() - oldTouchY));
+                    touchYaccumulated += event.getY() - oldTouchY;
+                    drawLowQuality();
+                }
+                oldTouchY = event.getY();
             } else {
-                touchX = -1;
-                touchY = -1;
-            }
-            if (event.getPointerCount() == 1) {
-                Log.d(LOG_TAG, event.getPointerCount() + " - " + touchY);
-            } else {
-                Log.d(LOG_TAG,
-                        event.getPointerCount() + " - " + touchY + ", " + event.getAxisValue(MotionEvent.AXIS_Y, 1));
+                oldTouchY = -1;
             }
             super.onTouchEvent(event);
         }
@@ -118,6 +111,10 @@ public class JuliaWallpaperService extends WallpaperService {
 
             this.xOffset = xOffset;
 
+            drawLowQuality();
+        }
+
+        private void drawLowQuality() {
             Log.d(LOG_TAG, "Begin lq draw.");
             draw(juliaLowQualityRSWrapper);
             Log.d(LOG_TAG, "Finish lq draw.");
@@ -133,10 +130,10 @@ public class JuliaWallpaperService extends WallpaperService {
         }
 
         private void draw(JuliaRSWrapper juliaRSWrapper) {
-            double x = JuliaSeeds.getX(xOffset, timeBasedSeed);
-            double y = JuliaSeeds.getY(xOffset, timeBasedSeed);
+            float offset = xOffset + touchYaccumulated / Y_ACC_DIV;
+            double x = JuliaSeeds.getX(offset, timeBasedSeed);
+            double y = JuliaSeeds.getY(offset, timeBasedSeed);
             Bitmap bitmap = juliaRSWrapper.renderJulia(x, y);
-            bitmap.
             Canvas c = null;
             SurfaceHolder holder = getSurfaceHolder();
             try {
@@ -145,9 +142,6 @@ public class JuliaWallpaperService extends WallpaperService {
                     matrix.reset();
                     matrix.setScale(juliaRSWrapper.getScale(), juliaRSWrapper.getScale());
                     c.drawBitmap(bitmap, matrix, null);
-                    // matrix.postRotate(180, 0, 0);
-                    // matrix.postTranslate(width, height);
-                    // c.drawBitmap(bitmap, matrix, null);
                 }
             } finally {
                 if (c != null) {
