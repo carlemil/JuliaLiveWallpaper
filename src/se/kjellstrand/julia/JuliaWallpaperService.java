@@ -37,11 +37,11 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private float xOffset = 0.0f;
 
+        private float touchYaccumulated = 0.0f;
+
+        private float oldTouchY = 0.0f;
+
         private int timeBasedSeed;
-
-        private float oldTouchY;
-
-        private float touchYaccumulated;
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
@@ -114,6 +114,11 @@ public class JuliaWallpaperService extends WallpaperService {
             drawLowQuality();
         }
 
+        @Override
+        public void timeout() {
+            drawHighQuality();
+        }
+
         private void drawLowQuality() {
             Log.d(LOG_TAG, "Begin lq draw.");
             draw(juliaLowQualityRSWrapper);
@@ -122,8 +127,7 @@ public class JuliaWallpaperService extends WallpaperService {
             hqTimer.startTimer();
         }
 
-        @Override
-        public void timeout() {
+        private void drawHighQuality() {
             Log.d(LOG_TAG, "---Begin hq draw.");
             draw(juliaHighQualityRSWrapper);
             Log.d(LOG_TAG, "---Finish hq draw.");
