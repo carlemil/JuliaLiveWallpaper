@@ -27,8 +27,8 @@ int precision;
 uchar *color;
 
 void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
-    float fx = x / width * (2.f * zoom) - (1.f * zoom);
-    float fy = y / height * (2.f * zoom) - (1.f * zoom);
+    float fx = x / width * (4.f / zoom) - (2.f / zoom);
+    float fy = y / height * (4.f / zoom) - (2.f / zoom);
 
     float t = 0;
     int k = 0;

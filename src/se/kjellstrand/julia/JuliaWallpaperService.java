@@ -145,6 +145,7 @@ public class JuliaWallpaperService extends WallpaperService {
                 if (c != null) {
                     matrix.reset();
                     matrix.setScale(juliaRSWrapper.getScale(), juliaRSWrapper.getScale());
+                    // rs.setscale?
                     c.drawBitmap(bitmap, matrix, null);
                 }
             } finally {
