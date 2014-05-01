@@ -24,13 +24,13 @@
     <string name="palette_black_to_white_to_black">Black, white, black</string>
     <string name="palette_white_to_black">White, black</string>
     <string name="palette_black_to_white">Black, white</string>
-    <string name="palette_kazakhstan">Flag of Kazakhstan</string>
-    <string name="palette_sweden">Flag of Sweden</string>
-    <string name="palette_norway">Flag of Norway</string>
-    <string name="palette_india">Flag of India</string>
-    <string name="palette_china">Flag of China</string>
-    <string name="palette_russia">Flag of Russia</string>
-    <string name="palette_britain">Flag of Britain</string>
+    <string name="palette_kazakhstan">Из степи</string>
+    <string name="palette_sweden">Home</string>
+    <string name="palette_india">तिरंगा</string>
+    <string name="palette_china">致敬曾联松</string>
+    <string name="palette_russia">Мать Россия</string>
+    <string name="palette_britain">The Empire</string>
+    <string name="palette_japan">日出づる</string>
     
     <string name="pref_palette_default">@string/palette_black_to_white_to_black</string>
     <string name="pref_palette_dialog_title">Palette</string>
@@ -38,11 +38,11 @@
     <string name="pref_palette_summary">Set the palette of the wallpaper</string>
     <string name="pref_palette_title">Palette</string>
     
-    <string name="draw_mode_smooth_blend">Smooth gradients</string>
-    <string name="draw_mode_zebra_blend">Zebra gradients</string>
-    <string name="draw_mode_flag_bands">Flag bands</string>
+    <string name="draw_mode_gradient">Gradient</string>
+    <string name="draw_mode_zebra_gradient">Zebra gradient</string>
+    <string name="draw_mode_zebra">Zebra</string>
     
-    <string name="pref_draw_mode_default">@string/draw_mode_smooth_blend</string>
+    <string name="pref_draw_mode_default">@string/draw_mode_gradient</string>
     <string name="pref_draw_mode_dialog_title">Draw mode</string>
     <string name="pref_draw_mode_key">draw_mode_key</string>
     <string name="pref_draw_mode_summary">Set the draw mode of the wallpaper</string>

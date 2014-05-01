@@ -58,7 +58,7 @@ public class JuliaRSWrapper {
         script.set_precision(INITIAL_PRECISION);
 
         String colors = context.getString(R.string.palette_black_to_white);
-        String drawMode = context.getString(R.string.draw_mode_smooth_blend);
+        String drawMode = context.getString(R.string.draw_mode_gradient);
         setPalette(context, colors, drawMode);
     }
 

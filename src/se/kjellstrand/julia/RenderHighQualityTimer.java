@@ -28,7 +28,7 @@ public class RenderHighQualityTimer extends Thread {
             Log.d(LOG_TAG, "Start timer: " + timer );
             timer.schedule(new TimerTask() {
                 public void run() {
-                    Log.d(LOG_TAG, "+++ timeout timer: " + timer);
+                    Log.d(LOG_TAG, "Timeout timer: " + timer);
                     listener.timeout();
                     timer.cancel();
                 }

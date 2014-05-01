@@ -36,7 +36,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private static final float MIN_ZOOM = 0.7f;
 
-        private static final float MAX_ZOOM = 2.0f;
+        private static final float MAX_ZOOM = 2.5f;
 
         private float xOffset = 0.0f;
 
@@ -94,11 +94,8 @@ public class JuliaWallpaperService extends WallpaperService {
 
         @Override
         public void onTouchEvent(MotionEvent event) {
-            Log.d(LOG_TAG, "event.getAction() " + event.getAction());
-
             switch (event.getAction()) {
                 case MotionEvent.ACTION_MOVE:
-                    Log.d(LOG_TAG, "getPointerCount " + event.getPointerCount());
                     if (event.getPointerCount() == 1) {
                         if (oldTouchY != 0) {
                             touchYaccumulated += event.getY() - oldTouchY;
@@ -106,7 +103,7 @@ public class JuliaWallpaperService extends WallpaperService {
                         }
                         oldTouchY = event.getY();
 
-                    } else if (event.getPointerCount() == 2) {
+                    } else if (event.getPointerCount() >= 2) {
                         double pinchDist = Math.sqrt(Math.pow((event.getY(0) - event.getY(1)), 2)
                                 + Math.pow((event.getX(0) - event.getX(1)), 2));
                         if (previousPinchDist != 0) {

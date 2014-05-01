@@ -22,10 +22,6 @@ public class Palette {
             colors = new int[] {
                     0x000000, 0xffffff
             };
-        } else if (context.getString(R.string.palette_norway).equals(paletteName)) {
-            colors = new int[] {
-                    0x002868, 0xffffff, 0xef2b2d
-            };
         } else if (context.getString(R.string.palette_sweden).equals(paletteName)) {
             colors = new int[] {
                     0x005293, 0xfecb00
@@ -50,6 +46,10 @@ public class Palette {
             colors = new int[] {
                     0xcf142b, 0xffffff, 0x00247d
             };
+        } else if (context.getString(R.string.palette_japan).equals(paletteName)) {
+            colors = new int[] {
+                    0xffffff, 0xed2939
+            };
         } else {
             // Default colors: black - white - black
             colors = new int[] {
@@ -57,15 +57,15 @@ public class Palette {
             };
         }
 
-        if (context.getString(R.string.draw_mode_smooth_blend).equals(drawMode)) {
+        if (context.getString(R.string.draw_mode_gradient).equals(drawMode)) {
             if (colors.length == 2) {
                 setHSVGradient(palette, colors[0], colors[1]);
             } else if (colors.length == 3) {
                 setTrippleHSVGradient(palette, colors[0], colors[1], colors[2]);
             }
-        } else if (context.getString(R.string.draw_mode_flag_bands).equals(drawMode)) {
+        } else if (context.getString(R.string.draw_mode_zebra).equals(drawMode)) {
             setFlagBands(palette, colors);
-        } else if (context.getString(R.string.draw_mode_zebra_blend).equals(drawMode)) {
+        } else if (context.getString(R.string.draw_mode_zebra_gradient).equals(drawMode)) {
             if (colors.length == 2) {
                 setHSVGradient(palette, colors[0], colors[1]);
             } else if (colors.length == 3) {
