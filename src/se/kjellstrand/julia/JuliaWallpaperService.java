@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
@@ -37,7 +36,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private static final float MIN_ZOOM = 0.7f;
 
-        private static final float MAX_ZOOM = 3.0f;
+        private static final float MAX_ZOOM = 2.0f;
 
         private float xOffset = 0.0f;
 
@@ -47,16 +46,11 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private int timeBasedSeed;
 
-        private double startPinchDist;
-
-        private int previousPointerCount;
-
-        private float startPinchZoomZoom;
+        private double previousPinchDist;
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
             super.onSurfaceCreated(holder);
-            Rect rect = holder.getSurfaceFrame();
         }
 
         @Override
@@ -100,35 +94,40 @@ public class JuliaWallpaperService extends WallpaperService {
 
         @Override
         public void onTouchEvent(MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                Log.d(LOG_TAG, "getPointerCount " + event.getPointerCount());
-                if (event.getPointerCount() == 1 && oldTouchY != -1) {
-                    touchYaccumulated += event.getY() - oldTouchY;
-                    drawLowQuality();
-                    previousPointerCount = 1;
-                } else if (event.getPointerCount() == 2) {
-                    double pinchDist = Math.sqrt( //
-                            Math.pow((event.getY(0) - event.getY(1)), 2)
-                                    + Math.pow((event.getX(0) - event.getX(1)), 2));
-                    if (previousPointerCount <= 1) {
-                        previousPointerCount = 2;
-                        startPinchDist = pinchDist;
-                        startPinchZoomZoom = getZoom();
+            Log.d(LOG_TAG, "event.getAction() " + event.getAction());
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_MOVE:
+                    Log.d(LOG_TAG, "getPointerCount " + event.getPointerCount());
+                    if (event.getPointerCount() == 1) {
+                        if (oldTouchY != 0) {
+                            touchYaccumulated += event.getY() - oldTouchY;
+                            drawLowQuality();
+                        }
+                        oldTouchY = event.getY();
+
+                    } else if (event.getPointerCount() == 2) {
+                        double pinchDist = Math.sqrt(Math.pow((event.getY(0) - event.getY(1)), 2)
+                                + Math.pow((event.getX(0) - event.getX(1)), 2));
+                        if (previousPinchDist != 0) {
+                            double pinchDistChange = pinchDist / previousPinchDist;
+                            float zoom = (float) (getZoom() * pinchDistChange);
+                            setZoom(zoom);
+                            drawLowQuality();
+                        }
+                        previousPinchDist = pinchDist;
                     }
-                    double pinchDistChange = pinchDist / startPinchDist;
+                    break;
 
-                    float zoom = (float) (startPinchZoomZoom * pinchDistChange);
+                case MotionEvent.ACTION_UP:
+                    previousPinchDist = 0;
+                    oldTouchY = 0;
+                    break;
 
-                    Log.d(LOG_TAG, "zoom " + zoom + "  pinchDistChange " + pinchDistChange + "  pinchDist "
-                            + pinchDist + " ,startPinchDist " + startPinchDist);
-
-                    setZoom(zoom);
-                    drawLowQuality();
-                }
-                oldTouchY = event.getY();
-            } else {
-                oldTouchY = -1;
+                default:
+                    break;
             }
+
             super.onTouchEvent(event);
         }
 
