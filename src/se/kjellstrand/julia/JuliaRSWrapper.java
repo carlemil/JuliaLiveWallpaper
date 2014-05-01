@@ -1,4 +1,3 @@
-
 package se.kjellstrand.julia;
 
 import android.content.Context;
@@ -10,7 +9,13 @@ import android.renderscript.RenderScript.Priority;
 
 public class JuliaRSWrapper {
 
+    private static final String LOG_TAG = JuliaRSWrapper.class.getCanonicalName();
+
     private final String TAG = JuliaRSWrapper.class.getCanonicalName();
+
+    private static final int INITIAL_PRECISION = 28 + 5;
+
+    private static final float INITIAL_ZOOM = 1.2f;
 
     private Bitmap bitmap;
 
@@ -22,13 +27,9 @@ public class JuliaRSWrapper {
 
     private int scaledHeight;
 
-    private int precision = 28 + 5;
-
     private final float scale;
 
     private RenderScript rs;
-
-    private float zoom = 1.3f;
 
     public JuliaRSWrapper(Context context, int width, int height, float scale) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
@@ -52,9 +53,9 @@ public class JuliaRSWrapper {
         script.set_width(scaledWidth);
         script.set_height(scaledHeight);
 
-        script.set_zoom(zoom);
+        script.set_zoom(INITIAL_ZOOM);
 
-        script.set_precision(precision);
+        script.set_precision(INITIAL_PRECISION);
 
         String colors = context.getString(R.string.palette_black_to_white);
         String drawMode = context.getString(R.string.draw_mode_smooth_blend);
@@ -62,13 +63,13 @@ public class JuliaRSWrapper {
     }
 
     public void setPalette(Context context, String palette, String drawMode) {
-        byte[] d = Palette.getPalette(context, palette, drawMode, precision);
+        byte[] d = Palette.getPalette(context, palette, drawMode, INITIAL_PRECISION);
 
         Element type = Element.U8(rs);
-        Allocation colorAllocation = Allocation.createSized(rs, type, precision * 3);
+        Allocation colorAllocation = Allocation.createSized(rs, type, INITIAL_PRECISION * 3);
         script.bind_color(colorAllocation);
 
-        colorAllocation.copy1DRangeFrom(0, precision * 3, d);
+        colorAllocation.copy1DRangeFrom(0, INITIAL_PRECISION * 3, d);
     }
 
     public Bitmap renderJulia(double x, double y) {
@@ -79,12 +80,19 @@ public class JuliaRSWrapper {
         return bitmap;
     }
 
+    public float getZoom() {
+        return script.get_zoom();
+    }
+
+    public void setZoom(float zoom) {
+        script.set_zoom(zoom);
+    }
+
     public int getPrecision() {
-        return precision;
+        return script.get_precision();
     }
 
     public void setPrecision(int mPrecision) {
-        this.precision = mPrecision;
         script.set_precision(mPrecision);
     }
 

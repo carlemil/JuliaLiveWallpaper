@@ -35,6 +35,10 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private static final int Y_ACC_DIV = 2000;
 
+        private static final float MIN_ZOOM = 0.7f;
+
+        private static final float MAX_ZOOM = 3.0f;
+
         private float xOffset = 0.0f;
 
         private float touchYaccumulated = 0.0f;
@@ -42,6 +46,12 @@ public class JuliaWallpaperService extends WallpaperService {
         private float oldTouchY = 0.0f;
 
         private int timeBasedSeed;
+
+        private double startPinchDist;
+
+        private int previousPointerCount;
+
+        private float startPinchZoomZoom;
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
@@ -91,9 +101,28 @@ public class JuliaWallpaperService extends WallpaperService {
         @Override
         public void onTouchEvent(MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                Log.d(LOG_TAG, "getPointerCount " + event.getPointerCount());
                 if (event.getPointerCount() == 1 && oldTouchY != -1) {
-                    Log.d(LOG_TAG, "-- " + (event.getY() - oldTouchY));
                     touchYaccumulated += event.getY() - oldTouchY;
+                    drawLowQuality();
+                    previousPointerCount = 1;
+                } else if (event.getPointerCount() == 2) {
+                    double pinchDist = Math.sqrt( //
+                            Math.pow((event.getY(0) - event.getY(1)), 2)
+                                    + Math.pow((event.getX(0) - event.getX(1)), 2));
+                    if (previousPointerCount <= 1) {
+                        previousPointerCount = 2;
+                        startPinchDist = pinchDist;
+                        startPinchZoomZoom = getZoom();
+                    }
+                    double pinchDistChange = pinchDist / startPinchDist;
+
+                    float zoom = (float) (startPinchZoomZoom * pinchDistChange);
+
+                    Log.d(LOG_TAG, "zoom " + zoom + "  pinchDistChange " + pinchDistChange + "  pinchDist "
+                            + pinchDist + " ,startPinchDist " + startPinchDist);
+
+                    setZoom(zoom);
                     drawLowQuality();
                 }
                 oldTouchY = event.getY();
@@ -101,6 +130,20 @@ public class JuliaWallpaperService extends WallpaperService {
                 oldTouchY = -1;
             }
             super.onTouchEvent(event);
+        }
+
+        private float getZoom() {
+            return juliaHighQualityRSWrapper.getZoom();
+        }
+
+        private void setZoom(float zoom) {
+            if (zoom < MIN_ZOOM) {
+                zoom = MIN_ZOOM;
+            } else if (zoom > MAX_ZOOM) {
+                zoom = MAX_ZOOM;
+            }
+            juliaHighQualityRSWrapper.setZoom(zoom);
+            juliaLowQualityRSWrapper.setZoom(zoom);
         }
 
         @Override
@@ -120,17 +163,17 @@ public class JuliaWallpaperService extends WallpaperService {
         }
 
         private void drawLowQuality() {
-            Log.d(LOG_TAG, "Begin lq draw.");
+            // Log.d(LOG_TAG, "Begin lq draw.");
             draw(juliaLowQualityRSWrapper);
-            Log.d(LOG_TAG, "Finish lq draw.");
+            // Log.d(LOG_TAG, "Finish lq draw.");
 
             hqTimer.startTimer();
         }
 
         private void drawHighQuality() {
-            Log.d(LOG_TAG, "---Begin hq draw.");
+            // Log.d(LOG_TAG, "---Begin hq draw.");
             draw(juliaHighQualityRSWrapper);
-            Log.d(LOG_TAG, "---Finish hq draw.");
+            // Log.d(LOG_TAG, "---Finish hq draw.");
         }
 
         private void draw(JuliaRSWrapper juliaRSWrapper) {
