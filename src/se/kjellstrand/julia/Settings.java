@@ -13,6 +13,8 @@ public final class Settings {
 
     private static final String PREFS_ZOOM = "zoom";
 
+    private static final String PREFS_TOUCH_Y_ACC = "touch_y_acc";
+
     private static SharedPreferences.Editor openSharedPreferencesForEditing(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES_FILE,
                 Context.MODE_PRIVATE);
@@ -24,18 +26,23 @@ public final class Settings {
     }
 
     public static void setZoom(Context context, float zoom) {
-        if (context != null) {
-            SharedPreferences.Editor editor = openSharedPreferencesForEditing(context);
-            editor.putFloat(PREFS_ZOOM, zoom);
-            editor.apply();
-        } else {
-            Log.e(LOG_TAG,
-                    "isShareUsageDataAccepted, could not read/write from/to SharedPreferences, context == null.");
-        }
+        SharedPreferences.Editor editor = openSharedPreferencesForEditing(context);
+        editor.putFloat(PREFS_ZOOM, zoom);
+        editor.apply();
     }
 
     public static float getZoom(Context context) {
         return loadSharedPreferences(context).getFloat(PREFS_ZOOM, JuliaRSWrapper.INITIAL_ZOOM);
+    }
+
+    public static void setTouchYaccumulated(Context context, float touchYaccumulated) {
+        SharedPreferences.Editor editor = openSharedPreferencesForEditing(context);
+        editor.putFloat(PREFS_TOUCH_Y_ACC, touchYaccumulated);
+        editor.apply();
+    }
+
+    public static float getTouchYaccumulated(Context context) {
+        return loadSharedPreferences(context).getFloat(PREFS_TOUCH_Y_ACC, 0);
     }
 
     public static void reset(Context context) {

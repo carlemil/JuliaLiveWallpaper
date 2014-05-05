@@ -90,6 +90,7 @@ public class JuliaWallpaperService extends WallpaperService {
                 String drawModeKey = getResources().getString(R.string.pref_draw_mode_key);
                 String drawMode = sharedPreferences.getString(drawModeKey, null);
                 setZoom(Settings.getZoom(getApplicationContext()));
+                touchYaccumulated = Settings.getTouchYaccumulated(getApplicationContext());
                 juliaHighQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
                 juliaLowQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
 
@@ -99,6 +100,7 @@ public class JuliaWallpaperService extends WallpaperService {
                 drawLowQuality();
             } else {
                 Settings.setZoom(getApplicationContext(), getZoom());
+                Settings.setTouchYaccumulated(getApplicationContext(), touchYaccumulated);
             }
         }
 
