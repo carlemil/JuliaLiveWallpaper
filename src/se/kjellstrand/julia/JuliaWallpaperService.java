@@ -1,5 +1,7 @@
 package se.kjellstrand.julia;
 
+import java.util.concurrent.TimeUnit;
+
 import se.kjellstrand.julia.RenderHighQualityTimer.TimeoutListener;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -22,8 +24,6 @@ public class JuliaWallpaperService extends WallpaperService {
 
     class JuliaEngine extends Engine implements TimeoutListener {
 
-        private final String LOG_TAG = JuliaEngine.class.getCanonicalName();
-
         private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer(this);
 
         private Matrix matrix = new Matrix();
@@ -32,7 +32,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private JuliaRSWrapper juliaLowQualityRSWrapper;
 
-        private static final int Y_ACC_DIV = 2000;
+        private int yAccDiv = 2000;
 
         private static final float MIN_ZOOM = 0.7f;
 
@@ -63,6 +63,7 @@ public class JuliaWallpaperService extends WallpaperService {
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
+            yAccDiv = height * 3;
             juliaHighQualityRSWrapper = new JuliaRSWrapper(
                     JuliaWallpaperService.this.getBaseContext(), width, height, 1f);
             juliaLowQualityRSWrapper = new JuliaRSWrapper(
@@ -87,7 +88,7 @@ public class JuliaWallpaperService extends WallpaperService {
             juliaHighQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
             juliaLowQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
 
-            timeBasedSeed = (int) ((System.currentTimeMillis() / (1000 * 60 * 60)) % JuliaSeeds
+            timeBasedSeed = (int) ((System.currentTimeMillis() / TimeUnit.HOURS.toMillis(1)) % JuliaSeeds
                     .getNumberOfSeeds());
             Log.d(TAG, "seedTime " + timeBasedSeed);
         }
@@ -173,7 +174,7 @@ public class JuliaWallpaperService extends WallpaperService {
         }
 
         private void draw(JuliaRSWrapper juliaRSWrapper) {
-            float offset = xOffset + touchYaccumulated / Y_ACC_DIV;
+            float offset = xOffset + touchYaccumulated / yAccDiv;
             double x = JuliaSeeds.getX(offset, timeBasedSeed);
             double y = JuliaSeeds.getY(offset, timeBasedSeed);
             Bitmap bitmap = juliaRSWrapper.renderJulia(x, y);
