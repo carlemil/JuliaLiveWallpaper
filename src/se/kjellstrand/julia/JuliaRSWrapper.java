@@ -15,7 +15,7 @@ public class JuliaRSWrapper {
 
     private static final int INITIAL_PRECISION = 28 + 5;
 
-    private static final float INITIAL_ZOOM = 1.2f;
+    public static final float INITIAL_ZOOM = 1.2f;
 
     private Bitmap bitmap;
 

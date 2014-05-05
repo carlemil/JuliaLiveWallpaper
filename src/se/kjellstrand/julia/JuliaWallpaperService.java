@@ -1,3 +1,4 @@
+
 package se.kjellstrand.julia;
 
 import java.util.concurrent.TimeUnit;
@@ -44,6 +45,8 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private float oldTouchY = 0.0f;
 
+        private float oldTouchX = 0.0f;
+
         private int timeBasedSeed;
 
         private double previousPinchDist;
@@ -63,34 +66,40 @@ public class JuliaWallpaperService extends WallpaperService {
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
-            yAccDiv = height * 3;
+            // Sets the yAccDiv so that it will make scrolling in y feel similar
+            // to scrolling in x-axis.
+            yAccDiv = height * 2;
             juliaHighQualityRSWrapper = new JuliaRSWrapper(
                     JuliaWallpaperService.this.getBaseContext(), width, height, 1f);
             juliaLowQualityRSWrapper = new JuliaRSWrapper(
                     JuliaWallpaperService.this.getBaseContext(), width, height, 2f);
-            draw(juliaHighQualityRSWrapper);
+            drawLowQuality();
         }
 
         @Override
         public void onVisibilityChanged(boolean visible) {
             super.onVisibilityChanged(visible);
-            // TODO !!!!!!!!!!!!!!!
 
-            // mScript stop/start?
-            // mJuliaRenderer.getScript
+            Log.d(TAG, "visible " + visible);
 
-            SharedPreferences sharedPreferences = PreferenceManager
-                    .getDefaultSharedPreferences(getApplicationContext());
-            String colorsKey = getResources().getString(R.string.pref_palette_key);
-            String colors = sharedPreferences.getString(colorsKey, null);
-            String drawModeKey = getResources().getString(R.string.pref_draw_mode_key);
-            String drawMode = sharedPreferences.getString(drawModeKey, null);
-            juliaHighQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
-            juliaLowQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
+            if (visible) {
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext());
+                String colorsKey = getResources().getString(R.string.pref_palette_key);
+                String colors = sharedPreferences.getString(colorsKey, null);
+                String drawModeKey = getResources().getString(R.string.pref_draw_mode_key);
+                String drawMode = sharedPreferences.getString(drawModeKey, null);
+                setZoom(Settings.getZoom(getApplicationContext()));
+                juliaHighQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
+                juliaLowQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
 
-            timeBasedSeed = (int) ((System.currentTimeMillis() / TimeUnit.HOURS.toMillis(1)) % JuliaSeeds
-                    .getNumberOfSeeds());
-            Log.d(TAG, "seedTime " + timeBasedSeed);
+                timeBasedSeed = (int) ((System.currentTimeMillis() / TimeUnit.HOURS.toMillis(1)) % JuliaSeeds
+                        .getNumberOfSeeds());
+                Log.d(TAG, "seedTime " + timeBasedSeed);
+                drawLowQuality();
+            } else {
+                Settings.setZoom(getApplicationContext(), getZoom());
+            }
         }
 
         @Override
@@ -99,10 +108,17 @@ public class JuliaWallpaperService extends WallpaperService {
                 case MotionEvent.ACTION_MOVE:
                     if (event.getPointerCount() == 1) {
                         if (oldTouchY != 0) {
-                            touchYaccumulated += event.getY() - oldTouchY;
-                            drawLowQuality();
+                            float dy = event.getY() - oldTouchY;
+                            float dx = event.getX() - oldTouchX;
+                            // Only activate if we have dragged at least as 2x
+                            // much on the y axis as x axis.
+                            if (Math.abs(dy) / 2 >= Math.abs(dx)) {
+                                touchYaccumulated += dy / yAccDiv;
+                                drawLowQuality();
+                            }
                         }
                         oldTouchY = event.getY();
+                        oldTouchX = event.getX();
 
                     } else if (event.getPointerCount() >= 2) {
                         double pinchDist = Math.sqrt(Math.pow((event.getY(0) - event.getY(1)), 2)
@@ -174,7 +190,7 @@ public class JuliaWallpaperService extends WallpaperService {
         }
 
         private void draw(JuliaRSWrapper juliaRSWrapper) {
-            float offset = xOffset + touchYaccumulated / yAccDiv;
+            float offset = xOffset + touchYaccumulated;
             double x = JuliaSeeds.getX(offset, timeBasedSeed);
             double y = JuliaSeeds.getY(offset, timeBasedSeed);
             Bitmap bitmap = juliaRSWrapper.renderJulia(x, y);
