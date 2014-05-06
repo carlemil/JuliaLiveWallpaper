@@ -58,22 +58,22 @@ public class Palette {
         }
 
         if (context.getString(R.string.draw_mode_gradient).equals(drawMode)) {
-            if (colors.length == 2) {
-                setHSVGradient(palette, colors[0], colors[1]);
-            } else if (colors.length == 3) {
-                setTrippleHSVGradient(palette, colors[0], colors[1], colors[2]);
-            }
+            setGradient(palette, colors);
         } else if (context.getString(R.string.draw_mode_zebra).equals(drawMode)) {
             setFlagBands(palette, colors);
         } else if (context.getString(R.string.draw_mode_zebra_gradient).equals(drawMode)) {
-            if (colors.length == 2) {
-                setHSVGradient(palette, colors[0], colors[1]);
-            } else if (colors.length == 3) {
-                setTrippleHSVGradient(palette, colors[0], colors[1], colors[2]);
-            }
+            setGradient(palette, colors);
             zebraify(palette);
         }
         return byteify(palette);
+    }
+
+    private static void setGradient(int[] palette, int[] colors) {
+        if (colors.length == 2) {
+            setHSVGradient(palette, colors[0], colors[1]);
+        } else if (colors.length == 3) {
+            setTrippleHSVGradient(palette, colors[0], colors[1], colors[2]);
+        }
     }
 
     private static void zebraify(int[] palette) {
