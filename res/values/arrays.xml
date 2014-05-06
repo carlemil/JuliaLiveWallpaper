@@ -19,5 +19,10 @@
         <item>@string/draw_mode_zebra_gradient</item>
         <item>@string/draw_mode_zebra</item>
     </string-array>
+    <string-array name="list_of_draw_modes_a">
+        <item>draw_mode_gradient</item>
+        <item>draw_mode_zebra_gradient</item>
+        <item>draw_mode_zebra</item>
+    </string-array>
     
 </resources>
