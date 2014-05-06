@@ -25,6 +25,8 @@ public class JuliaWallpaperService extends WallpaperService {
 
     class JuliaEngine extends Engine implements TimeoutListener {
 
+        private static final String DEFAULT_PALETTE_COLORS = "0x000000, 0xffffff, 0x000000";
+
         private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer(this);
 
         private Matrix matrix = new Matrix();
@@ -70,9 +72,9 @@ public class JuliaWallpaperService extends WallpaperService {
             // to scrolling in x-axis.
             yAccDiv = height * 2;
             juliaHighQualityRSWrapper = new JuliaRSWrapper(
-                    JuliaWallpaperService.this.getBaseContext(), width, height, 1f);
+                    JuliaWallpaperService.this.getBaseContext(), width, height, 1f, DEFAULT_PALETTE_COLORS);
             juliaLowQualityRSWrapper = new JuliaRSWrapper(
-                    JuliaWallpaperService.this.getBaseContext(), width, height, 2f);
+                    JuliaWallpaperService.this.getBaseContext(), width, height, 2f, DEFAULT_PALETTE_COLORS);
             drawLowQuality();
         }
 
@@ -86,7 +88,10 @@ public class JuliaWallpaperService extends WallpaperService {
                 SharedPreferences sharedPreferences = PreferenceManager
                         .getDefaultSharedPreferences(getApplicationContext());
                 String colorsKey = getResources().getString(R.string.pref_palette_key);
-                String colors = sharedPreferences.getString(colorsKey, null);
+                Log.d(TAG, "colorsKey "+colorsKey);
+
+                String colors = sharedPreferences.getString(colorsKey, DEFAULT_PALETTE_COLORS);
+                Log.d(TAG, "colors "+colors);
                 String drawModeKey = getResources().getString(R.string.pref_draw_mode_key);
                 String drawMode = sharedPreferences.getString(drawModeKey, null);
                 setZoom(Settings.getZoom(getApplicationContext()));

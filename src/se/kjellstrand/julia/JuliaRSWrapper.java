@@ -31,7 +31,7 @@ public class JuliaRSWrapper {
 
     private RenderScript rs;
 
-    public JuliaRSWrapper(Context context, int width, int height, float scale) {
+    public JuliaRSWrapper(Context context, int width, int height, float scale, String colors) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
 
         this.scale = scale;
@@ -57,7 +57,6 @@ public class JuliaRSWrapper {
 
         script.set_precision(INITIAL_PRECISION);
 
-        String colors = context.getString(R.string.palette_black_to_white);
         String drawMode = context.getString(R.string.draw_mode_gradient);
         setPalette(context, colors, drawMode);
     }

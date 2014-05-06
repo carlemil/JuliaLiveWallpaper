@@ -32,7 +32,6 @@
     <string name="palette_britain">The Empire</string>
     <string name="palette_japan">日出づる</string>
     
-    <string name="pref_palette_default">@string/palette_black_to_white_to_black</string>
     <string name="pref_palette_dialog_title">Palette</string>
     <string name="pref_palette_key">palette_key</string>
     <string name="pref_palette_summary">Set the palette of the wallpaper</string>

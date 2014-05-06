@@ -3,10 +3,10 @@
     
     <ListPreference
             android:id="@+id/pref_palette"
-            android:defaultValue="@string/pref_palette_default"
+            android:defaultValue="0x000000, 0xffffff, 0x000000"
             android:dialogTitle="@string/pref_palette_dialog_title"
-            android:entries="@array/list_of_palettes"
-            android:entryValues="@array/list_of_palettes"
+            android:entries="@array/list_of_palettes_entries"
+            android:entryValues="@array/list_of_palettes_entry_values"
             android:key="@string/pref_palette_key"
             android:summary="@string/pref_palette_summary"
             android:title="@string/pref_palette_title"/>
@@ -15,7 +15,7 @@
             android:id="@+id/pref_draw_mode"
             android:defaultValue="@string/pref_draw_mode_default"
             android:dialogTitle="@string/pref_draw_mode_dialog_title"
-            android:entries="@array/list_of_draw_modes_a"
+            android:entries="@array/list_of_draw_modes"
             android:entryValues="@array/list_of_draw_modes"
             android:key="@string/pref_draw_mode_key"
             android:summary="@string/pref_draw_mode_summary"
