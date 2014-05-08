@@ -119,10 +119,9 @@ public class Palette {
 
     private static void setRGBGradient(int[] palette, int startColor, int endColor) {
         float[] startRGB = new float[3];
-        // Color.colorToHSV(startColor, startRGB);
         startRGB = rgbToFloat3(startColor);
         float[] endRGB = new float[3];
-        Color.colorToHSV(endColor, endRGB);
+        endRGB = rgbToFloat3(endColor);
 
         float[] tmpRGB = new float[3];
 
@@ -136,7 +135,7 @@ public class Palette {
     }
 
     private static int float3ToInt(float[] f3) {
-        return (int) f3[0] + ((int) f3[1] << 8) + ((int) f3[2] << 16);
+        return ((int) f3[0] & 255) + ((int) f3[1] << 8) + ((int) f3[2] << 16);
     }
 
     private static float[] rgbToFloat3(int color) {
