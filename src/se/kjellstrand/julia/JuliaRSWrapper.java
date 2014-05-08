@@ -1,3 +1,4 @@
+
 package se.kjellstrand.julia;
 
 import android.content.Context;
@@ -58,11 +59,12 @@ public class JuliaRSWrapper {
         script.set_precision(INITIAL_PRECISION);
 
         String drawMode = context.getString(R.string.draw_mode_gradient);
-        setPalette(context, colors, drawMode);
+        String blendMode = context.getString(R.string.blend_mode_hvs);
+        setPalette(context, colors, drawMode, blendMode);
     }
 
-    public void setPalette(Context context, String palette, String drawMode) {
-        byte[] d = Palette.getPalette(context, palette, drawMode, INITIAL_PRECISION);
+    public void setPalette(Context context, String palette, String drawMode, String blendMode) {
+        byte[] d = Palette.getPalette(context, palette, drawMode, blendMode, INITIAL_PRECISION);
 
         Element type = Element.U8(rs);
         Allocation colorAllocation = Allocation.createSized(rs, type, INITIAL_PRECISION * 3);

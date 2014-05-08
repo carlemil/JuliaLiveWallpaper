@@ -72,9 +72,11 @@ public class JuliaWallpaperService extends WallpaperService {
             // to scrolling in x-axis.
             yAccDiv = height * 2;
             juliaHighQualityRSWrapper = new JuliaRSWrapper(
-                    JuliaWallpaperService.this.getBaseContext(), width, height, 1f, DEFAULT_PALETTE_COLORS);
+                    JuliaWallpaperService.this.getBaseContext(), width, height, 1f,
+                    DEFAULT_PALETTE_COLORS);
             juliaLowQualityRSWrapper = new JuliaRSWrapper(
-                    JuliaWallpaperService.this.getBaseContext(), width, height, 2f, DEFAULT_PALETTE_COLORS);
+                    JuliaWallpaperService.this.getBaseContext(), width, height, 2f,
+                    DEFAULT_PALETTE_COLORS);
             drawLowQuality();
         }
 
@@ -87,17 +89,26 @@ public class JuliaWallpaperService extends WallpaperService {
             if (visible) {
                 SharedPreferences sharedPreferences = PreferenceManager
                         .getDefaultSharedPreferences(getApplicationContext());
-                String colorsKey = getResources().getString(R.string.pref_palette_key);
-                Log.d(TAG, "colorsKey "+colorsKey);
 
+                String colorsKey = getResources().getString(R.string.pref_palette_key);
                 String colors = sharedPreferences.getString(colorsKey, DEFAULT_PALETTE_COLORS);
-                Log.d(TAG, "colors "+colors);
+
                 String drawModeKey = getResources().getString(R.string.pref_draw_mode_key);
                 String drawMode = sharedPreferences.getString(drawModeKey, null);
+
+                String blendModeKey = getResources().getString(R.string.pref_blend_mode_key);
+                Log.d(TAG, "blendModeKey "+blendModeKey);
+                String blendMode = sharedPreferences.getString(blendModeKey, null);
+                Log.d(TAG, "blendMode "+blendMode);
+
                 setZoom(Settings.getZoom(getApplicationContext()));
+
                 touchYaccumulated = Settings.getTouchYaccumulated(getApplicationContext());
-                juliaHighQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
-                juliaLowQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode);
+
+                juliaHighQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode,
+                        blendMode);
+                juliaLowQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode,
+                        blendMode);
 
                 timeBasedSeed = (int) ((System.currentTimeMillis() / TimeUnit.HOURS.toMillis(1)) % JuliaSeeds
                         .getNumberOfSeeds());

@@ -33,5 +33,9 @@
         <item>@string/draw_mode_zebra</item>
     </string-array>
 
+    <string-array name="list_of_blend_modes">
+        <item>@string/blend_mode_hvs</item>
+        <item>@string/blend_mode_rgb</item>
+    </string-array>
     
 </resources>

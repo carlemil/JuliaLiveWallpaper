@@ -13,12 +13,22 @@
     
     <ListPreference
             android:id="@+id/pref_draw_mode"
-            android:defaultValue="@string/pref_draw_mode_default"
+            android:defaultValue="@string/draw_mode_gradient"
             android:dialogTitle="@string/pref_draw_mode_dialog_title"
             android:entries="@array/list_of_draw_modes"
             android:entryValues="@array/list_of_draw_modes"
             android:key="@string/pref_draw_mode_key"
             android:summary="@string/pref_draw_mode_summary"
             android:title="@string/pref_draw_mode_title"/>
+    
+    <ListPreference
+            android:id="@+id/pref_blend_mode"
+            android:defaultValue="@string/blend_mode_hvs"
+            android:dialogTitle="@string/pref_blend_mode_dialog_title"
+            android:entries="@array/list_of_blend_modes"
+            android:entryValues="@array/list_of_blend_modes"
+            android:key="@string/pref_blend_mode_key"
+            android:summary="@string/pref_blend_mode_summary"
+            android:title="@string/pref_blend_mode_title"/>
     
 </PreferenceScreen>

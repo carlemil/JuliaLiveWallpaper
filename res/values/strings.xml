@@ -34,17 +34,24 @@
     
     <string name="pref_palette_dialog_title">Palette</string>
     <string name="pref_palette_key">palette_key</string>
-    <string name="pref_palette_summary">Set the palette of the wallpaper</string>
+    <string name="pref_palette_summary">Select palette</string>
     <string name="pref_palette_title">Palette</string>
     
     <string name="draw_mode_gradient">Gradient</string>
     <string name="draw_mode_zebra_gradient">Zebra gradient</string>
     <string name="draw_mode_zebra">Zebra</string>
-    
-    <string name="pref_draw_mode_default">@string/draw_mode_gradient</string>
+        
     <string name="pref_draw_mode_dialog_title">Draw mode</string>
     <string name="pref_draw_mode_key">draw_mode_key</string>
-    <string name="pref_draw_mode_summary">Set the draw mode of the wallpaper</string>
+    <string name="pref_draw_mode_summary">Set the draw mode</string>
     <string name="pref_draw_mode_title">Draw mode</string>
+    
+    <string name="blend_mode_hvs">HSV</string>
+    <string name="blend_mode_rgb">RGB</string>
 
+    <string name="pref_blend_mode_dialog_title">Blend mode</string>
+    <string name="pref_blend_mode_key">blend_mode_key</string>
+    <string name="pref_blend_mode_summary">Set the blend mode</string>
+    <string name="pref_blend_mode_title">Blend mode</string>
+    
 </resources>
