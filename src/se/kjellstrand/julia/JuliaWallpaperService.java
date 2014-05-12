@@ -15,7 +15,8 @@ import android.view.SurfaceHolder;
 
 public class JuliaWallpaperService extends WallpaperService {
 
-    //private final String TAG = JuliaWallpaperService.class.getCanonicalName();
+    // private final String TAG =
+    // JuliaWallpaperService.class.getCanonicalName();
 
     public static final float INITIAL_ZOOM = 1.6f;
 
@@ -158,8 +159,6 @@ public class JuliaWallpaperService extends WallpaperService {
                 default:
                     break;
             }
-
-            super.onTouchEvent(event);
         }
 
         private float getZoom() {
@@ -202,25 +201,26 @@ public class JuliaWallpaperService extends WallpaperService {
         }
 
         private void draw(JuliaRSWrapper juliaRSWrapper) {
-            float offset = xOffset + touchYaccumulated;
-            double x = JuliaSeeds.getX(offset, timeBasedSeed);
-            double y = JuliaSeeds.getY(offset, timeBasedSeed);
-            Bitmap bitmap = juliaRSWrapper.renderJulia(x, y);
-            Canvas c = null;
-            SurfaceHolder holder = getSurfaceHolder();
-            try {
-                c = holder.lockCanvas();
-                if (c != null) {
-                    matrix.reset();
-                    matrix.setScale(juliaRSWrapper.getScale(), juliaRSWrapper.getScale());
-                    c.drawBitmap(bitmap, matrix, null);
-                }
-            } finally {
-                if (c != null) {
-                    holder.unlockCanvasAndPost(c);
+            if (isVisible()) {
+                float offset = xOffset + touchYaccumulated;
+                double x = JuliaSeeds.getX(offset, timeBasedSeed);
+                double y = JuliaSeeds.getY(offset, timeBasedSeed);
+                Bitmap bitmap = juliaRSWrapper.renderJulia(x, y);
+                Canvas c = null;
+                SurfaceHolder holder = getSurfaceHolder();
+                try {
+                    c = holder.lockCanvas();
+                    if (c != null) {
+                        matrix.reset();
+                        matrix.setScale(juliaRSWrapper.getScale(), juliaRSWrapper.getScale());
+                        c.drawBitmap(bitmap, matrix, null);
+                    }
+                } finally {
+                    if (c != null) {
+                        holder.unlockCanvasAndPost(c);
+                    }
                 }
             }
         }
-
     }
 }
