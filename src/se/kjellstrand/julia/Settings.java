@@ -32,7 +32,7 @@ public final class Settings {
     }
 
     public static float getZoom(Context context) {
-        return loadSharedPreferences(context).getFloat(PREFS_ZOOM, JuliaRSWrapper.INITIAL_ZOOM);
+        return loadSharedPreferences(context).getFloat(PREFS_ZOOM, JuliaWallpaperService.INITIAL_ZOOM);
     }
 
     public static void setTouchYaccumulated(Context context, float touchYaccumulated) {

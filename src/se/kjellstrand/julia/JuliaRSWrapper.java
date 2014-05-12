@@ -12,12 +12,6 @@ public class JuliaRSWrapper {
 
     private static final String LOG_TAG = JuliaRSWrapper.class.getCanonicalName();
 
-    private final String TAG = JuliaRSWrapper.class.getCanonicalName();
-
-    private static final int INITIAL_PRECISION = 28 + 5;
-
-    public static final float INITIAL_ZOOM = 1.2f;
-
     private Bitmap bitmap;
 
     private ScriptC_julia script;
@@ -54,9 +48,9 @@ public class JuliaRSWrapper {
         script.set_width(scaledWidth);
         script.set_height(scaledHeight);
 
-        script.set_zoom(INITIAL_ZOOM);
+        script.set_zoom(JuliaWallpaperService.INITIAL_ZOOM);
 
-        script.set_precision(INITIAL_PRECISION);
+        script.set_precision(JuliaWallpaperService.INITIAL_PRECISION);
 
         String drawMode = context.getString(R.string.draw_mode_gradient);
         String blendMode = context.getString(R.string.blend_mode_hvs);
@@ -64,13 +58,13 @@ public class JuliaRSWrapper {
     }
 
     public void setPalette(Context context, String palette, String drawMode, String blendMode) {
-        byte[] d = Palette.getPalette(context, palette, drawMode, blendMode, INITIAL_PRECISION);
+        byte[] d = Palette.getPalette(context, palette, drawMode, blendMode, JuliaWallpaperService.INITIAL_PRECISION);
 
         Element type = Element.U8(rs);
-        Allocation colorAllocation = Allocation.createSized(rs, type, INITIAL_PRECISION * 3);
+        Allocation colorAllocation = Allocation.createSized(rs, type, JuliaWallpaperService.INITIAL_PRECISION * 3);
         script.bind_color(colorAllocation);
 
-        colorAllocation.copy1DRangeFrom(0, INITIAL_PRECISION * 3, d);
+        colorAllocation.copy1DRangeFrom(0, JuliaWallpaperService.INITIAL_PRECISION * 3, d);
     }
 
     public Bitmap renderJulia(double x, double y) {

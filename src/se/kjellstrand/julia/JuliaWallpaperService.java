@@ -10,13 +10,16 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 public class JuliaWallpaperService extends WallpaperService {
 
-    private final String TAG = JuliaWallpaperService.class.getCanonicalName();
+    //private final String TAG = JuliaWallpaperService.class.getCanonicalName();
+
+    public static final float INITIAL_ZOOM = 1.6f;
+
+    public static final int INITIAL_PRECISION = 28 + 5;
 
     @Override
     public Engine onCreateEngine() {
@@ -84,8 +87,6 @@ public class JuliaWallpaperService extends WallpaperService {
         public void onVisibilityChanged(boolean visible) {
             super.onVisibilityChanged(visible);
 
-            Log.d(TAG, "visible " + visible);
-
             if (visible) {
                 SharedPreferences sharedPreferences = PreferenceManager
                         .getDefaultSharedPreferences(getApplicationContext());
@@ -97,9 +98,7 @@ public class JuliaWallpaperService extends WallpaperService {
                 String drawMode = sharedPreferences.getString(drawModeKey, null);
 
                 String blendModeKey = getResources().getString(R.string.pref_blend_mode_key);
-                Log.d(TAG, "blendModeKey "+blendModeKey);
                 String blendMode = sharedPreferences.getString(blendModeKey, null);
-                Log.d(TAG, "blendMode "+blendMode);
 
                 setZoom(Settings.getZoom(getApplicationContext()));
 
@@ -112,7 +111,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
                 timeBasedSeed = (int) ((System.currentTimeMillis() / TimeUnit.HOURS.toMillis(1)) % JuliaSeeds
                         .getNumberOfSeeds());
-                Log.d(TAG, "seedTime " + timeBasedSeed);
+
                 drawLowQuality();
             } else {
                 Settings.setZoom(getApplicationContext(), getZoom());
@@ -194,17 +193,12 @@ public class JuliaWallpaperService extends WallpaperService {
         }
 
         private void drawLowQuality() {
-            // Log.d(LOG_TAG, "Begin lq draw.");
             draw(juliaLowQualityRSWrapper);
-            // Log.d(LOG_TAG, "Finish lq draw.");
-
             hqTimer.startTimer();
         }
 
         private void drawHighQuality() {
-            // Log.d(LOG_TAG, "---Begin hq draw.");
             draw(juliaHighQualityRSWrapper);
-            // Log.d(LOG_TAG, "---Finish hq draw.");
         }
 
         private void draw(JuliaRSWrapper juliaRSWrapper) {
@@ -219,7 +213,6 @@ public class JuliaWallpaperService extends WallpaperService {
                 if (c != null) {
                     matrix.reset();
                     matrix.setScale(juliaRSWrapper.getScale(), juliaRSWrapper.getScale());
-                    // rs.setscale?
                     c.drawBitmap(bitmap, matrix, null);
                 }
             } finally {
