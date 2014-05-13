@@ -37,9 +37,9 @@ public class Palette {
     private static void setGradient(Context context, int[] palette, int[] colors, String blendMode) {
         for (int i = 1; i < colors.length; i++) {
             int pl = palette.length;
-            int cl = colors.length;
-            int i1 = (int) ((pl / (float) (cl)) * (i - 1));
-            int i2 = (int) ((pl / (float) (cl)) * i);
+            int cl = colors.length - 1;
+            int i1 = Math.round((pl / (float) (cl)) * (i - 1));
+            int i2 = Math.round((pl / (float) (cl)) * i);
             int c1 = colors[i - 1];
             int c2 = colors[i];
             Log.d(LOG_TAG, "cl " + cl + " pl " + pl + " i1 " + i1 + " i2 " + i2 + " i " + i + " f "
