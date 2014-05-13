@@ -20,18 +20,8 @@
 <resources>
 
     <string name="name">Julia wallpaper</string>
-    
-    <string name="palette_black_to_white_to_black">Black, white, black</string>
-    <string name="palette_white_to_black">White, black</string>
-    <string name="palette_black_to_white">Black, white</string>
-    <string name="palette_kazakhstan">Из степи</string>
-    <string name="palette_sweden">Home</string>
-    <string name="palette_india">तिरंगा</string>
-    <string name="palette_china">致敬曾联松</string>
-    <string name="palette_russia">Мать Россия</string>
-    <string name="palette_britain">The Empire</string>
-    <string name="palette_japan">日出づる</string>
-    
+   
+    <!--  Preferences related  -->
     <string name="pref_palette_dialog_title">Palette</string>
     <string name="pref_palette_key">palette_key</string>
     <string name="pref_palette_summary">Select palette</string>

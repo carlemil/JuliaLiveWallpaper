@@ -2,30 +2,33 @@
 <resources>
 
     <string-array name="list_of_palettes_entries">
-        <item>@string/palette_black_to_white_to_black</item>
-        <item>@string/palette_black_to_white</item>
-        <item>@string/palette_white_to_black</item>
-        <item>@string/palette_kazakhstan</item>
-        <item>@string/palette_sweden</item>
-        <item>@string/palette_china</item>
-        <item>@string/palette_india</item>
-        <item>@string/palette_russia</item>
-        <item>@string/palette_britain</item>
-        <item>@string/palette_japan</item>
+        <item>Black, white, black</item>
+        <item>White, black</item>
+        <item>Black, white</item>
+        <item>Kazakh</item>
+        <item>Sweden</item>
+        <item>China</item>
+        <item>India</item>
+        <item>Russia</item>
+        <item>Britain</item>
+        <item>Japan</item>
+        <item>Sunset</item>
     </string-array>
-
+    
     <string-array name="list_of_palettes_entry_values">
-        <item>0x000000, 0xffffff, 0x000000</item>
-        <item>0x000000, 0xffffff</item>
-        <item>0xffffff, 0x000000</item>
-        <item>0x00ddff, 0xfeed00</item>
-        <item>0x005293, 0xfecb00</item>
-        <item>0xde2910, 0xffde00</item>
-        <item>0xff9933, 0xffffff, 0x128807</item>
-        <item>0x0039a6, 0xffffff, 0xd52b1e</item>
-        <item>0xcf142b, 0xffffff, 0x00247d</item>
-        <item>0xffffff, 0xed2939</item>
+        <item>0x000000, 0xffffff, 0x000000</item><!-- bwb -->
+        <item>0x000000, 0xffffff</item><!-- wb -->
+        <item>0xffffff, 0x000000</item><!-- bw -->
+        <item>0x00ddff, 0xfeed00</item><!-- kz -->
+        <item>0x005293, 0xfecb00</item><!-- se -->
+        <item>0xde2910, 0xffde00</item><!-- ch -->
+        <item>0xff9933, 0xffffff, 0x128807</item><!-- in -->
+        <item>0x0039a6, 0xffffff, 0xd52b1e</item><!-- ru -->
+        <item>0xcf142b, 0xffffff, 0x00247d</item><!-- gb -->
+        <item>0xffffff, 0xed2939</item><!-- jp -->
+        <item>0x000000, 0x422343, 0xaa5167, 0xf06659, 0xf19516, 0xfff312</item><!-- sunset -->
     </string-array>
+    
     
     <string-array name="list_of_draw_modes">
         <item>@string/draw_mode_gradient</item>
