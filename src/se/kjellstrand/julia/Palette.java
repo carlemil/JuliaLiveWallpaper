@@ -35,14 +35,26 @@ public class Palette {
     }
 
     private static void setGradient(Context context, int[] palette, int[] colors, String blendMode) {
-        if (context.getString(R.string.blend_mode_hvs).equals(blendMode)) {
-            setMultiHSVGradient(palette, colors);
-        } else {
-            if (colors.length == 2) {
-                setRGBGradient(palette, colors[0], colors[1]);
-            } else if (colors.length == 3) {
-                setTrippleRGBGradient(palette, colors[0], colors[1], colors[2]);
+        for (int i = 1; i < colors.length; i++) {
+            int pl = palette.length;
+            int cl = colors.length;
+            int i1 = (int) ((pl / (float) (cl)) * (i - 1));
+            int i2 = (int) ((pl / (float) (cl)) * i);
+            int c1 = colors[i - 1];
+            int c2 = colors[i];
+            Log.d(LOG_TAG, "cl " + cl + " pl " + pl + " i1 " + i1 + " i2 " + i2 + " i " + i + " f "
+                    + (pl / (float) (cl)));
+            int[] p = new int[i2 - i1];
+            if (context.getString(R.string.blend_mode_hvs).equals(blendMode)) {
+                setHSVGradient(p, c1, c2);
+            } else {
+                setRGBGradient(p, c1, c2);
             }
+            Log.d(LOG_TAG, " -- palette -- ");
+            for (int j = 0; j < p.length; j++) {
+                Log.d(LOG_TAG, p[j] + ", ");
+            }
+            System.arraycopy(p, 0, palette, i1, p.length);
         }
     }
 
@@ -74,27 +86,6 @@ public class Palette {
         }
     }
 
-    private static int[] setMultiHSVGradient(int[] palette, int[] color) {
-        for (int i = 1; i < color.length; i++) {
-            int pl = palette.length;
-            int cl = color.length;
-            int i1 = (int) ((pl / (float) (cl)) * (i - 1));
-            int i2 = (int) ((pl / (float) (cl)) * i);
-            int c1 = color[i - 1];
-            int c2 = color[i];
-            Log.d(LOG_TAG, "cl " + cl + " pl " + pl + " i1 " + i1 + " i2 " + i2 + " i " + i+" f "+(pl / (float) (cl)));
-            int[] p = new int[i2 - i1];
-            setHSVGradient(p, c1, c2);
-            Log.d(LOG_TAG, " -- palette -- ");
-            for (int j = 0; j < p.length; j++) {
-                Log.d(LOG_TAG, p[j] + ", ");
-            }
-            System.arraycopy(p, 0, palette, i1, p.length);
-
-        }
-        return palette;
-    }
-
     private static void setHSVGradient(int[] palette, int startColor, int endColor) {
         float[] startHSV = new float[3];
         Color.colorToHSV(startColor, startHSV);
@@ -110,17 +101,6 @@ public class Palette {
             }
             palette[i] = Color.HSVToColor(tmpHSV);
         }
-    }
-
-    private static int[] setTrippleRGBGradient(int[] palette, int startColor, int middleColor,
-            int endColor) {
-        int[] paletteStart = new int[palette.length / 2];
-        setRGBGradient(paletteStart, startColor, middleColor);
-        int[] paletteEnd = new int[palette.length - paletteStart.length + 1];
-        setRGBGradient(paletteEnd, middleColor, endColor);
-        System.arraycopy(paletteStart, 0, palette, 0, paletteStart.length);
-        System.arraycopy(paletteEnd, 0, palette, paletteStart.length - 1, paletteEnd.length);
-        return palette;
     }
 
     private static void setRGBGradient(int[] palette, int startColor, int endColor) {
