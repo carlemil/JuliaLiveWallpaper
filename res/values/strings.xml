@@ -44,4 +44,13 @@
     <string name="pref_blend_mode_summary">Set the blend mode</string>
     <string name="pref_blend_mode_title">Blend mode</string>
     
+    <string name="pref_reverse_palette_summary">Reverse the order of the colors in the palette</string>
+    <string name="pref_reverse_palette_title">Reverse palette</string>
+    <string name="pref_reverse_palette_key">reverse_palette_key</string>
+    
+    <string name="pref_black_center_summary">Force the center of the image to be black</string>
+    <string name="pref_black_center_title">Black center</string>
+    <string name="pref_black_center_key">black_center_key</string>
+    
+    
 </resources>

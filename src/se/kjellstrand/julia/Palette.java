@@ -7,7 +7,7 @@ import android.graphics.Color;
 public class Palette {
 
     public static byte[] getPalette(Context context, String paletteString, String drawMode,
-            String blendMode, int precision) {
+            String blendMode, boolean blackCenter, boolean reversePalette, int precision) {
         String[] split = paletteString.split(",");
         int[] colors = new int[split.length];
         for (int i = 0; i < split.length; i++) {
@@ -23,6 +23,19 @@ public class Palette {
         } else if (context.getString(R.string.draw_mode_zebra_gradient).equals(drawMode)) {
             setGradient(context, palette, colors, blendMode);
             zebraify(palette);
+        }
+
+        if (reversePalette) {
+            for (int i = 0; i < palette.length / 2; i++) {
+                int r = palette.length - i - 1;
+                int tmp = palette[r];
+                palette[r] = palette[i];
+                palette[i] = tmp;
+            }
+        }
+
+        if (blackCenter) {
+            palette[palette.length - 1] = 0;
         }
 
         return byteify(palette);

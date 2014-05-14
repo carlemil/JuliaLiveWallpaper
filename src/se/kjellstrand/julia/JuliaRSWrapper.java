@@ -2,7 +2,9 @@
 package se.kjellstrand.julia;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.preference.PreferenceManager;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -11,6 +13,8 @@ import android.renderscript.RenderScript.Priority;
 public class JuliaRSWrapper {
 
     private static final String LOG_TAG = JuliaRSWrapper.class.getCanonicalName();
+
+    private static final String DEFAULT_PALETTE_COLORS = "0x000000, 0xffffff, 0x000000";
 
     private Bitmap bitmap;
 
@@ -26,7 +30,7 @@ public class JuliaRSWrapper {
 
     private RenderScript rs;
 
-    public JuliaRSWrapper(Context context, int width, int height, float scale, String colors) {
+    public JuliaRSWrapper(Context context, int width, int height, float scale) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
 
         this.scale = scale;
@@ -52,16 +56,34 @@ public class JuliaRSWrapper {
 
         script.set_precision(JuliaWallpaperService.INITIAL_PRECISION);
 
-        String drawMode = context.getString(R.string.draw_mode_gradient);
-        String blendMode = context.getString(R.string.blend_mode_hvs);
-        setPalette(context, colors, drawMode, blendMode);
+        setPalette(context);
     }
 
-    public void setPalette(Context context, String palette, String drawMode, String blendMode) {
-        byte[] d = Palette.getPalette(context, palette, drawMode, blendMode, JuliaWallpaperService.INITIAL_PRECISION);
+    public void setPalette(Context context){
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+
+        String colorsKey = context.getResources().getString(R.string.pref_palette_key);
+        String palette = sharedPreferences.getString(colorsKey, DEFAULT_PALETTE_COLORS);
+
+        String drawModeKey = context.getResources().getString(R.string.pref_draw_mode_key);
+        String drawMode = sharedPreferences.getString(drawModeKey, null);
+
+        String blendModeKey = context.getResources().getString(R.string.pref_blend_mode_key);
+        String blendMode = sharedPreferences.getString(blendModeKey, null);
+
+        String blackCenterKey = context.getResources().getString(R.string.pref_black_center_key);
+        boolean blackCenter = sharedPreferences.getBoolean(blackCenterKey, false);
+
+        String reversePaletteKey = context.getResources().getString(R.string.pref_reverse_palette_key);
+        boolean reversePalette = sharedPreferences.getBoolean(reversePaletteKey, false);
+
+        byte[] d = Palette.getPalette(context, palette, drawMode, blendMode, blackCenter,
+                reversePalette, JuliaWallpaperService.INITIAL_PRECISION);
 
         Element type = Element.U8(rs);
-        Allocation colorAllocation = Allocation.createSized(rs, type, JuliaWallpaperService.INITIAL_PRECISION * 3);
+        Allocation colorAllocation = Allocation.createSized(rs, type,
+                JuliaWallpaperService.INITIAL_PRECISION * 3);
         script.bind_color(colorAllocation);
 
         colorAllocation.copy1DRangeFrom(0, JuliaWallpaperService.INITIAL_PRECISION * 3, d);

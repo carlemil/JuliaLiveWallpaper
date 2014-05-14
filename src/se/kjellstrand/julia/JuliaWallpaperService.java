@@ -4,11 +4,9 @@ package se.kjellstrand.julia;
 import java.util.concurrent.TimeUnit;
 
 import se.kjellstrand.julia.RenderHighQualityTimer.TimeoutListener;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -20,6 +18,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
     public static final float INITIAL_ZOOM = 1.6f;
 
+    // keep odd number for nicer center color.
     public static final int INITIAL_PRECISION = 28 + 5;
 
     @Override
@@ -28,8 +27,6 @@ public class JuliaWallpaperService extends WallpaperService {
     }
 
     class JuliaEngine extends Engine implements TimeoutListener {
-
-        private static final String DEFAULT_PALETTE_COLORS = "0x000000, 0xffffff, 0x000000";
 
         private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer(this);
 
@@ -76,11 +73,9 @@ public class JuliaWallpaperService extends WallpaperService {
             // to scrolling in x-axis.
             yAccDiv = height * 2;
             juliaHighQualityRSWrapper = new JuliaRSWrapper(
-                    JuliaWallpaperService.this.getBaseContext(), width, height, 1f,
-                    DEFAULT_PALETTE_COLORS);
+                    JuliaWallpaperService.this.getBaseContext(), width, height, 1f);
             juliaLowQualityRSWrapper = new JuliaRSWrapper(
-                    JuliaWallpaperService.this.getBaseContext(), width, height, 2f,
-                    DEFAULT_PALETTE_COLORS);
+                    JuliaWallpaperService.this.getBaseContext(), width, height, 2f);
             drawLowQuality();
         }
 
@@ -89,26 +84,12 @@ public class JuliaWallpaperService extends WallpaperService {
             super.onVisibilityChanged(visible);
 
             if (visible) {
-                SharedPreferences sharedPreferences = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext());
-
-                String colorsKey = getResources().getString(R.string.pref_palette_key);
-                String colors = sharedPreferences.getString(colorsKey, DEFAULT_PALETTE_COLORS);
-
-                String drawModeKey = getResources().getString(R.string.pref_draw_mode_key);
-                String drawMode = sharedPreferences.getString(drawModeKey, null);
-
-                String blendModeKey = getResources().getString(R.string.pref_blend_mode_key);
-                String blendMode = sharedPreferences.getString(blendModeKey, null);
-
                 setZoom(Settings.getZoom(getApplicationContext()));
 
                 touchYaccumulated = Settings.getTouchYaccumulated(getApplicationContext());
 
-                juliaHighQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode,
-                        blendMode);
-                juliaLowQualityRSWrapper.setPalette(getApplicationContext(), colors, drawMode,
-                        blendMode);
+                juliaHighQualityRSWrapper.setPalette(getApplicationContext());
+                juliaLowQualityRSWrapper.setPalette(getApplicationContext());
 
                 timeBasedSeed = (int) ((System.currentTimeMillis() / TimeUnit.HOURS.toMillis(1)) % JuliaSeeds
                         .getNumberOfSeeds());
