@@ -42,18 +42,8 @@ public class Palette {
             int i2 = Math.round((pl / (float) (cl)) * i);
             int c1 = colors[i - 1];
             int c2 = colors[i];
-            Log.d(LOG_TAG, "cl " + cl + " pl " + pl + " i1 " + i1 + " i2 " + i2 + " i " + i + " f "
-                    + (pl / (float) (cl)));
             int[] p = new int[i2 - i1];
-            if (context.getString(R.string.blend_mode_hvs).equals(blendMode)) {
-                setHSVGradient(p, c1, c2);
-            } else {
-                setRGBGradient(p, c1, c2);
-            }
-            Log.d(LOG_TAG, " -- palette -- ");
-            for (int j = 0; j < p.length; j++) {
-                Log.d(LOG_TAG, p[j] + ", ");
-            }
+            setGradient(context, p, c1, c2, blendMode);
             System.arraycopy(p, 0, palette, i1, p.length);
         }
     }
@@ -86,37 +76,30 @@ public class Palette {
         }
     }
 
-    private static void setHSVGradient(int[] palette, int startColor, int endColor) {
-        float[] startHSV = new float[3];
-        Color.colorToHSV(startColor, startHSV);
-        float[] endHSV = new float[3];
-        Color.colorToHSV(endColor, endHSV);
+    private static void setGradient(Context context, int[] palette, int startColor, int endColor,
+            String blendMode) {
+        float[] start = new float[3];
+        float[] end = new float[3];
+        float[] tmp = new float[3];
 
-        float[] tmpHSV = new float[3];
-
-        for (int i = 0; i < palette.length; i++) {
-            float p = ((float) i) / palette.length;
-            for (int j = 0; j < 3; j++) {
-                tmpHSV[j] = startHSV[j] * (1f - p) + endHSV[j] * p;
-            }
-            palette[i] = Color.HSVToColor(tmpHSV);
+        if (context.getString(R.string.blend_mode_hvs).equals(blendMode)) {
+            Color.colorToHSV(startColor, start);
+            Color.colorToHSV(endColor, end);
+        } else {
+            start = rgbToFloat3(startColor);
+            end = rgbToFloat3(endColor);
         }
-    }
-
-    private static void setRGBGradient(int[] palette, int startColor, int endColor) {
-        float[] startRGB = new float[3];
-        startRGB = rgbToFloat3(startColor);
-        float[] endRGB = new float[3];
-        endRGB = rgbToFloat3(endColor);
-
-        float[] tmpRGB = new float[3];
 
         for (int i = 0; i < palette.length; i++) {
             float p = ((float) i) / palette.length;
             for (int j = 0; j < 3; j++) {
-                tmpRGB[j] = startRGB[j] * (1f - p) + endRGB[j] * p;
+                tmp[j] = start[j] * (1f - p) + end[j] * p;
             }
-            palette[i] = float3ToInt(tmpRGB);
+            if (context.getString(R.string.blend_mode_hvs).equals(blendMode)) {
+                palette[i] = Color.HSVToColor(tmp);
+            } else {
+                palette[i] = float3ToInt(tmp);
+            }
         }
     }
 
