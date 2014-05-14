@@ -3,19 +3,13 @@ package se.kjellstrand.julia;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 
 public class Palette {
 
-    private static final String LOG_TAG = Palette.class.getCanonicalName();
-
-    private static int[] colors;
-
     public static byte[] getPalette(Context context, String paletteString, String drawMode,
             String blendMode, int precision) {
-        Log.d(LOG_TAG, "paletteString " + paletteString);
         String[] split = paletteString.split(",");
-        colors = new int[split.length];
+        int[] colors = new int[split.length];
         for (int i = 0; i < split.length; i++) {
             colors[i] = Long.decode(split[i].trim()).intValue();
         }
