@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--  -->
     <string-array name="list_of_palettes_entries">
         <item>Black, white, black</item>
         <item>White, black, white</item>
@@ -14,8 +15,10 @@
         <item>Japan</item>
         <item>Sunset</item>
         <item>Sunrise</item>
+        <item>Pink</item>
+        <item>RGB</item>
     </string-array>
-    
+    <!--  -->
     <string-array name="list_of_palettes_entry_values">
         <item>0x000000, 0xffffff, 0x000000</item> <!-- bwb -->
         <item>0xffffff, 0x000000, 0xffffff</item> <!-- wb -->
@@ -29,14 +32,16 @@
         <item>0xffffff, 0xed2939</item> <!-- jp -->
         <item>0x000000, 0x422343, 0xaa5167, 0xf06659, 0xf19516, 0xfff312</item> <!-- sunset -->
         <item>0x0068ff, 0xb4a2cc, 0xe0af22, 0xffb628, 0xfffc46, 0xffffaf</item> <!-- sunrise -->
+        <item>0xfadadd, 0xd4999e, 0xae636a, 0x873940</item> <!-- pink -->
+        <item>0xff0000, 0x00ff00, 0x0000ff</item> <!-- RGB -->
     </string-array>
-    
+    <!--  -->
     <string-array name="list_of_draw_modes">
         <item>@string/draw_mode_gradient</item>
         <item>@string/draw_mode_zebra_gradient</item>
         <item>@string/draw_mode_zebra</item>
     </string-array>
-    
+    <!--  -->
     <string-array name="list_of_blend_modes">
         <item>@string/blend_mode_hvs</item>
         <item>@string/blend_mode_rgb</item>
