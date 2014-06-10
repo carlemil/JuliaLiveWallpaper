@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:robobunny="http://robobunny.com"
+    android:key="preference_screen" >
 
     <ListPreference
         android:id="@+id/pref_palette"
@@ -10,7 +12,6 @@
         android:key="@string/pref_palette_key"
         android:summary="@string/pref_palette_summary"
         android:title="@string/pref_palette_title" />
-    
     <ListPreference
         android:id="@+id/pref_draw_mode"
         android:defaultValue="@string/draw_mode_gradient"
@@ -20,7 +21,6 @@
         android:key="@string/pref_draw_mode_key"
         android:summary="@string/pref_draw_mode_summary"
         android:title="@string/pref_draw_mode_title" />
-    
     <ListPreference
         android:id="@+id/pref_blend_mode"
         android:defaultValue="@string/blend_mode_hvs"
@@ -31,18 +31,27 @@
         android:summary="@string/pref_blend_mode_summary"
         android:title="@string/pref_blend_mode_title" />
 
+    <com.robobunny.SeekBarPreference
+        android:defaultValue="80"
+        android:key="@string/pref_brightness_key"
+        android:max="100"
+        android:summary="Adjust brightness of the wallpaper"
+        android:title="Brightness"
+        robobunny:min="10"
+        robobunny:unitsLeft=""
+        robobunny:unitsRight="%" />
+
     <CheckBoxPreference
         android:id="@+id/pref_reverse_palette"
         android:enabled="true"
         android:key="@string/pref_reverse_palette_key"
         android:summary="@string/pref_reverse_palette_summary"
         android:title="@string/pref_reverse_palette_title" />
-
     <CheckBoxPreference
         android:id="@+id/pref_black_center"
         android:enabled="true"
         android:key="@string/pref_black_center_key"
         android:summary="@string/pref_black_center_summary"
         android:title="@string/pref_black_center_title" />
-    
+
 </PreferenceScreen>

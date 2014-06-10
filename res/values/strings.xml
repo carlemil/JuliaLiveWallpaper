@@ -36,6 +36,8 @@
     <string name="pref_draw_mode_summary">Set the draw mode</string>
     <string name="pref_draw_mode_title">Draw mode</string>
     
+    <string name="pref_brightness_key">brightness_key</string>
+    
     <string name="blend_mode_hvs">HSV</string>
     <string name="blend_mode_rgb">RGB</string>
 

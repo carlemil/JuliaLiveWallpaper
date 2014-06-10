@@ -7,12 +7,15 @@ import android.graphics.Color;
 public class Palette {
 
     public static byte[] getPalette(Context context, String paletteString, String drawMode,
-            String blendMode, boolean blackCenter, boolean reversePalette, int precision) {
+            String blendMode, boolean blackCenter, boolean reversePalette, int precision,
+            int brightness) {
         String[] split = paletteString.split(",");
         int[] colors = new int[split.length];
         for (int i = 0; i < split.length; i++) {
             colors[i] = Long.decode(split[i].trim()).intValue();
         }
+
+        adjustBrightness(colors, brightness);
 
         int[] palette = new int[precision];
 
@@ -39,6 +42,16 @@ public class Palette {
         }
 
         return byteify(palette);
+    }
+
+    private static void adjustBrightness(int[] colors, int brightness) {
+        for (int i = 0; i < colors.length; i++) {
+            float[] f3 = rgbToFloat3(colors[i]);
+            for (int j = 0; j < 3; j++) {
+                f3[j] = f3[j] * (brightness / 100f);
+            }
+            colors[i] = float3ToInt(f3);
+        }
     }
 
     private static void setGradient(Context context, int[] palette, int[] colors, String blendMode) {
@@ -111,7 +124,7 @@ public class Palette {
     }
 
     private static int float3ToInt(float[] f3) {
-        return ((int) f3[0] & 255) + ((int) f3[1] << 8) + ((int) f3[2] << 16);
+        return (int) f3[0] + ((int) f3[1] << 8) + ((int) f3[2] << 16);
     }
 
     private static float[] rgbToFloat3(int color) {

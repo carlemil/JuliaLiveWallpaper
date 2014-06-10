@@ -72,6 +72,9 @@ public class JuliaRSWrapper {
         String blendModeKey = context.getResources().getString(R.string.pref_blend_mode_key);
         String blendMode = sharedPreferences.getString(blendModeKey, null);
 
+        String brightnessKey = context.getResources().getString(R.string.pref_brightness_key);
+        int brightness = sharedPreferences.getInt(brightnessKey, 80);
+
         String blackCenterKey = context.getResources().getString(R.string.pref_black_center_key);
         boolean blackCenter = sharedPreferences.getBoolean(blackCenterKey, false);
 
@@ -79,7 +82,7 @@ public class JuliaRSWrapper {
         boolean reversePalette = sharedPreferences.getBoolean(reversePaletteKey, false);
 
         byte[] d = Palette.getPalette(context, palette, drawMode, blendMode, blackCenter,
-                reversePalette, JuliaWallpaperService.INITIAL_PRECISION);
+                reversePalette, JuliaWallpaperService.INITIAL_PRECISION, brightness);
 
         Element type = Element.U8(rs);
         Allocation colorAllocation = Allocation.createSized(rs, type,
