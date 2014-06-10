@@ -24,13 +24,14 @@ public class JuliaWallpaperService extends WallpaperService {
     // keep odd number for nicer center color.
     public static final int INITIAL_PRECISION = 28 + 5;
 
-    private Tracker tracker;
+    private Tracker tracker = null;
 
-    public JuliaWallpaperService(){
-
-              GoogleAnalytics analytics = GoogleAnalytics.getInstance(JuliaWallpaperService.this);
-              tracker = analytics.newTracker(R.xml.tracker);
-
+    synchronized public Tracker getTracker() {
+        if (tracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(JuliaWallpaperService.this);
+            tracker = analytics.newTracker(R.xml.tracker);
+        }
+        return tracker;
     }
 
     @Override
