@@ -3,6 +3,9 @@ package se.kjellstrand.julia;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
 import se.kjellstrand.julia.RenderHighQualityTimer.TimeoutListener;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -20,6 +23,15 @@ public class JuliaWallpaperService extends WallpaperService {
 
     // keep odd number for nicer center color.
     public static final int INITIAL_PRECISION = 28 + 5;
+
+    private Tracker tracker;
+
+    public JuliaWallpaperService(){
+
+              GoogleAnalytics analytics = GoogleAnalytics.getInstance(JuliaWallpaperService.this);
+              tracker = analytics.newTracker(R.xml.tracker);
+
+    }
 
     @Override
     public Engine onCreateEngine() {

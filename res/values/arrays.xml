@@ -15,8 +15,12 @@
         <item>Japan</item>
         <item>Sunset</item>
         <item>Sunrise</item>
-        <item>Pink</item>
-        <item>RGB</item>
+        <item>Pale Pink</item>
+        <item>Red Green Blue</item>
+        <item>Bright Pink</item>
+        <item>Bee</item>
+        <item>HSV</item>
+        <item>Slime green</item>
     </string-array>
     <!--  -->
     <string-array name="list_of_palettes_entry_values">
@@ -34,6 +38,10 @@
         <item>0x0068ff, 0xb4a2cc, 0xe0af22, 0xffb628, 0xfffc46, 0xffffaf</item> <!-- sunrise -->
         <item>0xfadadd, 0xd4999e, 0xae636a, 0x873940</item> <!-- pink -->
         <item>0xff0000, 0x00ff00, 0x0000ff</item> <!-- RGB -->
+        <item>0xff0096, 0xffffff</item>
+        <item>0xffff00, 0x000000, 0xffff00, 0x000000, 0xffff00, 0x000000</item>
+        <item>0xff0000, 0x7fff00, 0x00ffff, 0x7f00ff</item>
+        <item>0x8efc00, 0x779d00</item>
     </string-array>
     <!--  -->
     <string-array name="list_of_draw_modes">
