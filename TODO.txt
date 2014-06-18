@@ -1,0 +1,11 @@
+slå samman palette, och modes till json och parsa med egen prefs klass.
+
+sätta upp play sida, screens och text.
+
+skapa key
+
+bättra på färgscheman.
+
+
+v2:
+dist för färg istället för antal iterationer
