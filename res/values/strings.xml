@@ -30,7 +30,7 @@
     <string name="draw_mode_gradient">Gradient</string>
     <string name="draw_mode_zebra_gradient">Zebra gradient</string>
     <string name="draw_mode_zebra">Zebra</string>
-        
+
     <string name="pref_draw_mode_dialog_title">Draw mode</string>
     <string name="pref_draw_mode_key">draw_mode_key</string>
     <string name="pref_draw_mode_summary">Set the draw mode</string>
