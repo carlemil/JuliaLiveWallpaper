@@ -43,15 +43,24 @@
 
     <CheckBoxPreference
         android:id="@+id/pref_reverse_palette"
+        android:defaultValue="false"
         android:enabled="true"
         android:key="@string/pref_reverse_palette_key"
         android:summary="@string/pref_reverse_palette_summary"
         android:title="@string/pref_reverse_palette_title" />
     <CheckBoxPreference
         android:id="@+id/pref_black_center"
+        android:defaultValue="false"
         android:enabled="true"
         android:key="@string/pref_black_center_key"
         android:summary="@string/pref_black_center_summary"
         android:title="@string/pref_black_center_title" />
+    <CheckBoxPreference
+        android:id="@+id/pref_swipe_morph"
+        android:defaultValue="true"
+        android:enabled="true"
+        android:key="@string/pref_swipe_morph_key"
+        android:summary="@string/pref_swipe_morph_summary"
+        android:title="@string/pref_swipe_morph_title" />
 
 </PreferenceScreen>

@@ -7,9 +7,11 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
 import se.kjellstrand.julia.RenderHighQualityTimer.TimeoutListener;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -26,6 +28,10 @@ public class JuliaWallpaperService extends WallpaperService {
 
     private Tracker tracker = null;
 
+    private SharedPreferences sharedPreferences = null;
+
+    private String swipeMorphKey = null;
+
     synchronized public Tracker getTracker() {
         if (tracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(JuliaWallpaperService.this);
@@ -37,6 +43,14 @@ public class JuliaWallpaperService extends WallpaperService {
     @Override
     public Engine onCreateEngine() {
         return new JuliaEngine();
+    }
+
+    public boolean isSwipeMorphEnabled() {
+        if (sharedPreferences == null) {
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(JuliaWallpaperService.this);
+            swipeMorphKey = getResources().getString(R.string.pref_swipe_morph_key);
+        }
+        return sharedPreferences.getBoolean(swipeMorphKey, false);
     }
 
     class JuliaEngine extends Engine implements TimeoutListener {
@@ -85,10 +99,8 @@ public class JuliaWallpaperService extends WallpaperService {
             // Sets the yAccDiv so that it will make scrolling in y feel similar
             // to scrolling in x-axis.
             yAccDiv = height * 2;
-            juliaHighQualityRSWrapper = new JuliaRSWrapper(
-                    JuliaWallpaperService.this.getBaseContext(), width, height, 1f);
-            juliaLowQualityRSWrapper = new JuliaRSWrapper(
-                    JuliaWallpaperService.this.getBaseContext(), width, height, 2f);
+            juliaHighQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 1f);
+            juliaLowQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 2f);
             drawLowQuality();
         }
 
@@ -104,8 +116,7 @@ public class JuliaWallpaperService extends WallpaperService {
                 juliaHighQualityRSWrapper.setPalette(getApplicationContext());
                 juliaLowQualityRSWrapper.setPalette(getApplicationContext());
 
-                timeBasedSeed = (int) ((System.currentTimeMillis() / TimeUnit.HOURS.toMillis(1)) % JuliaSeeds
-                        .getNumberOfSeeds());
+                timeBasedSeed = (int) ((System.currentTimeMillis() / TimeUnit.HOURS.toMillis(1)) % JuliaSeeds.getNumberOfSeeds());
 
                 drawLowQuality();
             } else {
@@ -116,42 +127,44 @@ public class JuliaWallpaperService extends WallpaperService {
 
         @Override
         public void onTouchEvent(MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_MOVE:
-                    if (event.getPointerCount() == 1) {
-                        if (oldTouchY != 0) {
-                            float dy = event.getY() - oldTouchY;
-                            float dx = event.getX() - oldTouchX;
-                            // Only activate if we have dragged at least as 2x
-                            // much on the y axis as x axis.
-                            if (Math.abs(dy) / 2 >= Math.abs(dx)) {
-                                touchYaccumulated += dy / yAccDiv;
+            if (isSwipeMorphEnabled()) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        if (event.getPointerCount() == 1) {
+                            if (oldTouchY != 0) {
+                                float dy = event.getY() - oldTouchY;
+                                float dx = event.getX() - oldTouchX;
+                                // Only activate if we have dragged at least as
+                                // 2x much on the y axis as x axis.
+                                if (Math.abs(dy) / 2 >= Math.abs(dx)) {
+                                    touchYaccumulated += dy / yAccDiv;
+                                    drawLowQuality();
+                                }
+                            }
+                            oldTouchY = event.getY();
+                            oldTouchX = event.getX();
+
+                        } else if (event.getPointerCount() >= 2) {
+                            double pinchDist = Math.sqrt(Math.pow((event.getY(0) - event.getY(1)), 2)
+                                    + Math.pow((event.getX(0) - event.getX(1)), 2));
+                            if (previousPinchDist != 0) {
+                                double pinchDistChange = pinchDist / previousPinchDist;
+                                float zoom = (float) (getZoom() * pinchDistChange);
+                                setZoom(zoom);
                                 drawLowQuality();
                             }
+                            previousPinchDist = pinchDist;
                         }
-                        oldTouchY = event.getY();
-                        oldTouchX = event.getX();
+                        break;
 
-                    } else if (event.getPointerCount() >= 2) {
-                        double pinchDist = Math.sqrt(Math.pow((event.getY(0) - event.getY(1)), 2)
-                                + Math.pow((event.getX(0) - event.getX(1)), 2));
-                        if (previousPinchDist != 0) {
-                            double pinchDistChange = pinchDist / previousPinchDist;
-                            float zoom = (float) (getZoom() * pinchDistChange);
-                            setZoom(zoom);
-                            drawLowQuality();
-                        }
-                        previousPinchDist = pinchDist;
-                    }
-                    break;
+                    case MotionEvent.ACTION_UP:
+                        previousPinchDist = 0;
+                        oldTouchY = 0;
+                        break;
 
-                case MotionEvent.ACTION_UP:
-                    previousPinchDist = 0;
-                    oldTouchY = 0;
-                    break;
-
-                default:
-                    break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -170,10 +183,9 @@ public class JuliaWallpaperService extends WallpaperService {
         }
 
         @Override
-        public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep,
-                float yOffsetStep, int xPixelOffset, int yPixelOffset) {
-            super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset,
-                    yPixelOffset);
+        public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep, float yOffsetStep, int xPixelOffset,
+                int yPixelOffset) {
+            super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
 
             this.xOffset = xOffset;
 
