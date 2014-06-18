@@ -54,8 +54,8 @@
     <string name="pref_black_center_title">Black center</string>
     <string name="pref_black_center_key">black_center_key</string>
        
-    <string name="pref_swipe_morph_summary">Enable morphing of the background by swiping</string>
-    <string name="pref_swipe_morph_title">Enable swipe morph</string>
+    <string name="pref_swipe_morph_summary">Change the background when swiping up and down on the homescreen</string>
+    <string name="pref_swipe_morph_title">Background change on swipe</string>
     <string name="pref_swipe_morph_key">swipe_morph_key</string>
     
     
