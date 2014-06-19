@@ -32,7 +32,7 @@
         android:title="@string/pref_blend_mode_title" />
 
     <com.robobunny.SeekBarPreference
-        android:defaultValue="80"
+        android:defaultValue="50"
         android:key="@string/pref_brightness_key"
         android:max="100"
         android:summary="Adjust brightness of the wallpaper"
