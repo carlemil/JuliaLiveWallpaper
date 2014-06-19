@@ -4,6 +4,16 @@
     android:key="preference_screen" >
 
     <ListPreference
+        android:id="@+id/pref_theme"
+        android:defaultValue="0xffffff, 0x000000, 0xffffff"
+        android:dialogTitle="@string/pref_theme_dialog_title"
+        android:entries="@array/list_of_theme_entries"
+        android:entryValues="@array/list_of_theme_entry_values"
+        android:key="@string/pref_theme_key"
+        android:summary="@string/pref_theme_summary"
+        android:title="@string/pref_theme_title" />
+    
+    <ListPreference
         android:id="@+id/pref_palette"
         android:defaultValue="0xffffff, 0x000000, 0xffffff"
         android:dialogTitle="@string/pref_palette_dialog_title"

@@ -22,6 +22,11 @@
     <string name="name">Julia wallpaper</string>
    
     <!--  Preferences related  -->
+    <string name="pref_theme_dialog_title">Theme selector</string>
+    <string name="pref_theme_key">theme_key</string>
+    <string name="pref_theme_summary">Select the theme of the Julia wallpaper</string>
+    <string name="pref_theme_title">Theme</string>
+        
     <string name="pref_palette_dialog_title">Palette</string>
     <string name="pref_palette_key">palette_key</string>
     <string name="pref_palette_summary">Select palette</string>

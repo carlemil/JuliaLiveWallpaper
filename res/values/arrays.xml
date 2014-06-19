@@ -2,6 +2,14 @@
 <resources>
 
     <!--  -->
+    <string-array name="list_of_theme_entries">
+        <item>CCCP</item>
+    </string-array>
+    <!--  -->
+    <string-array name="list_of_theme_entry_values">
+        <item>json</item>
+    </string-array>
+    <!--  -->
     <string-array name="list_of_palettes_entries">
         <item>White, black, white</item>
         <item>Black, white</item>
@@ -33,11 +41,11 @@
         <item>0x0068ff, 0xb4a2cc, 0xe0af22, 0xffb628, 0xfffc46, 0xffffaf</item> <!-- sunrise -->
         <item>0xfadadd, 0xd4999e, 0xae636a, 0x873940</item> <!-- pink -->
         <item>0xff0000, 0x00ff00, 0x0000ff</item> <!-- RGB -->
-        <item>0xff0096, 0xffffff</item><!-- pink -->
-        <item>0xffff00, 0x000000, 0xffff00, 0x000000, 0xffff00, 0x000000</item><!-- bee -->
-        <item>0xff0000, 0x7fff00, 0x00ffff, 0x7f00ff</item><!-- HSV -->
-        <item>0x8efc00, 0x779d00</item><!-- green -->
-        <item>0xffffff, 0x0000ff, 0x000000</item><!-- blue hole -->
+        <item>0xff0096, 0xffffff</item> <!-- pink -->
+        <item>0xffff00, 0x000000, 0xffff00, 0x000000, 0xffff00, 0x000000</item> <!-- bee -->
+        <item>0xff0000, 0x7fff00, 0x00ffff, 0x7f00ff</item> <!-- HSV -->
+        <item>0x8efc00, 0x779d00</item> <!-- green -->
+        <item>0xffffff, 0x0000ff, 0x000000</item> <!-- blue hole -->
         <item>0xffffff, 0x000000, 0xffffff, 0x000000, 0xffffff, 0x000000</item> <!-- zebra -->
         <item>0xe0e0ba, 0xd1857e, 0x502065, 0x17b4c7, 0x7315b7, 0x000000</item> <!-- shiny scales -->
     </string-array>
