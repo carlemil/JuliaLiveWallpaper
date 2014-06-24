@@ -20,50 +20,33 @@
 <resources>
 
     <string name="name">Julia wallpaper</string>
-   
-    <!--  Preferences related  -->
+
+    <!-- Preferences related -->
     <string name="pref_theme_dialog_title">Theme selector</string>
     <string name="pref_theme_key">theme_key</string>
     <string name="pref_theme_summary">Select the theme of the Julia wallpaper</string>
     <string name="pref_theme_title">Theme</string>
-        
-    <string name="pref_palette_dialog_title">Palette</string>
-    <string name="pref_palette_key">palette_key</string>
-    <string name="pref_palette_summary">Select palette</string>
-    <string name="pref_palette_title">Palette</string>
-    
-    <string name="draw_mode_gradient">Gradient</string>
-    <string name="draw_mode_zebra_gradient">Zebra gradient</string>
-    <string name="draw_mode_zebra">Zebra</string>
-
-    <string name="pref_draw_mode_dialog_title">Draw mode</string>
-    <string name="pref_draw_mode_key">draw_mode_key</string>
-    <string name="pref_draw_mode_summary">Set the draw mode</string>
-    <string name="pref_draw_mode_title">Draw mode</string>
     
     <string name="pref_brightness_key">brightness_key</string>
+    <string name="pref_brightness_summary">Adjust brightness of the wallpaper</string>
+    <string name="pref_brightness_title">Brightness</string>
     
-    <string name="blend_mode_hvs">HSV</string>
-    <string name="blend_mode_rgb">RGB</string>
-
-    <string name="pref_blend_mode_dialog_title">Blend mode</string>
-    <string name="pref_blend_mode_key">blend_mode_key</string>
-    <string name="pref_blend_mode_summary">Set the blend mode</string>
-    <string name="pref_blend_mode_title">Blend mode</string>
-    
-    <string name="pref_reverse_palette_summary">Reverse the order of the colors in the palette</string>
-    <string name="pref_reverse_palette_title">Reverse palette</string>
-    <string name="pref_reverse_palette_key">reverse_palette_key</string>
-    
-    <string name="pref_black_center_summary">Force the center of the image to be black</string>
-    <string name="pref_black_center_title">Black center</string>
-    <string name="pref_black_center_key">black_center_key</string>
-       
     <string name="pref_swipe_morph_summary">Change the background when swiping up and down on the homescreen</string>
-    <string name="pref_swipe_morph_title">Background change on swipe</string>
+    <string name="pref_swipe_morph_title">Swipe</string>
     <string name="pref_swipe_morph_key">swipe_morph_key</string>
     
     <string name="theme_black_n_white">Black and White</string>
-    
-    
+    <string name="theme_blue_yellow">Blue and Yellow</string>
+    <string name="theme_india">India</string>
+    <string name="theme_red_white">Red and White</string>
+    <string name="theme_sunset">Sunset</string>
+    <string name="theme_senrise">Sunrise</string>
+    <string name="theme_pale_pink">Pale Pink</string>
+    <string name="theme_bright_pink">Bright Pink</string>
+    <string name="theme_bee_stripes">Bee stripes</string>
+    <string name="theme_slime_green">Slime green</string>
+    <string name="theme_blue_hole">Blue hole</string>
+    <string name="theme_zebra_stripes">Zebra stripes</string>
+    <string name="theme_shiny_scales">Shiny scales</string>
+
 </resources>

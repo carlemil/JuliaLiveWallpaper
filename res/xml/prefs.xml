@@ -17,8 +17,8 @@
         android:defaultValue="50"
         android:key="@string/pref_brightness_key"
         android:max="100"
-        android:summary="Adjust brightness of the wallpaper"
-        android:title="Brightness"
+        android:summary="@string/pref_brightness_summary"
+        android:title="@string/pref_brightness_title"
         robobunny:min="10"
         robobunny:unitsLeft=""
         robobunny:unitsRight="%" />

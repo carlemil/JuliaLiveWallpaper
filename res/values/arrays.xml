@@ -4,14 +4,7 @@
     <!--  -->
     <string-array name="list_of_theme_entries">
         <item>@string/theme_black_n_white</item>
-        <!--
-        <item>Blue and Yellow</item>
-        <item>Pale Pink</item>
-        -->
-
     </string-array>
-    <!--  -->
-
     <!--  -->
     <string-array name="list_of_palettes_entries">
         <item>White, black, white</item>
@@ -52,16 +45,5 @@
         <item>0xffffff, 0x000000, 0xffffff, 0x000000, 0xffffff, 0x000000</item> <!-- zebra -->
         <item>0xe0e0ba, 0xd1857e, 0x502065, 0x17b4c7, 0x7315b7, 0x000000</item> <!-- shiny scales -->
     </string-array>
-    <!--  -->
-    <string-array name="list_of_draw_modes">
-        <item>@string/draw_mode_gradient</item>
-        <item>@string/draw_mode_zebra_gradient</item>
-        <item>@string/draw_mode_zebra</item>
-    </string-array>
-    <!--  -->
-    <string-array name="list_of_blend_modes">
-        <item>@string/blend_mode_hvs</item>
-        <item>@string/blend_mode_rgb</item>
-    </string-array>
-
+    
 </resources>
