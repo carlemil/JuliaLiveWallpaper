@@ -6,38 +6,22 @@ import android.graphics.Color;
 
 public class Palette {
 
-    public static byte[] getPalette(Context context, String paletteString, String drawMode,
-            String blendMode, boolean blackCenter, boolean reversePalette, int precision,
-            int brightness) {
-        String[] split = paletteString.split(",");
-        int[] colors = new int[split.length];
-        for (int i = 0; i < split.length; i++) {
-            colors[i] = Long.decode(split[i].trim()).intValue();
-        }
+    public static byte[] getPalette(Context context, Theme theme, int precision, int brightness) {
 
-        adjustBrightness(colors, brightness);
+        adjustBrightness(theme.palette, brightness);
 
         int[] palette = new int[precision];
 
-        if (context.getString(R.string.draw_mode_gradient).equals(drawMode)) {
-            setGradient(context, palette, colors, blendMode);
-        } else if (context.getString(R.string.draw_mode_zebra).equals(drawMode)) {
-            setFlagBands(palette, colors);
-        } else if (context.getString(R.string.draw_mode_zebra_gradient).equals(drawMode)) {
-            setGradient(context, palette, colors, blendMode);
+        if (theme.drawMode == DrawMode.ZEBRA) {
+            setFlagBands(palette, theme.palette);
+        } else if (theme.drawMode == DrawMode.ZEBRA_GRADIENT) {
+            setGradient(context, palette, theme.palette, theme.blendMode);
             zebraify(palette);
+        } else if (theme.drawMode == DrawMode.GRADIENT) {
+            setGradient(context, palette, theme.palette, theme.blendMode);
         }
 
-        if (reversePalette) {
-            for (int i = 0; i < palette.length / 2; i++) {
-                int r = palette.length - i - 1;
-                int tmp = palette[r];
-                palette[r] = palette[i];
-                palette[i] = tmp;
-            }
-        }
-
-        if (blackCenter) {
+        if (theme.blackCenter) {
             palette[palette.length - 1] = 0;
         }
 
@@ -54,7 +38,7 @@ public class Palette {
         }
     }
 
-    private static void setGradient(Context context, int[] palette, int[] colors, String blendMode) {
+    private static void setGradient(Context context, int[] palette, int[] colors, BlendMode blendMode) {
         for (int i = 1; i < colors.length; i++) {
             int pl = palette.length;
             int cl = colors.length - 1;
@@ -96,13 +80,12 @@ public class Palette {
         }
     }
 
-    private static void setGradient(Context context, int[] palette, int startColor, int endColor,
-            String blendMode) {
+    private static void setGradient(Context context, int[] palette, int startColor, int endColor, BlendMode blendMode) {
         float[] start = new float[3];
         float[] end = new float[3];
         float[] tmp = new float[3];
 
-        if (context.getString(R.string.blend_mode_hvs).equals(blendMode)) {
+        if (blendMode == BlendMode.HSV) {
             Color.colorToHSV(startColor, start);
             Color.colorToHSV(endColor, end);
         } else {
@@ -115,7 +98,7 @@ public class Palette {
             for (int j = 0; j < 3; j++) {
                 tmp[j] = start[j] * (1f - p) + end[j] * p;
             }
-            if (context.getString(R.string.blend_mode_hvs).equals(blendMode)) {
+            if (blendMode == BlendMode.HSV) {
                 palette[i] = Color.HSVToColor(tmp);
             } else {
                 palette[i] = float3ToInt(tmp);

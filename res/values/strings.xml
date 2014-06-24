@@ -63,5 +63,7 @@
     <string name="pref_swipe_morph_title">Background change on swipe</string>
     <string name="pref_swipe_morph_key">swipe_morph_key</string>
     
+    <string name="theme_black_n_white">Black and White</string>
+    
     
 </resources>

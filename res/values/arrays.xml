@@ -3,12 +3,15 @@
 
     <!--  -->
     <string-array name="list_of_theme_entries">
-        <item>CCCP</item>
+        <item>@string/theme_black_n_white</item>
+        <!--
+        <item>Blue and Yellow</item>
+        <item>Pale Pink</item>
+        -->
+
     </string-array>
     <!--  -->
-    <string-array name="list_of_theme_entry_values">
-        <item>json</item>
-    </string-array>
+
     <!--  -->
     <string-array name="list_of_palettes_entries">
         <item>White, black, white</item>
