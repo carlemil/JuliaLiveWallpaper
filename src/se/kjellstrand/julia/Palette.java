@@ -21,10 +21,11 @@ public class Palette {
             setGradient(context, palette, theme.palette, theme.blendMode);
         }
 
-        if (theme.blackCenter) {
-            palette[palette.length - 1] = 0;
+        if (theme.blackCenter == CenterMode.BLACK) {
+            palette[palette.length - 1] = 0x000000;
+        } else if (theme.blackCenter == CenterMode.WHITE) {
+            palette[palette.length - 1] = 0xffffff;
         }
-
         return byteify(palette);
     }
 

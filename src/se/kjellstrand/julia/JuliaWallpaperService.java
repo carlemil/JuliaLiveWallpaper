@@ -23,8 +23,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
     public static final float INITIAL_ZOOM = 1.6f;
 
-    // keep odd number for nicer center color.
-    public static final int INITIAL_PRECISION = 28 + 5;
+    public static final int INITIAL_PRECISION = 32;
 
     private Tracker tracker = null;
 

@@ -8,6 +8,7 @@
         <item>@string/theme_blue_hole</item>
         <item>@string/theme_blue_yellow</item>
         <item>@string/theme_bright_pink</item>
-    </string-array>
+        <item>@string/theme_pale_pink</item>
+        </string-array>
     
 </resources>
