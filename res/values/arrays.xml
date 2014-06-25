@@ -4,26 +4,10 @@
     <!--  -->
     <string-array name="list_of_theme_entries">
         <item>@string/theme_black_n_white</item>
-    </string-array>
-    <!--  -->
-    <string-array name="list_of_palettes_entries">
-        <item>White, black, white</item>
-        <item>Black, white</item>
-        <item>Blue and Yellow</item>
-        <item>CCCP</item>
-        <item>India</item>
-        <item>Red and White</item>
-        <item>Sunset</item>
-        <item>Sunrise</item>
-        <item>Pale Pink</item>
-        <item>Red, Green and Blue</item>
-        <item>Bright Pink</item>
-        <item>Bee stripes</item>
-        <item>HSV</item>
-        <item>Slime green</item>
-        <item>Blue hole</item>
-        <item>Zebra stripes</item>
-        <item>Shiny scales</item>
+        <item>@string/theme_bee_stripes</item>
+        <item>@string/theme_blue_hole</item>
+        <item>@string/theme_blue_yellow</item>
+        <item>@string/theme_bright_pink</item>
     </string-array>
     
 </resources>
