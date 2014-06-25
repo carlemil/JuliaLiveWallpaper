@@ -25,25 +25,5 @@
         <item>Zebra stripes</item>
         <item>Shiny scales</item>
     </string-array>
-    <!--  -->
-    <string-array name="list_of_palettes_entry_values">
-        <item>0xffffff, 0x000000, 0xffffff</item> <!-- wb -->
-        <item>0xffffff, 0x000000</item> <!-- bw -->
-        <item>0x00ddff, 0xfeed00</item> <!-- kz -->
-        <item>0xde2910, 0xffde00</item> <!-- cccp -->
-        <item>0xff9933, 0xffffff, 0x128807</item> <!-- in -->
-        <item>0xffffff, 0xed2939</item> <!-- white red -->
-        <item>0x000000, 0x422343, 0xaa5167, 0xf06659, 0xf19516, 0xfff312</item> <!-- sunset -->
-        <item>0x0068ff, 0xb4a2cc, 0xe0af22, 0xffb628, 0xfffc46, 0xffffaf</item> <!-- sunrise -->
-        <item>0xfadadd, 0xd4999e, 0xae636a, 0x873940</item> <!-- pink -->
-        <item>0xff0000, 0x00ff00, 0x0000ff</item> <!-- RGB -->
-        <item>0xff0096, 0xffffff</item> <!-- pink -->
-        <item>0xffff00, 0x000000, 0xffff00, 0x000000, 0xffff00, 0x000000</item> <!-- bee -->
-        <item>0xff0000, 0x7fff00, 0x00ffff, 0x7f00ff</item> <!-- HSV -->
-        <item>0x8efc00, 0x779d00</item> <!-- green -->
-        <item>0xffffff, 0x0000ff, 0x000000</item> <!-- blue hole -->
-        <item>0xffffff, 0x000000, 0xffffff, 0x000000, 0xffffff, 0x000000</item> <!-- zebra -->
-        <item>0xe0e0ba, 0xd1857e, 0x502065, 0x17b4c7, 0x7315b7, 0x000000</item> <!-- shiny scales -->
-    </string-array>
     
 </resources>
