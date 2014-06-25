@@ -71,10 +71,10 @@ public class Theme {
             };
         } else if (context.getResources().getString(R.string.theme_shiny_scales, "").equals(themeName)) {
             blendMode = BlendMode.RGB;
-            drawMode = DrawMode.ZEBRA;
-            blackCenter = CenterMode.DEFAULT;
+            drawMode = DrawMode.ZEBRA_GRADIENT;
+            blackCenter = CenterMode.BLACK;
             palette = new int[] {
-                    0xe0e0ba, 0xd1857e, 0x502065, 0x17b4c7, 0x7315b7, 0x000000
+                    0x00f0ba, 0xd1857e, 0x502065, 0x17b4c7, 0x7315b7, 0x000000
             };
         } else if (context.getResources().getString(R.string.theme_slime_green, "").equals(themeName)) {
             blendMode = BlendMode.RGB;
