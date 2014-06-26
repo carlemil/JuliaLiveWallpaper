@@ -62,7 +62,7 @@ public class JuliaRSWrapper {
         Theme theme = new Theme(themeName, context);
 
         String brightnessKey = context.getResources().getString(R.string.pref_brightness_key);
-        int brightness = sharedPreferences.getInt(brightnessKey, 50);
+        int brightness = sharedPreferences.getInt(brightnessKey, 70);
 
         script.set_precision(theme.precission);
 

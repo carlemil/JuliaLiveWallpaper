@@ -17,7 +17,7 @@ public class Theme {
             0xffffff, 0x000000
     };
 
-    public int precission = 32;
+    public int precission = 64;
 
     public Theme(String themeName, Context context) {
         if (context.getResources().getString(R.string.theme_black_n_white, "").equals(themeName)) {
@@ -28,7 +28,7 @@ public class Theme {
             palette = new int[] {
                     0xffff00, 0x222200
             };
-            precission = 31;
+            precission = 63;
         } else if (context.getResources().getString(R.string.theme_blue_hole, "").equals(themeName)) {
             drawMode = DrawMode.GRADIENT;
             palette = new int[] {
@@ -54,7 +54,7 @@ public class Theme {
             palette = new int[] {
                     0xffffff, 0xed2939
             };
-            precission = 31;
+            precission = 63;
         } else if (context.getResources().getString(R.string.theme_sunrise, "").equals(themeName)) {
             drawMode = DrawMode.GRADIENT;
             palette = new int[] {

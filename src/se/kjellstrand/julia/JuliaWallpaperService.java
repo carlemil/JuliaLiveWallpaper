@@ -98,7 +98,7 @@ public class JuliaWallpaperService extends WallpaperService {
             // to scrolling in x-axis.
             yAccDiv = height * 2;
             juliaHighQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 1f);
-            juliaLowQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 2f);
+            juliaLowQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 3f);
             drawLowQuality();
         }
 
