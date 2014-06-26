@@ -1,6 +1,7 @@
 
-package se.kjellstrand.julia;
+package se.kjellstrand.julia.prefs;
 
+import se.kjellstrand.julia.JuliaWallpaperService;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;

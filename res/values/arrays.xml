@@ -11,6 +11,9 @@
         <item>@string/theme_pale_pink</item>
         <item>@string/theme_red_white</item>
         <item>@string/theme_shiny_scales</item>
+        <item>@string/theme_slime_green</item>
+        <item>@string/theme_sunset</item>
+        <item>@string/theme_zebra_stripes</item>
         </string-array>
     
 </resources>

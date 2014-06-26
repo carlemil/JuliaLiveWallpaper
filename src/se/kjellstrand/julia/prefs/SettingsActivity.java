@@ -1,4 +1,4 @@
-package se.kjellstrand.julia;
+package se.kjellstrand.julia.prefs;
 
 import android.app.Activity;
 import android.os.Bundle;

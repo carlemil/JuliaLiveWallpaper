@@ -37,7 +37,7 @@
     
     <string name="theme_black_n_white">Black and White</string>
     <string name="theme_blue_yellow">Blue and Yellow</string>
-    <string name="theme_red_white">Red and White</string>
+    <string name="theme_red_white">Polka</string>
     <string name="theme_sunset">Sunset</string>
     <string name="theme_sunrise">Sunrise</string>
     <string name="theme_pale_pink">Pale Pink</string>
@@ -46,6 +46,6 @@
     <string name="theme_slime_green">Slime green</string>
     <string name="theme_blue_hole">Blue hole</string>
     <string name="theme_zebra_stripes">Zebra stripes</string>
-    <string name="theme_shiny_scales">Shiny scales</string>
+    <string name="theme_shiny_scales">Shiny stuff</string>
 
 </resources>

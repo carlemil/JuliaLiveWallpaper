@@ -7,6 +7,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
 import se.kjellstrand.julia.RenderHighQualityTimer.TimeoutListener;
+import se.kjellstrand.julia.prefs.Settings;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -22,8 +23,6 @@ public class JuliaWallpaperService extends WallpaperService {
     // JuliaWallpaperService.class.getCanonicalName();
 
     public static final float INITIAL_ZOOM = 1.6f;
-
-    public static final int INITIAL_PRECISION = 32;
 
     private Tracker tracker = null;
 

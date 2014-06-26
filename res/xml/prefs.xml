@@ -14,7 +14,7 @@
         android:title="@string/pref_theme_title" />
     
     <com.robobunny.SeekBarPreference
-        android:defaultValue="50"
+        android:defaultValue="70"
         android:key="@string/pref_brightness_key"
         android:max="100"
         android:summary="@string/pref_brightness_summary"

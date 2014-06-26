@@ -1,5 +1,7 @@
-package se.kjellstrand.julia;
+package se.kjellstrand.julia.prefs;
 
+import se.kjellstrand.julia.R;
+import se.kjellstrand.julia.R.xml;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 

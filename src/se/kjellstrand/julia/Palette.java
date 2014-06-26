@@ -1,16 +1,19 @@
 
 package se.kjellstrand.julia;
 
+import se.kjellstrand.julia.prefs.BlendMode;
+import se.kjellstrand.julia.prefs.CenterMode;
+import se.kjellstrand.julia.prefs.DrawMode;
 import android.content.Context;
 import android.graphics.Color;
 
 public class Palette {
 
-    public static byte[] getPalette(Context context, Theme theme, int precision, int brightness) {
+    public static byte[] getPalette(Context context, Theme theme, int brightness) {
 
         adjustBrightness(theme.palette, brightness);
 
-        int[] palette = new int[precision];
+        int[] palette = new int[theme.precission];
 
         if (theme.drawMode == DrawMode.ZEBRA) {
             setFlagBands(palette, theme.palette);

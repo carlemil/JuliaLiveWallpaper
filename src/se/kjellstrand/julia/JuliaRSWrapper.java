@@ -51,8 +51,6 @@ public class JuliaRSWrapper {
 
         script.set_zoom(JuliaWallpaperService.INITIAL_ZOOM);
 
-        script.set_precision(JuliaWallpaperService.INITIAL_PRECISION);
-
         setPalette(context);
     }
 
@@ -66,13 +64,15 @@ public class JuliaRSWrapper {
         String brightnessKey = context.getResources().getString(R.string.pref_brightness_key);
         int brightness = sharedPreferences.getInt(brightnessKey, 50);
 
-        byte[] d = Palette.getPalette(context, theme, JuliaWallpaperService.INITIAL_PRECISION, brightness);
+        script.set_precision(theme.precission);
+
+        byte[] d = Palette.getPalette(context, theme, brightness);
 
         Element type = Element.U8(rs);
-        Allocation colorAllocation = Allocation.createSized(rs, type, JuliaWallpaperService.INITIAL_PRECISION * 3);
+        Allocation colorAllocation = Allocation.createSized(rs, type, theme.precission * 3);
         script.bind_color(colorAllocation);
 
-        colorAllocation.copy1DRangeFrom(0, JuliaWallpaperService.INITIAL_PRECISION * 3, d);
+        colorAllocation.copy1DRangeFrom(0, theme.precission * 3, d);
     }
 
     public Bitmap renderJulia(double x, double y) {
