@@ -40,16 +40,17 @@ public class Theme {
             palette = new int[] {
                     0x00ddff, 0xfeed00
             };
+            precission = 63;
         } else if (context.getResources().getString(R.string.theme_bright_pink, "").equals(themeName)) {
             drawMode = DrawMode.GRADIENT;
             palette = new int[] {
                     0xff0096, 0xffffff
             };
         } else if (context.getResources().getString(R.string.theme_pale_pink, "").equals(themeName)) {
-            blackCenter = CenterMode.WHITE;
             palette = new int[] {
                     0xfadadd, 0xd4999e, 0xae636a, 0x873940, 0xae636a, 0xd4999e
             };
+            precission = 61;
         } else if (context.getResources().getString(R.string.theme_red_white, "").equals(themeName)) {
             palette = new int[] {
                     0xffffff, 0xed2939
