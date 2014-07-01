@@ -14,6 +14,7 @@
         <item>@string/theme_slime_green</item>
         <item>@string/theme_sunset</item>
         <item>@string/theme_zebra_stripes</item>
-        </string-array>
-    
+        <item>@string/theme_milky_way</item>
+    </string-array>
+
 </resources>

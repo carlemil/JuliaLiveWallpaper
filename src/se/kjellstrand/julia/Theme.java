@@ -78,6 +78,11 @@ public class Theme {
             palette = new int[] {
                     0x000000, 0x422343, 0xaa5167, 0xf06659, 0xf19516, 0xfff312
             };
+        } else if (context.getResources().getString(R.string.theme_milky_way, "").equals(themeName)) {
+            drawMode = DrawMode.GRADIENT;
+            palette = new int[] {
+                    0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xffffff
+            };
         } else if (context.getResources().getString(R.string.theme_zebra_stripes, "").equals(themeName)) {
         }
 

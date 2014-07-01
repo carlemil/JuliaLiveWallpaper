@@ -26,15 +26,12 @@
     <string name="pref_theme_key">theme_key</string>
     <string name="pref_theme_summary">Select the theme of the Julia wallpaper</string>
     <string name="pref_theme_title">Theme</string>
-    
     <string name="pref_brightness_key">brightness_key</string>
     <string name="pref_brightness_summary">Adjust brightness of the wallpaper</string>
     <string name="pref_brightness_title">Brightness</string>
-    
     <string name="pref_swipe_morph_summary">Change the background when swiping up and down on the homescreen</string>
     <string name="pref_swipe_morph_title">Swipe</string>
     <string name="pref_swipe_morph_key">swipe_morph_key</string>
-    
     <string name="theme_black_n_white">Black and White</string>
     <string name="theme_blue_yellow">Blue and Yellow</string>
     <string name="theme_red_white">Polka</string>
@@ -47,5 +44,6 @@
     <string name="theme_blue_hole">Blue hole</string>
     <string name="theme_zebra_stripes">Zebra stripes</string>
     <string name="theme_shiny_scales">Shiny stuff</string>
+    <string name="theme_milky_way">Milky Way</string>
 
 </resources>
