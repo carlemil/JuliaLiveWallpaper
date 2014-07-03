@@ -1,3 +1,4 @@
+
 package se.kjellstrand.julia;
 
 public class JuliaSeeds {
@@ -74,7 +75,6 @@ public class JuliaSeeds {
             }
     };
 
-
     private static final double FIRST_SIZE = 0.1;
 
     private static final double FIRST_SEED_MUL = 4.0;
@@ -82,8 +82,6 @@ public class JuliaSeeds {
     private static final double SECOND_SIZE = FIRST_SIZE * 0.2;
 
     private static final double SECOND_SEED_MUL = FIRST_SEED_MUL * 6;
-
-
 
     // /*
     // * right x: 3.916667e-1 y: 4.166667e-3
@@ -94,6 +92,18 @@ public class JuliaSeeds {
 
     private static int[] getCircle(double radius, int n) {
         final int[] data = new int[n * 2];
+
+        long time = System.currentTimeMillis();
+        long unixHours = time / 1000 / 60 / 60;
+        System.out.println("hour " + unixHours);
+        double swipeXOffset = 0;
+        double swipeYOffset = 0;
+
+        double timeOffset = unixHours / 21d; // time based, div by 21 to slow it
+                                             // down and avoid daily repetition
+        double bigArc = swipeYOffset + timeOffset;
+
+        double smalArc = swipeXOffset / 2000d; // swipe up and down
 
         for (int i = 0; i < n; i++) {
 
@@ -106,15 +116,14 @@ public class JuliaSeeds {
         return data;
     }
 
-
     static double getX(double xOffset, int seed) {
-        return (double) ((Math.sin(xOffset * FIRST_SEED_MUL) * FIRST_SIZE) + (Math.sin(xOffset
-                / SECOND_SEED_MUL) * SECOND_SIZE)) + juliaSeeds[seed][0];
+        return (double) ((Math.sin(xOffset * FIRST_SEED_MUL) * FIRST_SIZE) + (Math.sin(xOffset / SECOND_SEED_MUL) * SECOND_SIZE))
+                + juliaSeeds[seed][0];
     }
 
     static double getY(double xOffset, int seed) {
-        return (double) ((Math.cos(xOffset * FIRST_SEED_MUL) * FIRST_SIZE) + (Math.cos(xOffset
-                / SECOND_SEED_MUL) * SECOND_SIZE)) + juliaSeeds[seed][1];
+        return (double) ((Math.cos(xOffset * FIRST_SEED_MUL) * FIRST_SIZE) + (Math.cos(xOffset / SECOND_SEED_MUL) * SECOND_SIZE))
+                + juliaSeeds[seed][1];
     }
 
     static int getNumberOfSeeds() {

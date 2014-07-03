@@ -67,9 +67,9 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private static final float MAX_ZOOM = 2.5f;
 
-        private float xOffset = 0.0f;
+        private float swipeXOffset = 0.0f;
 
-        private float touchYaccumulated = 0.0f;
+        private float swipeYOffset = 0.0f;
 
         private float oldTouchY = 0.0f;
 
@@ -109,7 +109,7 @@ public class JuliaWallpaperService extends WallpaperService {
             if (visible) {
                 setZoom(Settings.getZoom(getApplicationContext()));
 
-                touchYaccumulated = Settings.getTouchYaccumulated(getApplicationContext());
+                swipeYOffset = Settings.getTouchYaccumulated(getApplicationContext());
 
                 juliaHighQualityRSWrapper.setPalette(getApplicationContext());
                 juliaLowQualityRSWrapper.setPalette(getApplicationContext());
@@ -119,7 +119,7 @@ public class JuliaWallpaperService extends WallpaperService {
                 drawLowQuality();
             } else {
                 Settings.setZoom(getApplicationContext(), getZoom());
-                Settings.setTouchYaccumulated(getApplicationContext(), touchYaccumulated);
+                Settings.setTouchYaccumulated(getApplicationContext(), swipeYOffset);
             }
         }
 
@@ -135,7 +135,7 @@ public class JuliaWallpaperService extends WallpaperService {
                                 // Only activate if we have dragged at least as
                                 // 2x much on the y axis as x axis.
                                 if (Math.abs(dy) / 2 >= Math.abs(dx)) {
-                                    touchYaccumulated += dy / yAccDiv;
+                                    swipeYOffset += dy / yAccDiv;
                                     drawLowQuality();
                                 }
                             }
@@ -185,10 +185,10 @@ public class JuliaWallpaperService extends WallpaperService {
                 int yPixelOffset) {
             super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
 
-            använd detta offset för att röra oss i vågor längs stora cirkeln (hourOffset) och upp/ner offset för en mindre cirkel
+            // använd detta offset för att röra oss  längs stora cirkeln (hourOffset) och upp/ner offset för en mindre cirkel på den stora
 
 
-            this.xOffset = xOffset;
+            this.swipeXOffset = xOffset;
 
             drawLowQuality();
         }
@@ -209,7 +209,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private void draw(JuliaRSWrapper juliaRSWrapper) {
             if (isVisible()) {
-                float offset = xOffset + touchYaccumulated;
+                float offset = swipeXOffset + swipeYOffset;
                 double x = JuliaSeeds.getX(offset, timeBasedSeed);
                 double y = JuliaSeeds.getY(offset, timeBasedSeed);
                 Bitmap bitmap = juliaRSWrapper.renderJulia(x, y);
