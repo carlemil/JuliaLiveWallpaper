@@ -185,6 +185,9 @@ public class JuliaWallpaperService extends WallpaperService {
                 int yPixelOffset) {
             super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
 
+            använd detta offset för att röra oss i vågor längs stora cirkeln (hourOffset) och upp/ner offset för en mindre cirkel
+
+
             this.xOffset = xOffset;
 
             drawLowQuality();
