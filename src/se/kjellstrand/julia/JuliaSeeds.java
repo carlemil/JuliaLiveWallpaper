@@ -74,6 +74,7 @@ public class JuliaSeeds {
             }
     };
 
+
     private static final double FIRST_SIZE = 0.1;
 
     private static final double FIRST_SEED_MUL = 4.0;
@@ -81,6 +82,30 @@ public class JuliaSeeds {
     private static final double SECOND_SIZE = FIRST_SIZE * 0.2;
 
     private static final double SECOND_SEED_MUL = FIRST_SEED_MUL * 6;
+
+
+
+    // /*
+    // * right x: 3.916667e-1 y: 4.166667e-3
+    // * bottom x: -1.250000e-1 y: -6.500000e-1
+    // * left x: -7.541667e-1 y: 8.333333e-3
+    // * top x: -1.333333e-1 y: 6.625000e-1
+    // */
+
+    private static int[] getCircle(double radius, int n) {
+        final int[] data = new int[n * 2];
+
+        for (int i = 0; i < n; i++) {
+
+            double a = i / (double) n * Math.PI * 2;
+            data[i * 2] = (int) (Math.sin(a) * 13d - 13d / 2d);
+            data[i * 2 + 1] = (int) ((Math.cos(a) * 11.5d) + 5.75d);
+            System.out.println("data[i] " + data[i * 2] + "  " + data[i * 2 + 1]);
+        }
+
+        return data;
+    }
+
 
     static double getX(double xOffset, int seed) {
         return (double) ((Math.sin(xOffset * FIRST_SEED_MUL) * FIRST_SIZE) + (Math.sin(xOffset
