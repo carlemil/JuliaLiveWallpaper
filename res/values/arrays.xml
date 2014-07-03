@@ -15,6 +15,15 @@
         <item>@string/theme_sunset</item>
         <item>@string/theme_zebra_stripes</item>
         <item>@string/theme_milky_way</item>
+        
+        <item>@string/theme_terracotta</item>
+        <item>@string/theme_teal</item>
+        <item>@string/theme_brick_wall</item>
+        <item>@string/theme_chrome</item>
+        <item>@string/theme_dessert</item>
+        <item>@string/theme_feeling_blue</item>
+        <item>@string/theme_heavy_rain</item>
+        <item>@string/theme_forest</item>
     </string-array>
 
 </resources>

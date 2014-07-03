@@ -24,9 +24,9 @@ public class Palette {
             setGradient(context, palette, theme.palette, theme.blendMode);
         }
 
-        if (theme.blackCenter == CenterMode.BLACK) {
+        if (theme.centerMode == CenterMode.BLACK) {
             palette[palette.length - 1] = 0x000000;
-        } else if (theme.blackCenter == CenterMode.WHITE) {
+        } else if (theme.centerMode == CenterMode.WHITE) {
             palette[palette.length - 1] = 0xffffff;
         }
         return byteify(palette);
