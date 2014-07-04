@@ -1,6 +1,8 @@
 
 package se.kjellstrand.julia;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -55,9 +57,9 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private Matrix matrix = new Matrix();
 
-        private JuliaRSWrapper juliaHighQualityRSWrapper;
+        private RSWrapper juliaHighQualityRSWrapper;
 
-        private JuliaRSWrapper juliaLowQualityRSWrapper;
+        private RSWrapper juliaLowQualityRSWrapper;
 
         private static final float MIN_ZOOM = 0.7f;
 
@@ -72,6 +74,8 @@ public class JuliaWallpaperService extends WallpaperService {
         private float oldTouchX = 0.0f;
 
         private double previousPinchDist;
+
+        private AtomicBoolean drawing = new AtomicBoolean(false);
 
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
@@ -90,8 +94,8 @@ public class JuliaWallpaperService extends WallpaperService {
             super.onSurfaceChanged(holder, format, width, height);
             // Sets the yAccDiv so that it will make scrolling in y feel similar
             // to scrolling in x-axis.
-            juliaHighQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 1f);
-            juliaLowQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 3f);
+            juliaHighQualityRSWrapper = new RSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 1f);
+            juliaLowQualityRSWrapper = new RSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 3f);
             drawLowQuality();
         }
 
@@ -190,17 +194,21 @@ public class JuliaWallpaperService extends WallpaperService {
         }
 
         private void drawLowQuality() {
-            draw(juliaLowQualityRSWrapper);
-            hqTimer.startTimer();
+            if (drawing.compareAndSet(false, true)) {
+                draw(juliaLowQualityRSWrapper);
+                hqTimer.startTimer();
+            }
         }
 
         private void drawHighQuality() {
-            draw(juliaHighQualityRSWrapper);
+            if (drawing.compareAndSet(false, true)) {
+                draw(juliaHighQualityRSWrapper);
+            }
         }
 
-        private void draw(JuliaRSWrapper juliaRSWrapper) {
+        private void draw(RSWrapper juliaRSWrapper) {
             if (isVisible()) {
-                double[] seedPoint = JuliaSeeds.getSeedPoint(swipeXOffset, swipeYOffset);
+                double[] seedPoint = SeedPoint.get(swipeXOffset, swipeYOffset);
                 Bitmap bitmap = juliaRSWrapper.renderJulia(seedPoint[0], seedPoint[1]);
                 Canvas c = null;
                 SurfaceHolder holder = getSurfaceHolder();
@@ -217,6 +225,7 @@ public class JuliaWallpaperService extends WallpaperService {
                     }
                 }
             }
+            drawing.set(false);
         }
     }
 }

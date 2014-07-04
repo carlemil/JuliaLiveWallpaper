@@ -10,9 +10,9 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.RenderScript.Priority;
 
-public class JuliaRSWrapper {
+public class RSWrapper {
 
-    private static final String LOG_TAG = JuliaRSWrapper.class.getCanonicalName();
+    private static final String LOG_TAG = RSWrapper.class.getCanonicalName();
 
     private Bitmap bitmap;
 
@@ -28,7 +28,7 @@ public class JuliaRSWrapper {
 
     private RenderScript rs;
 
-    public JuliaRSWrapper(Context context, int width, int height, float scale) {
+    public RSWrapper(Context context, int width, int height, float scale) {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
 
         this.scale = scale;

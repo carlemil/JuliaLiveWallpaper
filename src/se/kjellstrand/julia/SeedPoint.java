@@ -1,15 +1,13 @@
 
 package se.kjellstrand.julia;
 
-import android.util.Log;
-
-public class JuliaSeeds {
+public class SeedPoint {
 
     private static final double SWIPE_X_OFFSET_DIV = 0.3;
 
     private static final double SWIPE_Y_OFFSET_DIV = 3000;
 
-    static double[] getSeedPoint(double swipeXOffset, double swipeYOffset) {
+    public static double[] get(double swipeXOffset, double swipeYOffset) {
         double[] point = new double[2];
 
         // ......0.67....
@@ -29,8 +27,6 @@ public class JuliaSeeds {
 
         point[0] = bigArcX + smalArcX;
         point[1] = bigArcY + smalArcY;
-
-        Log.d("TAG", point[0] + " - " + point[1]);
 
         return point;
     }
