@@ -1,8 +1,6 @@
 
 package se.kjellstrand.julia;
 
-import java.util.concurrent.TimeUnit;
-
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -61,8 +59,6 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private JuliaRSWrapper juliaLowQualityRSWrapper;
 
-        private int yAccDiv = 2000;
-
         private static final float MIN_ZOOM = 0.7f;
 
         private static final float MAX_ZOOM = 2.5f;
@@ -74,8 +70,6 @@ public class JuliaWallpaperService extends WallpaperService {
         private float oldTouchY = 0.0f;
 
         private float oldTouchX = 0.0f;
-
-        private int timeBasedSeed;
 
         private double previousPinchDist;
 
@@ -96,7 +90,6 @@ public class JuliaWallpaperService extends WallpaperService {
             super.onSurfaceChanged(holder, format, width, height);
             // Sets the yAccDiv so that it will make scrolling in y feel similar
             // to scrolling in x-axis.
-            yAccDiv = height * 2;
             juliaHighQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 1f);
             juliaLowQualityRSWrapper = new JuliaRSWrapper(JuliaWallpaperService.this.getBaseContext(), width, height, 3f);
             drawLowQuality();
@@ -113,8 +106,6 @@ public class JuliaWallpaperService extends WallpaperService {
 
                 juliaHighQualityRSWrapper.setPalette(getApplicationContext());
                 juliaLowQualityRSWrapper.setPalette(getApplicationContext());
-
-                timeBasedSeed = (int) ((System.currentTimeMillis() / TimeUnit.HOURS.toMillis(1)) % JuliaSeeds.getNumberOfSeeds());
 
                 drawLowQuality();
             } else {
@@ -135,7 +126,7 @@ public class JuliaWallpaperService extends WallpaperService {
                                 // Only activate if we have dragged at least as
                                 // 2x much on the y axis as x axis.
                                 if (Math.abs(dy) / 2 >= Math.abs(dx)) {
-                                    swipeYOffset += dy / yAccDiv;
+                                    swipeYOffset += dy;
                                     drawLowQuality();
                                 }
                             }
@@ -185,8 +176,8 @@ public class JuliaWallpaperService extends WallpaperService {
                 int yPixelOffset) {
             super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
 
-            // använd detta offset för att röra oss  längs stora cirkeln (hourOffset) och upp/ner offset för en mindre cirkel på den stora
-
+            // använd detta offset för att röra oss längs stora cirkeln
+            // (hourOffset) och upp/ner offset för en mindre cirkel på den stora
 
             this.swipeXOffset = xOffset;
 
@@ -209,10 +200,8 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private void draw(JuliaRSWrapper juliaRSWrapper) {
             if (isVisible()) {
-                float offset = swipeXOffset + swipeYOffset;
-                double x = JuliaSeeds.getX(offset, timeBasedSeed);
-                double y = JuliaSeeds.getY(offset, timeBasedSeed);
-                Bitmap bitmap = juliaRSWrapper.renderJulia(x, y);
+                double[] seedPoint = JuliaSeeds.getSeedPoint(swipeXOffset, swipeYOffset);
+                Bitmap bitmap = juliaRSWrapper.renderJulia(seedPoint[0], seedPoint[1]);
                 Canvas c = null;
                 SurfaceHolder holder = getSurfaceHolder();
                 try {
