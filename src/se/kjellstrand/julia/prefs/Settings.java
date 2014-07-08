@@ -14,7 +14,7 @@ public final class Settings {
 
     private static final String PREFS_ZOOM = "zoom";
 
-    private static final String PREFS_TOUCH_Y_ACC = "touch_y_acc";
+    private static final String PREFS_SWIPE_OFFSET_ACC = "swipe_offset_acc";
 
     private static SharedPreferences.Editor openSharedPreferencesForEditing(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES_FILE,
@@ -38,12 +38,13 @@ public final class Settings {
 
     public static void setTouchYaccumulated(Context context, float touchYaccumulated) {
         SharedPreferences.Editor editor = openSharedPreferencesForEditing(context);
-        editor.putFloat(PREFS_TOUCH_Y_ACC, touchYaccumulated);
+        editor.putFloat(PREFS_SWIPE_OFFSET_ACC, touchYaccumulated);
         editor.apply();
     }
 
-    public static float getTouchYaccumulated(Context context) {
-        return loadSharedPreferences(context).getFloat(PREFS_TOUCH_Y_ACC, 0);
+    public static float getSwipeOffsetAcc(Context context) {
+        // Default starting point that is less boring compared to 0 :)
+        return loadSharedPreferences(context).getFloat(PREFS_SWIPE_OFFSET_ACC, 810528);
     }
 
     public static void reset(Context context) {
@@ -53,7 +54,7 @@ public final class Settings {
             editor.apply();
         } else {
             Log.e(LOG_TAG,
-                    "reset, could not read/write from/to SharedPreferences, context == null.");
+                    "Reset: context == null.");
         }
     }
 

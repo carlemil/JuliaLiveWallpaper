@@ -18,7 +18,7 @@ public class RSWrapper {
 
     private ScriptC_julia script;
 
-    private Allocation pxelsAllocation;
+    private Allocation allocation;
 
     private int scaledWidth;
 
@@ -42,7 +42,7 @@ public class RSWrapper {
         rs = RenderScript.create(context, RenderScript.ContextType.DEBUG);
         rs.setPriority(Priority.LOW);
 
-        pxelsAllocation = Allocation.createFromBitmap(rs, bitmap, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+        allocation = Allocation.createFromBitmap(rs, bitmap, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
 
         script = new ScriptC_julia(rs, context.getResources(), R.raw.julia);
 
@@ -78,8 +78,8 @@ public class RSWrapper {
     public Bitmap renderJulia(double x, double y) {
         script.set_cx((float) x);
         script.set_cy((float) y);
-        script.forEach_root(pxelsAllocation, pxelsAllocation);
-        pxelsAllocation.copyTo(bitmap);
+        script.forEach_root(allocation, allocation);
+        allocation.copyTo(bitmap);
         return bitmap;
     }
 

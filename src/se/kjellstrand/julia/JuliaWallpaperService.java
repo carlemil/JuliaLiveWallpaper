@@ -1,4 +1,3 @@
-
 package se.kjellstrand.julia;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -11,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -19,10 +19,7 @@ import com.google.android.gms.analytics.Tracker;
 
 public class JuliaWallpaperService extends WallpaperService {
 
-    // private final String TAG =
-    // JuliaWallpaperService.class.getCanonicalName();
-
-    public static final float INITIAL_ZOOM = 1.6f;
+    public static final float INITIAL_ZOOM = 1.2f;
 
     private Tracker tracker = null;
 
@@ -53,6 +50,8 @@ public class JuliaWallpaperService extends WallpaperService {
 
     class JuliaEngine extends Engine implements TimeoutListener {
 
+        private final String LOG_TAG = JuliaEngine.class.getCanonicalName();
+
         private RenderHighQualityTimer hqTimer = new RenderHighQualityTimer(this);
 
         private Matrix matrix = new Matrix();
@@ -65,9 +64,9 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private static final float MAX_ZOOM = 2.5f;
 
-        private float swipeXOffset = 0.0f;
+        // private float swipeXOffset = 0.0f;
 
-        private float swipeYOffset = 0.0f;
+        private float swipeOffset = 0.0f;
 
         private float oldTouchY = 0.0f;
 
@@ -106,7 +105,7 @@ public class JuliaWallpaperService extends WallpaperService {
             if (visible) {
                 setZoom(Settings.getZoom(getApplicationContext()));
 
-                swipeYOffset = Settings.getTouchYaccumulated(getApplicationContext());
+                swipeOffset = Settings.getSwipeOffsetAcc(getApplicationContext());
 
                 juliaHighQualityRSWrapper.setPalette(getApplicationContext());
                 juliaLowQualityRSWrapper.setPalette(getApplicationContext());
@@ -114,7 +113,7 @@ public class JuliaWallpaperService extends WallpaperService {
                 drawLowQuality();
             } else {
                 Settings.setZoom(getApplicationContext(), getZoom());
-                Settings.setTouchYaccumulated(getApplicationContext(), swipeYOffset);
+                Settings.setTouchYaccumulated(getApplicationContext(), swipeOffset);
             }
         }
 
@@ -130,7 +129,7 @@ public class JuliaWallpaperService extends WallpaperService {
                                 // Only activate if we have dragged at least as
                                 // 2x much on the y axis as x axis.
                                 if (Math.abs(dy) / 2 >= Math.abs(dx)) {
-                                    swipeYOffset += dy;
+                                    swipeOffset += dy;
                                     drawLowQuality();
                                 }
                             }
@@ -175,18 +174,20 @@ public class JuliaWallpaperService extends WallpaperService {
             juliaLowQualityRSWrapper.setZoom(zoom);
         }
 
-        @Override
-        public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep, float yOffsetStep, int xPixelOffset,
-                int yPixelOffset) {
-            super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
-
-            // använd detta offset för att röra oss längs stora cirkeln
-            // (hourOffset) och upp/ner offset för en mindre cirkel på den stora
-
-            this.swipeXOffset = xOffset;
-
-            drawLowQuality();
-        }
+        // @Override
+        // public void onOffsetsChanged(float xOffset, float yOffset, float
+        // xOffsetStep, float yOffsetStep, int xPixelOffset,
+        // int yPixelOffset) {
+        // super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep,
+        // xPixelOffset, yPixelOffset);
+        //
+        // // använd detta offset för att röra oss längs stora cirkeln
+        // // (hourOffset) och upp/ner offset för en mindre cirkel på den stora
+        //
+        // this.swipeXOffset = xOffset;
+        //
+        // drawLowQuality();
+        // }
 
         @Override
         public void timeout() {
@@ -206,12 +207,12 @@ public class JuliaWallpaperService extends WallpaperService {
             }
         }
 
-        private void draw(RSWrapper juliaRSWrapper) {
+        private void draw(final RSWrapper juliaRSWrapper) {
             if (isVisible()) {
-                double[] seedPoint = SeedPoint.get(swipeXOffset, swipeYOffset);
-                Bitmap bitmap = juliaRSWrapper.renderJulia(seedPoint[0], seedPoint[1]);
-                Canvas c = null;
+                double[] seedPoint = SeedPoint.get(swipeOffset);
+                final Bitmap bitmap = juliaRSWrapper.renderJulia(seedPoint[0], seedPoint[1]);
                 SurfaceHolder holder = getSurfaceHolder();
+                Canvas c = null;
                 try {
                     c = holder.lockCanvas();
                     if (c != null) {
@@ -219,10 +220,12 @@ public class JuliaWallpaperService extends WallpaperService {
                         matrix.setScale(juliaRSWrapper.getScale(), juliaRSWrapper.getScale());
                         c.drawBitmap(bitmap, matrix, null);
                     }
-                } finally {
-                    if (c != null) {
-                        holder.unlockCanvasAndPost(c);
-                    }
+                } catch (IllegalArgumentException e) {
+                    Log.e(LOG_TAG, "BORK: ", e);
+                    c = null;
+                }
+                if (c != null) {
+                    holder.unlockCanvasAndPost(c);
                 }
             }
             drawing.set(false);

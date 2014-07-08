@@ -8,6 +8,8 @@ import android.util.Log;
 
 public class RenderHighQualityTimer extends Thread {
 
+    private static final int TIMEOUT = 1000;
+
     private static final String LOG_TAG = RenderHighQualityTimer.class.getCanonicalName();
 
     private Timer timer;
@@ -21,18 +23,15 @@ public class RenderHighQualityTimer extends Thread {
     public void startTimer() {
         try {
             if (timer != null) {
-                Log.d(LOG_TAG, "Cancel timer: " + timer);
                 timer.cancel();
             }
             timer = new Timer();
-            Log.d(LOG_TAG, "Start timer: " + timer );
             timer.schedule(new TimerTask() {
                 public void run() {
-                    Log.d(LOG_TAG, "Timeout timer: " + timer);
                     listener.timeout();
                     timer.cancel();
                 }
-            }, 200);
+            }, TIMEOUT);
         } catch (IllegalStateException ise) {
             Log.d(LOG_TAG, "ISE: " + ise);
         }
