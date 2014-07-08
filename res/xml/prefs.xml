@@ -5,13 +5,21 @@
 
     <ListPreference
         android:id="@+id/pref_theme"
-        android:defaultValue="0xffffff, 0x000000, 0xffffff"
+        android:defaultValue="@string/theme_black_n_white"
         android:dialogTitle="@string/pref_theme_dialog_title"
         android:entries="@array/list_of_theme_entries"
         android:entryValues="@array/list_of_theme_entries"
         android:key="@string/pref_theme_key"
         android:summary="@string/pref_theme_summary"
         android:title="@string/pref_theme_title" />
+
+    <CheckBoxPreference
+        android:id="@+id/pref_swipe_morph"
+        android:defaultValue="true"
+        android:enabled="true"
+        android:key="@string/pref_swipe_morph_key"
+        android:summary="@string/pref_swipe_morph_summary"
+        android:title="@string/pref_swipe_morph_title" />
     
     <com.robobunny.SeekBarPreference
         android:defaultValue="70"
@@ -22,13 +30,5 @@
         robobunny:min="10"
         robobunny:unitsLeft=""
         robobunny:unitsRight="%" />
-
-    <CheckBoxPreference
-        android:id="@+id/pref_swipe_morph"
-        android:defaultValue="true"
-        android:enabled="true"
-        android:key="@string/pref_swipe_morph_key"
-        android:summary="@string/pref_swipe_morph_summary"
-        android:title="@string/pref_swipe_morph_title" />
 
 </PreferenceScreen>

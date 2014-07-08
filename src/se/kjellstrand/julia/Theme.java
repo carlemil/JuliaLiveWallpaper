@@ -98,7 +98,7 @@ public class Theme {
         } else if (context.getResources().getString(R.string.theme_brick_wall, "").equals(themeName)) {
             drawMode = DrawMode.ZEBRA;
             palette = new int[] {
-                    0x841f27, 0xaa3311, 0xa94140, 0x888888
+                    0x841f27, 0xa94140
             };
         } else if (context.getResources().getString(R.string.theme_chrome, "").equals(themeName)) {
             drawMode = DrawMode.GRADIENT;
@@ -113,11 +113,10 @@ public class Theme {
         } else if (context.getResources().getString(R.string.theme_feeling_blue, "").equals(themeName)) {
             drawMode = DrawMode.GRADIENT;
             palette = new int[] {
-                    0x000080, 0x000040, 0x000020, 0x000010, 0x0000f0, 0x000000
+                    0x000080, 0x000040, 0x000020, 0x000010, 0x000080, 0x000000
             };
         } else if (context.getResources().getString(R.string.theme_forest, "").equals(themeName)) {
             drawMode = DrawMode.ZEBRA_GRADIENT;
-            blendMode = BlendMode.HSV;
             centerMode = CenterMode.BLACK;
             palette = new int[] {
                     0x266A2E, 0x4F4F2F, 0x228b22, 0x855E42, 0x347235, 0x8B864E, 0x254117, 0x8B7355

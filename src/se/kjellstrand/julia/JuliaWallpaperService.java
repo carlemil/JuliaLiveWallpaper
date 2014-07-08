@@ -3,9 +3,6 @@ package se.kjellstrand.julia;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
-
 import se.kjellstrand.julia.RenderHighQualityTimer.TimeoutListener;
 import se.kjellstrand.julia.prefs.Settings;
 import android.content.SharedPreferences;
@@ -16,6 +13,9 @@ import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 
 public class JuliaWallpaperService extends WallpaperService {
 
@@ -48,7 +48,7 @@ public class JuliaWallpaperService extends WallpaperService {
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(JuliaWallpaperService.this);
             swipeMorphKey = getResources().getString(R.string.pref_swipe_morph_key);
         }
-        return sharedPreferences.getBoolean(swipeMorphKey, false);
+        return sharedPreferences.getBoolean(swipeMorphKey, true);
     }
 
     class JuliaEngine extends Engine implements TimeoutListener {
