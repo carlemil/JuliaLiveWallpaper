@@ -30,5 +30,15 @@
         robobunny:min="10"
         robobunny:unitsLeft=""
         robobunny:unitsRight="%" />
+    
+        <Preference
+            android:id="@+id/pref_share"
+            android:title="@string/pref_share_title" >
+
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="se.kjellstrand.julia.ShareActivity"
+                android:targetPackage="se.kjellstrand.julia"/>
+    </Preference>
 
 </PreferenceScreen>

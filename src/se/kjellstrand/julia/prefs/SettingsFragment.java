@@ -1,7 +1,6 @@
 package se.kjellstrand.julia.prefs;
 
 import se.kjellstrand.julia.R;
-import se.kjellstrand.julia.R.xml;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
@@ -12,5 +11,6 @@ public class SettingsFragment extends PreferenceFragment {
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.prefs);
+
     }
 }

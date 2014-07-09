@@ -54,6 +54,17 @@
                 android:name="android.service.wallpaper"
                 android:resource="@xml/demo_wp" />
         </service>
+
+        <activity
+            android:name=".ShareActivity"
+            android:label="@string/name"
+            android:theme="@android:style/Theme.NoDisplay" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
