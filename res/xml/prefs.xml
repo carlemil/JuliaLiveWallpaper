@@ -13,14 +13,6 @@
         android:summary="@string/pref_theme_summary"
         android:title="@string/pref_theme_title" />
 
-    <CheckBoxPreference
-        android:id="@+id/pref_swipe_morph"
-        android:defaultValue="true"
-        android:enabled="true"
-        android:key="@string/pref_swipe_morph_key"
-        android:summary="@string/pref_swipe_morph_summary"
-        android:title="@string/pref_swipe_morph_title" />
-    
     <com.robobunny.SeekBarPreference
         android:defaultValue="70"
         android:key="@string/pref_brightness_key"
@@ -30,15 +22,29 @@
         robobunny:min="10"
         robobunny:unitsLeft=""
         robobunny:unitsRight="%" />
-    
-        <Preference
-            android:id="@+id/pref_share"
-            android:title="@string/pref_share_title" >
 
+    <CheckBoxPreference
+        android:id="@+id/pref_swipe_hor_morph"
+        android:defaultValue="true"
+        android:enabled="true"
+        android:key="@string/pref_swipe_hor_morph_key"
+        android:summary="@string/pref_swipe_hor_morph_summary"
+        android:title="@string/pref_swipe_hor_morph_title" />
+    <CheckBoxPreference
+        android:id="@+id/pref_swipe_ver_morph"
+        android:defaultValue="true"
+        android:enabled="true"
+        android:key="@string/pref_swipe_ver_morph_key"
+        android:summary="@string/pref_swipe_ver_morph_summary"
+        android:title="@string/pref_swipe_ver_morph_title" />
+
+    <Preference
+        android:id="@+id/pref_share"
+        android:title="@string/pref_share_title" >
         <intent
-                android:action="android.intent.action.VIEW"
-                android:targetClass="se.kjellstrand.julia.ShareActivity"
-                android:targetPackage="se.kjellstrand.julia"/>
+            android:action="android.intent.action.VIEW"
+            android:targetClass="se.kjellstrand.julia.ShareActivity"
+            android:targetPackage="se.kjellstrand.julia" />
     </Preference>
 
 </PreferenceScreen>

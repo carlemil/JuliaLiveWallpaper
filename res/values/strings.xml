@@ -29,11 +29,14 @@
     <string name="pref_brightness_key">brightness_key</string>
     <string name="pref_brightness_summary">Adjust brightness of the wallpaper</string>
     <string name="pref_brightness_title">Brightness</string>
-    <string name="pref_swipe_morph_summary">Change the background when swiping up and down on the homescreen</string>
-    <string name="pref_swipe_morph_title">Swipe</string>
-    <string name="pref_swipe_morph_key">swipe_morph_key</string>
     <string name="pref_share_title">Share</string>
     <string name="pref_share_text">Sharing is caring, thats why I\'m sending you a link to JULIA SET LIVE WALLPAPER -> https://play.google.com/store/apps/details?id=se.kjellstrand.julia</string>
+    <string name="pref_swipe_hor_morph_summary">Change the background when swiping between desktops</string>
+    <string name="pref_swipe_hor_morph_title">Swipe</string>
+    <string name="pref_swipe_hor_morph_key">swipe_morph_hor_key</string>
+    <string name="pref_swipe_ver_morph_summary">Change the background when swiping up and down on the desktop</string>
+    <string name="pref_swipe_ver_morph_title">Swipe</string>
+    <string name="pref_swipe_ver_morph_key">swipe_morph_ver_key</string>
     <string name="theme_black_n_white">Black and White</string>
     <string name="theme_blue_yellow">Blue and Yellow</string>
     <string name="theme_red_white">Polka</string>

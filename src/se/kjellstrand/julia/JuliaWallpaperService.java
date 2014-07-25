@@ -1,3 +1,4 @@
+
 package se.kjellstrand.julia;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -19,13 +20,19 @@ import com.google.android.gms.analytics.Tracker;
 
 public class JuliaWallpaperService extends WallpaperService {
 
-    public static final float INITIAL_ZOOM = 1.2f;
+    private static final float MIN_ZOOM = 0.7f;
+
+    private static final float MAX_ZOOM = 2.5f;
+
+    public static final float INITIAL_ZOOM = MAX_ZOOM;
 
     private Tracker tracker = null;
 
     private SharedPreferences sharedPreferences = null;
 
-    private String swipeMorphKey = null;
+    private String verticalSwipeMorphKey = null;
+
+    private String horizontalSwipeMorphKey = null;;
 
     synchronized public Tracker getTracker() {
         if (tracker == null) {
@@ -40,12 +47,21 @@ public class JuliaWallpaperService extends WallpaperService {
         return new JuliaEngine();
     }
 
-    public boolean isSwipeMorphEnabled() {
+    public boolean isVerticalSwipeMorphEnabled() {
         if (sharedPreferences == null) {
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(JuliaWallpaperService.this);
-            swipeMorphKey = getResources().getString(R.string.pref_swipe_morph_key);
+            verticalSwipeMorphKey = getResources().getString(R.string.pref_swipe_ver_morph_key);
         }
-        return sharedPreferences.getBoolean(swipeMorphKey, true);
+        return sharedPreferences.getBoolean(verticalSwipeMorphKey, false);
+    }
+
+    public boolean isHorizontalSwipeMorphEnabled() {
+        if (sharedPreferences == null) {
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(JuliaWallpaperService.this);
+            horizontalSwipeMorphKey = getResources().getString(R.string.pref_swipe_hor_morph_key);
+        }
+
+        return sharedPreferences.getBoolean(horizontalSwipeMorphKey, true);
     }
 
     class JuliaEngine extends Engine implements TimeoutListener {
@@ -60,13 +76,9 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private RSWrapper juliaLowQualityRSWrapper;
 
-        private static final float MIN_ZOOM = 0.7f;
+        private float swipeYOffset = 0.0f;
 
-        private static final float MAX_ZOOM = 2.5f;
-
-        // private float swipeXOffset = 0.0f;
-
-        private float swipeOffset = 0.0f;
+        private float swipeXOffset = 0.0f;
 
         private float oldTouchY = 0.0f;
 
@@ -105,7 +117,8 @@ public class JuliaWallpaperService extends WallpaperService {
             if (visible) {
                 setZoom(Settings.getZoom(getApplicationContext()));
 
-                swipeOffset = Settings.getSwipeOffsetAcc(getApplicationContext());
+                swipeYOffset = Settings.getTouchYaccumulated(getApplicationContext());
+                swipeXOffset = Settings.getTouchXaccumulated(getApplicationContext());
 
                 juliaHighQualityRSWrapper.setPalette(getApplicationContext());
                 juliaLowQualityRSWrapper.setPalette(getApplicationContext());
@@ -113,13 +126,15 @@ public class JuliaWallpaperService extends WallpaperService {
                 drawLowQuality();
             } else {
                 Settings.setZoom(getApplicationContext(), getZoom());
-                Settings.setTouchYaccumulated(getApplicationContext(), swipeOffset);
+
+                Settings.setTouchYaccumulated(getApplicationContext(), swipeYOffset);
+                Settings.setTouchXaccumulated(getApplicationContext(), swipeXOffset);
             }
         }
 
         @Override
         public void onTouchEvent(MotionEvent event) {
-            if (isSwipeMorphEnabled()) {
+            if (isVerticalSwipeMorphEnabled()) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_MOVE:
                         if (event.getPointerCount() == 1) {
@@ -129,7 +144,7 @@ public class JuliaWallpaperService extends WallpaperService {
                                 // Only activate if we have dragged at least as
                                 // 2x much on the y axis as x axis.
                                 if (Math.abs(dy) / 2 >= Math.abs(dx)) {
-                                    swipeOffset += dy;
+                                    swipeYOffset += dy;
                                     drawLowQuality();
                                 }
                             }
@@ -174,20 +189,18 @@ public class JuliaWallpaperService extends WallpaperService {
             juliaLowQualityRSWrapper.setZoom(zoom);
         }
 
-        // @Override
-        // public void onOffsetsChanged(float xOffset, float yOffset, float
-        // xOffsetStep, float yOffsetStep, int xPixelOffset,
-        // int yPixelOffset) {
-        // super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep,
-        // xPixelOffset, yPixelOffset);
-        //
-        // // använd detta offset för att röra oss längs stora cirkeln
-        // // (hourOffset) och upp/ner offset för en mindre cirkel på den stora
-        //
-        // this.swipeXOffset = xOffset;
-        //
-        // drawLowQuality();
-        // }
+        @Override
+        public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep, float yOffsetStep, int xPixelOffset,
+                int yPixelOffset) {
+            super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
+
+            // använd detta offset för att röra oss längs stora cirkeln
+            // (hourOffset) och upp/ner offset för en mindre cirkel på den stora
+
+            this.swipeXOffset = xOffset;
+
+            drawLowQuality();
+        }
 
         @Override
         public void timeout() {
@@ -209,7 +222,7 @@ public class JuliaWallpaperService extends WallpaperService {
 
         private void draw(final RSWrapper juliaRSWrapper) {
             if (isVisible()) {
-                double[] seedPoint = SeedPoint.get(swipeOffset);
+                double[] seedPoint = SeedPoint.get(swipeXOffset, swipeYOffset);
                 final Bitmap bitmap = juliaRSWrapper.renderJulia(seedPoint[0], seedPoint[1]);
                 SurfaceHolder holder = getSurfaceHolder();
                 Canvas c = null;

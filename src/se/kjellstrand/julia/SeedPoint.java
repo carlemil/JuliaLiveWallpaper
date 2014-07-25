@@ -7,7 +7,7 @@ public class SeedPoint {
 
     private static final double SWIPE_BIG_OFFSET_DIV = 10061;
 
-    public static double[] get(double swipeOffset) {
+    public static double[] get(double swipeXOffset, double swipeYOffset) {
         double[] point = new double[2];
 
         // ......0.67....
@@ -17,13 +17,13 @@ public class SeedPoint {
         double maxX = 0.5d;
         double maxY = 0.67d;
 
-        double bigArcX = ((Math.cos(swipeOffset / SWIPE_BIG_OFFSET_DIV) + 1d) / 2d) * (maxX - minX) + minX;
-        double bigArcY = Math.sin(swipeOffset / SWIPE_BIG_OFFSET_DIV) * maxY;
+        double bigArcX = ((Math.cos(swipeXOffset / SWIPE_BIG_OFFSET_DIV) + 1d) / 2d) * (maxX - minX) + minX;
+        double bigArcY = Math.sin(swipeXOffset / SWIPE_BIG_OFFSET_DIV) * maxY;
 
         double maxSmalXY = 0.03;
 
-        double smalArcX = Math.cos(swipeOffset / SWIPE_SMAL_OFFSET_DIV) * maxSmalXY;
-        double smalArcY = Math.sin(swipeOffset / SWIPE_SMAL_OFFSET_DIV) * maxSmalXY;
+        double smalArcX = Math.cos(swipeYOffset / SWIPE_SMAL_OFFSET_DIV) * maxSmalXY;
+        double smalArcY = Math.sin(swipeYOffset / SWIPE_SMAL_OFFSET_DIV) * maxSmalXY;
 
         point[0] = bigArcX + smalArcX;
         point[1] = bigArcY + smalArcY;

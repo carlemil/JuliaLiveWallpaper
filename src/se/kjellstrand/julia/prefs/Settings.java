@@ -16,6 +16,10 @@ public final class Settings {
 
     private static final String PREFS_SWIPE_OFFSET_ACC = "swipe_offset_acc";
 
+    private static final String PREFS_TOUCH_X_ACC = "touch_x_acc";
+
+    private static final String PREFS_TOUCH_Y_ACC = "touch_y_acc";
+
     private static SharedPreferences.Editor openSharedPreferencesForEditing(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES_FILE,
                 Context.MODE_PRIVATE);
@@ -42,9 +46,19 @@ public final class Settings {
         editor.apply();
     }
 
-    public static float getSwipeOffsetAcc(Context context) {
-        // Default starting point that is less boring compared to 0 :)
-        return loadSharedPreferences(context).getFloat(PREFS_SWIPE_OFFSET_ACC, 810528);
+
+    public static void setTouchXaccumulated(Context context, float touchXaccumulated) {
+        SharedPreferences.Editor editor = openSharedPreferencesForEditing(context);
+        editor.putFloat(PREFS_TOUCH_X_ACC, touchXaccumulated);
+        editor.apply();
+    }
+
+    public static float getTouchYaccumulated(Context context) {
+        return loadSharedPreferences(context).getFloat(PREFS_TOUCH_Y_ACC, 0);
+    }
+
+    public static float getTouchXaccumulated(Context context) {
+        return loadSharedPreferences(context).getFloat(PREFS_TOUCH_X_ACC, 0);
     }
 
     public static void reset(Context context) {
