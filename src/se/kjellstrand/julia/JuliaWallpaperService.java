@@ -52,7 +52,7 @@ public class JuliaWallpaperService extends WallpaperService {
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(JuliaWallpaperService.this);
             verticalSwipeMorphKey = getResources().getString(R.string.pref_swipe_ver_morph_key);
         }
-        return sharedPreferences.getBoolean(verticalSwipeMorphKey, false);
+        return sharedPreferences.getBoolean(verticalSwipeMorphKey, true);
     }
 
     public boolean isHorizontalSwipeMorphEnabled() {
@@ -194,9 +194,7 @@ public class JuliaWallpaperService extends WallpaperService {
                 int yPixelOffset) {
             super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
 
-            // använd detta offset för att röra oss längs stora cirkeln
-            // (hourOffset) och upp/ner offset för en mindre cirkel på den stora
-
+            // Use this to move along the small circle
             this.swipeXOffset = xOffset;
 
             drawLowQuality();

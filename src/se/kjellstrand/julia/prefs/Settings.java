@@ -14,8 +14,6 @@ public final class Settings {
 
     private static final String PREFS_ZOOM = "zoom";
 
-    private static final String PREFS_SWIPE_OFFSET_ACC = "swipe_offset_acc";
-
     private static final String PREFS_TOUCH_X_ACC = "touch_x_acc";
 
     private static final String PREFS_TOUCH_Y_ACC = "touch_y_acc";
@@ -42,7 +40,7 @@ public final class Settings {
 
     public static void setTouchYaccumulated(Context context, float touchYaccumulated) {
         SharedPreferences.Editor editor = openSharedPreferencesForEditing(context);
-        editor.putFloat(PREFS_SWIPE_OFFSET_ACC, touchYaccumulated);
+        editor.putFloat(PREFS_TOUCH_Y_ACC, touchYaccumulated);
         editor.apply();
     }
 
