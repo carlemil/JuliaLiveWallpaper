@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/help_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Help"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/help_text_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="By pinching with two fingers you can change the size of the background.\nBy swiping left/right or up/down you can change the way the background looks.\n" />
+
+</LinearLayout>
