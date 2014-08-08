@@ -16,7 +16,9 @@ public class RSWrapper {
 
     private Bitmap bitmap;
 
-    private ScriptC_julia script;
+    private int segments = 4;
+
+    private ScriptC_julia_segmented script;
 
     private Allocation allocation;
 
@@ -36,7 +38,8 @@ public class RSWrapper {
         this.scaledWidth = (int) (width / scale);
         this.scaledHeight = (int) (height / scale);
 
-        bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, conf);
+        int scaledSegmentHeight = (int) (height / (scale * segments));
+        bitmap = Bitmap.createBitmap(scaledWidth, scaledSegmentHeight, conf);
         bitmap.setHasAlpha(false);
 
         rs = RenderScript.create(context, RenderScript.ContextType.DEBUG);
@@ -44,7 +47,7 @@ public class RSWrapper {
 
         allocation = Allocation.createFromBitmap(rs, bitmap, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
 
-        script = new ScriptC_julia(rs, context.getResources(), R.raw.julia);
+        script = new ScriptC_julia_segmented(rs, context.getResources(), R.raw.julia_segmented);
 
         script.set_width(scaledWidth);
         script.set_height(scaledHeight);
@@ -78,8 +81,11 @@ public class RSWrapper {
     public Bitmap renderJulia(double x, double y) {
         script.set_cx((float) x);
         script.set_cy((float) y);
-        script.forEach_root(allocation, allocation);
-        allocation.copyTo(bitmap);
+        for (int i = 0; i < segments; i++) {
+            script.set_segmentOffset(i / (float) segments);
+            script.forEach_root(allocation, allocation);
+            allocation.copyTo(bitmap);
+        }
         return bitmap;
     }
 
