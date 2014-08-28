@@ -17,12 +17,16 @@
 #pragma version(1)
 #pragma rs java_package_name(se.kjellstrand.julia)
 
+#include "rs_atomic.rsh"
+
 float cx;
 float cy;
 float width;
 float height;
 float zoom;
 int precision;
+
+float pi = 3.14;
 
 uchar *color;
 
@@ -37,23 +41,18 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     int k = 0;
     float d = 0;
     
-    while(k < 5) {
+    while(k < 15) {
 	    t = fx * fx - fy * fy + cx;
 	    fy = 2 * fx * fy + cy;
 	    fx = t;
-	    //if (fx * fx + fy * fy >= 4) {
-	      //break;
-	    //}
-	    k++;
-	    //d += fabs(fx-ox) + fabs(fy-oy);
-	   
 	    ox = fx;
 	    oy = fy;
-	    
+        d += sqrt(fabs(ox * ox) + fabs(ox * ox));
+	    k++;
 	}
-	 d += sqrt(fabs( ox * ox) + fabs(ox * ox))/10+1;
-	int di = (int) ((1/d)*precision);
-    out->b = color[di*3+0];
-    out->g = color[di*3+1];
-    out->r = color[di*3+2];
+	
+    int c = (int)(((sin(log2(d))+1)/pi)*precision/2);
+    out->b = color[c*3+0];
+    out->g = color[c*3+1];
+    out->r = color[c*3+2];
 }
