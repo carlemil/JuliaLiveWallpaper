@@ -30,19 +30,30 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     float fx = (x + 0.5f) / width * (4.f / zoom) - (2.f / zoom);
     float fy = (y + 0.5f) / height * (4.f / zoom) - (2.f / zoom);
 
+    float ox=0;
+    float oy=0;
+
     float t = 0;
     int k = 0;
+    float d = 0;
     
-    while(k < precision - 1) {
+    while(k < 5) {
 	    t = fx * fx - fy * fy + cx;
 	    fy = 2 * fx * fy + cy;
 	    fx = t;
-	    if (fx * fx + fy * fy >= 4) {
-	       break;
-	    }
+	    //if (fx * fx + fy * fy >= 4) {
+	      //break;
+	    //}
 	    k++;
+	    //d += fabs(fx-ox) + fabs(fy-oy);
+	   
+	    ox = fx;
+	    oy = fy;
+	    
 	}
-    out->b = color[k*3+0];
-    out->g = color[k*3+1];
-    out->r = color[k*3+2];
+	 d += sqrt(fabs( ox * ox) + fabs(ox * ox))/10+1;
+	int di = (int) ((1/d)*precision);
+    out->b = color[di*3+0];
+    out->g = color[di*3+1];
+    out->r = color[di*3+2];
 }
