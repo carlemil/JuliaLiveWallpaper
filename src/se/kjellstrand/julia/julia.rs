@@ -30,8 +30,6 @@ int precision;
 float pi = 3.14159265359;
 float pi4 = 0.78539816339;
 
-float bigNumber = 12345678;
-
 uchar *color;
 
 void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
@@ -44,6 +42,8 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
     float t = 0;
     int k = 0;
     float d = 0;
+
+    int bn = 1234567890;
     
     while(k < 15) {
 	    t = fx * fx - fy * fy + cx;
@@ -53,19 +53,19 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
 	    oy = fy;
         d += sqrt(fabs(ox * ox) + fabs(ox * ox));
 	    k++;
-	    if (fabs(fx) > bigNumber || fabs(fy) > bigNumber){
+	    if (d > bn){
+	        d = bn;
 	        break;
 	    }
 	}
 	
     //int c = (int)(((sin(1/(d-5))+1)/pi)*precision/2);
-    
     //int c = (int)(((1.0/(d-5))+1.0)*precision/2.0);
-    
-    float col = (sin(1/(d-9)));
-    
-    if (x==300 & y%10==0) {
-       rsDebug("c ", (sin(1/(d-5))+1), d);
+
+	float min_d = 0.0;    
+    float col = atan(1/d);
+    if (d < min_d) {
+       rsDebug("c ", col, d);
 	}
 	
     //if(c<0){c=0;}
