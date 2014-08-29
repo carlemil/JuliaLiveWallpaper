@@ -17,7 +17,8 @@
 #pragma version(1)
 #pragma rs java_package_name(se.kjellstrand.julia)
 
-#include "rs_atomic.rsh"
+//#include "rs_atomic.rsh"
+#include "rs_debug.rsh"
 
 float cx;
 float cy;
@@ -26,7 +27,10 @@ float height;
 float zoom;
 int precision;
 
-float pi = 3.14;
+float pi = 3.14159265359;
+float pi4 = 0.78539816339;
+
+float bigNumber = 12345678;
 
 uchar *color;
 
@@ -49,10 +53,31 @@ void root(const uchar4 *in, uchar4 *out, uint32_t x, uint32_t y) {
 	    oy = fy;
         d += sqrt(fabs(ox * ox) + fabs(ox * ox));
 	    k++;
+	    if (fabs(fx) > bigNumber || fabs(fy) > bigNumber){
+	        break;
+	    }
 	}
 	
-    int c = (int)(((sin(log2(d))+1)/pi)*precision/2);
-    out->b = color[c*3+0];
-    out->g = color[c*3+1];
-    out->r = color[c*3+2];
+    //int c = (int)(((sin(1/(d-5))+1)/pi)*precision/2);
+    
+    //int c = (int)(((1.0/(d-5))+1.0)*precision/2.0);
+    
+    float col = (sin(1/(d-9)));
+    
+    if (x==300 & y%10==0) {
+       rsDebug("c ", (sin(1/(d-5))+1), d);
+	}
+	
+    //if(c<0){c=0;}
+    //if(c>precision){c=precision;}
+    if(col<0){col=0.0;}
+    if(col>1){col=1.0;}
+        
+    out->b = (int) (1.0-col * 255.0);
+    out->g = (int) (col * 255.0);
+    out->r = (int) (col/2.0 * 255.0);
+
+    //out->b = color[c*3+0];
+    //out->g = color[c*3+1];
+    //out->r = color[c*3+2];
 }
