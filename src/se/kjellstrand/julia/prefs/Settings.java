@@ -56,7 +56,7 @@ public final class Settings {
     }
 
     public static float getTouchXaccumulated(Context context) {
-        return loadSharedPreferences(context).getFloat(PREFS_TOUCH_X_ACC, 0);
+        return loadSharedPreferences(context).getFloat(PREFS_TOUCH_X_ACC, 100000);
     }
 
     public static void reset(Context context) {

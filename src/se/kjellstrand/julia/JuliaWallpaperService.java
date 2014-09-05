@@ -20,9 +20,9 @@ import com.google.android.gms.analytics.Tracker;
 
 public class JuliaWallpaperService extends WallpaperService {
 
-    private static final float MIN_ZOOM = 0.7f;
+    private static final float MIN_ZOOM = 0.5f;
 
-    private static final float MAX_ZOOM = 2.5f;
+    private static final float MAX_ZOOM = 3.0f;
 
     public static final float INITIAL_ZOOM = MAX_ZOOM;
 

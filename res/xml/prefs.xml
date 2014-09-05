@@ -38,7 +38,7 @@
         android:summary="@string/pref_swipe_ver_morph_summary"
         android:title="@string/pref_swipe_ver_morph_title" />
 
-    <Preference
+    <!-- Preference
         android:id="@+id/pref_share"
         android:title="@string/pref_share_title" >
         <intent
@@ -46,5 +46,6 @@
             android:targetClass="se.kjellstrand.julia.ShareActivity"
             android:targetPackage="se.kjellstrand.julia" />
     </Preference>
-
+ -->
+ 
 </PreferenceScreen>
